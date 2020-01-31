@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 enum Type {SPACE,O,X}
 
@@ -33,9 +35,7 @@ public class OXO {
     void play(Board board,Dispaly dispaly)
     {
         String next;
-        if(board.showPlayMode()) {
-            Machine machine=new Machine();
-        }
+        Machine machine=new Machine();
         do {
             next=null;
             if((!board.showPlayMode())||((board.showPlayMode())&&
@@ -46,6 +46,13 @@ public class OXO {
                         dispaly.errorInput();
                     }
                     next = dispaly.turnbegin(board.showTurn());
+                } while (!board.isValid(next));
+            }else{
+                do {
+                    if (!board.isValid(next)) {
+                        dispaly.errorInput();
+                    }
+                    next = machine.easyPVE();
                 } while (!board.isValid(next));
             }
 
@@ -351,5 +358,106 @@ class Machine
         char a = (char)((int)'A'+random());
         char b = (char)((int)'1'+random());
         return ""+a+b;
+    }
+}
+
+class Node{
+    State state;
+    Node parent;
+    List<Node> childArray;
+
+    State getState() {
+        return state;
+    }
+}
+class Tree{
+    Node root;
+    Node getRoot(){
+        return root;
+    }
+}
+class State{
+    BoardAI board;
+    int playerNo;
+    int visitCount;
+    double winScore;
+
+    BoardAI getBoard(){
+        return board;
+    }
+    void setBoard(BoardAI board){
+        this.board=board;
+    }
+    void setPlayerNo(int playerNo){
+        this.playerNo=playerNo;
+    }
+
+    public List<State> getAllPossibleStates(){
+
+
+    }
+
+    public void randomPlay(){
+
+    }
+}
+
+class MonteCarloTreeSearch{
+    static final int WIN_SCORE=10;
+    int level;
+    int opppnent;
+
+    BoardAI findNextMove(BoardAI board, int playerNo){
+
+        final int end=1000;
+        opppnent=3-playerNo;
+        Tree tree = new Tree();
+        Node rootNode = tree.getRoot();
+        rootNode.getState().setBoard(board);
+        while (System.currentTimeMillis()<end){
+            Node promisingNode =selectPromisingNode(rootNode);
+            if(promisingNode.getState().getBoard().checkStatus()==BoardAI.IN_PROGRESS){
+                expandNode(promisingNode);
+            }
+            Node nodeToExplore=promisingNode;
+            if(promisingNode.getChildArray().size()>0){
+                nodeToExplore=promisingNode.getRandomChildNode();
+            }
+            int playoutResult = simulateRandomPlayout(nodeToExplore);
+            backProgogation(nodeToExplore,playoutResult);
+        }
+        Node winnerNode = rootNode.getChildWithScore();
+        tree.setRoot(winnerNode);
+        return winnerNode.getState().getBoard();
+    }
+    private Node selectPromisingNode()
+}
+
+class BoardAI{
+    int[][] boardValues;
+    static final int DEFAULT_BOARD_SIZE=3;
+    static final int IN_PROGRESS=-1;
+    static final int DREW =0;
+    static final int P1=1;
+    static final int P2=2;
+
+    void performMove(int player,Position p){
+        this.totalMoves++;
+        boardValues[p.getX()][p.getY()] = player;
+    }
+    int checkStatus(){
+
+    }
+    List<Position> getEmptyPositions(){
+        int size=this.boardValues.length;
+        List<Position> emptyPositions = new ArrayList<>();
+        for(int i = 0;i<size;i++) {
+            for(int j =0;j<size;j++){
+                if(boardValues[i][j]==0){
+                    emptyPositions.add(new Position(i,j));
+                }
+            }
+        }
+        return emptyPositions;
     }
 }
