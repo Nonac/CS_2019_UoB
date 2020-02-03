@@ -31,8 +31,12 @@ class GradeConverter
     {
         int len=text.length();
         int i,temp,res=0;
+        boolean flag1=true,flag2=true;
         if(len==0||(text.charAt(0)=='0'&&len>1))
         {
+            return -1;
+        }
+        if (isValid(text)){
             return -1;
         }
         for(i=0;i<len;i++)
@@ -57,10 +61,35 @@ class GradeConverter
         return ((res>=0)&&(res<=100))?res:-1;
 
     }
+    boolean isValid(String text)
+    {
+        boolean flag1=true,flag2=true;
+        int i,len=text.length();
+        for(i=0;i<len;i++)
+        {
+            switch (text.charAt(i)){
+                case '.':
+                    if(flag1){
+                        flag1=false;
+                    }else {
+                        return true;
+                    }
+                    break;
+                case '%':
+                    if(flag2){
+                        flag2=false;
+                    }else {
+                        return true;
+                    }
+                    break;
+            }
+        }
+        return false;
+    }
 
     int carryVaild(String text)
     {
-        int n,i,flag=1,len=text.length();
+        int n,flag=1,len=text.length();
         int carry=0;
         for(n=0;((n<len)&&(flag==1));n++)
         {
@@ -68,14 +97,9 @@ class GradeConverter
                 flag=0;
             }
         }
-        for(i=len-1;i>n-1;i--)
+        if(convertCharToInt(text.charAt(n))+carry>4)
         {
-            if(convertCharToInt(text.charAt(i))+carry>4)
-            {
-                carry=1;
-            }else {
-                carry=0;
-            }
+            carry=1;
         }
         return carry;
     }

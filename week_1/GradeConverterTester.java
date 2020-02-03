@@ -60,7 +60,7 @@ class GradeConverterTester
       assert(converter.convertStringToMark("55%") == 55): "\nERROR: failed to cope with % character";
       assert(converter.convertStringToMark("77.1") == 77): "\nERROR: failed to cope with float marks";
       assert(converter.convertStringToMark("24.9") == 25): "\nERROR: failed to correctly round float marks";
-      assert(converter.convertStringToMark("52.445") == 53): "\nERROR: failed to correctly round float marks";
+      assert(converter.convertStringToMark("52.5") == 53): "\nERROR: failed to correctly round float marks";
   }
 
   public static void main(String[] args)
