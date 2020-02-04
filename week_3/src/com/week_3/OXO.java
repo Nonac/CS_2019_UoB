@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 enum Type {SPACE,O,X}
+enum Status {PROGRESS,DRAW,XWIN,OWIN}
 
 public class OXO {
     private Board board;
@@ -26,8 +27,8 @@ public class OXO {
 
         play(board,dispaly);
 
-        if(board.isWin()) {
-            dispaly.winEnding(board.showWinner());
+        if(board.isWin()!=Status.DRAW) {
+            dispaly.winEnding(board.isWin());
         }else if(board.isDraw()) {
             dispaly.drawEnding();
         }
@@ -49,9 +50,6 @@ public class OXO {
                 } while (!board.isValid(next));
             }else{
                 do {
-                    if (!board.isValid(next)) {
-                        dispaly.errorInput();
-                    }
                     next = machine.easyPVE();
                 } while (!board.isValid(next));
             }
@@ -59,7 +57,7 @@ public class OXO {
             board.move(next);
             dispaly.printout(board.show());
             board.nextTurn();
-        } while ((!board.isWin())&&(!board.isDraw()));
+        } while (board.isWin()==Status.PROGRESS);
     }
 
 }
@@ -159,9 +157,9 @@ class Dispaly
     {
         System.out.println("It is a un valid place. Enter in a new one.");
     }
-    void winEnding(Type winner)
+    void winEnding(Status winner)
     {
-        String player=winner==Type.O?"Player O":"Player X";
+        String player=winner==Status.OWIN?"Player O":"Player X";
         System.out.println("Congratulations！"+player+" win the game!");
     }
     void drawEnding()
@@ -174,7 +172,6 @@ class Board
 {
     private boolean playerO=true;
     private Type[][] board = new Type[3][3];
-    private Type winner;
     private boolean PVE = false;
     private boolean playerFirst = true;
     Board()
@@ -192,10 +189,6 @@ class Board
     {
         return board;
     }
-    Type showWinner()
-    {
-        return winner;
-    }
     void nextTurn()
     {
         playerO=!playerO;
@@ -209,123 +202,66 @@ class Board
         if (next==null)return true;
         return board[next.charAt(1) - '1'][next.charAt(0) - 'A'] == Type.SPACE;
     }
-    boolean rowWin()
+
+    Status isWin()
     {
         int i,j;
+        Type[] slash1=new Type[3];
+        Type[] slash2=new Type[3];
         for(i=0;i<3;i++) {
-            for(j=0;j<3;j++) {
-                if(board[i][j]!=Type.O) {
-                    break;
-                }
-                if(j==2) {
-                    winner=Type.O;
-                    return true;
-                }
+            Type[] row = board[i];
+            Type[] col = new Type[3];
+            for (j = 0; j < 3; j++) {
+                col[j] = board[j][i];
             }
-        }
-        for(i=0;i<3;i++) {
-            for(j=0;j<3;j++) {
-                if(board[i][j]!=Type.X) {
-                    break;
-                }
-                if(j==2) {
-                    winner=Type.X;
-                    return true;
-                }
+
+            Status checkRowForWin = checkForWin(row);
+            if(checkRowForWin!=Status.PROGRESS){
+                return checkRowForWin;
             }
+            Status checkColForWin = checkForWin(col);
+            if(checkColForWin!=Status.PROGRESS){
+                return checkColForWin;
+            }
+            slash1[i]=board[i][i];
+            slash2[i]=board[2-i][i];
         }
-        return false;
+        Status checkSlash1ForWin = checkForWin(slash1);
+        if(checkSlash1ForWin!=Status.PROGRESS){
+            return checkSlash1ForWin;
+        }
+        Status checkSlash2ForWin = checkForWin(slash2);
+        if(checkSlash2ForWin!=Status.PROGRESS){
+            return checkSlash2ForWin;
+        }
+        return isDraw()?Status.DRAW:Status.PROGRESS;
+
     }
-    boolean colWin()
-    {
-        int i,j;
-        for(i=0;i<3;i++) {
-            for(j=0;j<3;j++) {
-                if(board[j][i]!=Type.O) {
-                    break;
-                }
-                if(j==2) {
-                    winner=Type.O;
-                    return true;
-                }
-            }
-        }
-        for(i=0;i<3;i++) {
-            for(j=0;j<3;j++) {
-                if(board[j][i]!=Type.X) {
-                    break;
-                }
-                if(j==2) {
-                    winner=Type.X;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    boolean slashwin()
+
+    Status checkForWin(Type[] array)
     {
         int i;
-        for(i=0;i<3;i++){
-            if(board[i][i]!=Type.O) {
-                break;
-            }
-            if(i==2) {
-                winner=Type.O;
-                return true;
+        for(i=0;i<3;i++)
+        {
+            if((array[i]==Type.SPACE)||(array[i]!=array[0])) {
+                return Status.PROGRESS;
             }
         }
-        for(i=0;i<3;i++){
-            if(board[i][i]!=Type.X) {
-                break;
-            }
-            if(i==2) {
-                winner=Type.X;
-                return true;
-            }
-        }
-        for(i=0;i<3;i++){
-            if(board[2-i][i]!=Type.X) {
-                break;
-            }
-            if(i==2) {
-                winner=Type.X;
-                return true;
-            }
-        }
-        for(i=0;i<3;i++){
-            if(board[2-i][i]!=Type.O) {
-                break;
-            }
-            if(i==2) {
-                winner=Type.O;
-                return true;
-            }
-        }
-        return false;
-    }
-    boolean isWin()
-    {
-        return rowWin()||colWin()||slashwin();
-
+        return array[0]==Type.O?Status.OWIN:Status.XWIN;
     }
     boolean isDraw()
     {
         int i,j;
-        if(!isWin())
-        {
-            for (i=0;i<3;i++){
-                for(j=0;j<3;j++)
+        for (i=0;i<3;i++){
+            for(j=0;j<3;j++)
+            {
+                if(board[i][j]==Type.SPACE)
                 {
-                    if(board[i][j]==Type.SPACE)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-            return true;
         }
-        return false;
+        return true;
     }
 
     void move(String next)
@@ -350,8 +286,8 @@ class Machine
 {
     int random()
     {
-        final long l = System.currentTimeMillis();
-        return (int)(l % 3);
+        final double d = Math.random();
+        return (int)(d * 3);
     }
     String easyPVE()
     {
@@ -360,7 +296,7 @@ class Machine
         return ""+a+b;
     }
 }
-
+/*
 class Node{
     State state;
     Node parent;
@@ -376,29 +312,93 @@ class Tree{
         return root;
     }
 }
-class State{
-    BoardAI board;
-    int playerNo;
-    int visitCount;
-    double winScore;
+public class State {
+    private BoardAI board;
+    private int playerNo;
+    private int visitCount;
+    private double winScore;
 
-    BoardAI getBoard(){
+    public State() {
+        board = new BoardAI();
+    }
+
+    public State(State state) {
+        this.board = new Board(state.getBoard());
+        this.playerNo = state.getPlayerNo();
+        this.visitCount = state.getVisitCount();
+        this.winScore = state.getWinScore();
+    }
+
+    public State(BoardAI board) {
+        this.board = new BoardAI(board);
+    }
+
+    Board getBoard() {
         return board;
     }
-    void setBoard(BoardAI board){
-        this.board=board;
-    }
-    void setPlayerNo(int playerNo){
-        this.playerNo=playerNo;
+
+    void setBoard(BoardAI board) {
+        this.board = board;
     }
 
-    public List<State> getAllPossibleStates(){
-
-
+    int getPlayerNo() {
+        return playerNo;
     }
 
-    public void randomPlay(){
+    void setPlayerNo(int playerNo) {
+        this.playerNo = playerNo;
+    }
 
+    int getOpponent() {
+        return 3 - playerNo;
+    }
+
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(int visitCount) {
+        this.visitCount = visitCount;
+    }
+
+    double getWinScore() {
+        return winScore;
+    }
+
+    void setWinScore(double winScore) {
+        this.winScore = winScore;
+    }
+
+    public List<State> getAllPossibleStates() {
+        List<State> possibleStates = new ArrayList<>();
+        List<Position> availablePositions = this.board.getEmptyPositions();
+        availablePositions.forEach(p -> {
+            State newState = new State(this.board);
+            newState.setPlayerNo(3 - this.playerNo);
+            newState.getBoard().performMove(newState.getPlayerNo(), p);
+            possibleStates.add(newState);
+        });
+        return possibleStates;
+    }
+
+    void incrementVisit() {
+        this.visitCount++;
+    }
+
+    void addScore(double score) {
+        if (this.winScore != Integer.MIN_VALUE)
+            this.winScore += score;
+    }
+
+    void randomPlay() {
+        List<Position> availablePositions = this.board.getEmptyPositions();
+        int totalPossibilities = availablePositions.size();
+        int selectRandom = (int) (Math.random() * totalPossibilities);
+        this.board.performMove(this.playerNo, availablePositions.get(selectRandom));
+    }
+
+    void togglePlayer() {
+        this.playerNo = 3 - this.playerNo;
     }
 }
 
@@ -407,9 +407,14 @@ class MonteCarloTreeSearch{
     int level;
     int opppnent;
 
+    private int getMillisForCurrentLevel() {
+        return 2 * (this.level - 1) + 1;
+    }
+
     BoardAI findNextMove(BoardAI board, int playerNo){
 
-        final int end=1000;
+        long start = System.currentTimeMillis();
+        long end = start + 60 * getMillisForCurrentLevel();
         opppnent=3-playerNo;
         Tree tree = new Tree();
         Node rootNode = tree.getRoot();
@@ -430,34 +435,42 @@ class MonteCarloTreeSearch{
         tree.setRoot(winnerNode);
         return winnerNode.getState().getBoard();
     }
-    private Node selectPromisingNode()
-}
-
-class BoardAI{
-    int[][] boardValues;
-    static final int DEFAULT_BOARD_SIZE=3;
-    static final int IN_PROGRESS=-1;
-    static final int DREW =0;
-    static final int P1=1;
-    static final int P2=2;
-
-    void performMove(int player,Position p){
-        this.totalMoves++;
-        boardValues[p.getX()][p.getY()] = player;
+    private void expandNode(Node node) {
+        List<State> possibleStates = node.getState().getAllPossibleStates();
+        possibleStates.forEach(state -> {
+            Node newNode = new Node(state);
+            newNode.setParent(node);
+            newNode.getState().setPlayerNo(node.getState().getOpponent());
+            node.getChildArray().add(newNode);
+        });
     }
-    int checkStatus(){
 
-    }
-    List<Position> getEmptyPositions(){
-        int size=this.boardValues.length;
-        List<Position> emptyPositions = new ArrayList<>();
-        for(int i = 0;i<size;i++) {
-            for(int j =0;j<size;j++){
-                if(boardValues[i][j]==0){
-                    emptyPositions.add(new Position(i,j));
-                }
-            }
+    private void backPropogation(Node nodeToExplore, int playerNo) {
+        Node tempNode = nodeToExplore;
+        while (tempNode != null) {
+            tempNode.getState().incrementVisit();
+            if (tempNode.getState().getPlayerNo() == playerNo)
+                tempNode.getState().addScore(WIN_SCORE);
+            tempNode = tempNode.getParent();
         }
-        return emptyPositions;
     }
+    private int simulateRandomPlayout(Node node) {
+        Node tempNode = new Node(node);
+        State tempState = tempNode.getState();
+        int boardStatus = tempState.getBoard().checkStatus();
+
+        if (boardStatus == opponent) {
+            tempNode.getParent().getState().setWinScore(Integer.MIN_VALUE);
+            return boardStatus;
+        }
+        while (boardStatus == Board.IN_PROGRESS) {
+            tempState.togglePlayer();
+            tempState.randomPlay();
+            boardStatus = tempState.getBoard().checkStatus();
+        }
+
+        return boardStatus;
+    }
+
 }
+*/
