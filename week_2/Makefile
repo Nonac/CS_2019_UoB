@@ -1,5 +1,11 @@
-default: Triangle
+default: build
 
-%: %.java
-	javac $@.java
-	java -ea $@
+build:
+	javac Triangle.java
+
+test: build
+	javac TriangleTester.java
+	java -ea TriangleTester
+
+clean:
+	rm *.class
