@@ -5,9 +5,11 @@ class OXOController
     private OXOModel gameState;
     private int[] coordinator = new int[2];
     private static int currentPlayerByNumber=0;
+    private Machine machine;
     public OXOController(OXOModel model)
     {
         gameState=model;
+        this.machine=new Machine(gameState.getNumberOfRows(),gameState.getNumberOfColumns());
     }
 
     void isFinish()
@@ -64,6 +66,11 @@ class OXOController
 
     public void handleIncomingCommand(String command) throws InvalidCellIdentifierException, CellAlreadyTakenException, CellDoesNotExistException
     {
+        if(command.equals("machine")) {
+            do {
+                command = machine.easyPVE();
+            }while (gameState.getCellOwner(command.charAt(0)-'a',command.charAt(1)-'1')!=null);
+        }
         if(command.length()!=2) throw new InvalidCellIdentifierException(command,command);
         if(command.charAt(0)<'a'||(command.charAt(0)>((int)'z'))) throw new InvalidCellIdentifierException(command,command.charAt(0));
         if(command.charAt(1)<'1'||(command.charAt(1)>((int)'9'))) throw new InvalidCellIdentifierException(command,command.charAt(1));
@@ -83,6 +90,27 @@ class OXOController
         gameState.setCellOwner(coordinator[0], coordinator[1], gameState.getCurrentPlayer());
         currentPlayerByNumber = (currentPlayerByNumber == (gameState.getNumberOfPlayers() - 1)) ? 0 : currentPlayerByNumber + 1;
         isFinish();
+    }
+}
+
+class Machine
+{
+    private int row,col;
+    public Machine(int row,int col)
+    {
+        this.row=row;
+        this.col=col;
+    }
+    int random(int seed)
+    {
+        final double d = Math.random();
+        return (int)(d*seed);
+    }
+    String easyPVE()
+    {
+        char a = (char)((int)'a'+random(row));
+        char b = (char)((int)'1'+random(col));
+        return ""+a+b;
     }
 }
 
