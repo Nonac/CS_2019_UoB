@@ -115,7 +115,8 @@ class test
         assert(assertionsEnabled = true);
         if (assertionsEnabled) {
             testException();
-            testcheckForWin();
+            testCheckForWin();
+            testIsDraw();
             System.out.println("SUCCESS: All tests passed !!!");
         }
         else {
@@ -132,18 +133,53 @@ class test
         checkTestException("a1");
     }
 
-    private static void testcheckForWin()
+    private static void testCheckForWin()
     {
         OXOModel gameModel = new OXOModel(3,3,3,null);
         OXOController controller=new OXOController(gameModel);
-        ArrayList<OXOPlayer> array=new ArrayList<OXOPlayer>();
+        ArrayList<OXOPlayer> array1=new ArrayList<OXOPlayer>();
+        ArrayList<OXOPlayer> array2=new ArrayList<OXOPlayer>();
         for(int i=0;i<gameModel.getWinThreshold();i++){
-            array.add(new OXOPlayer('X'));
+            array1.add(new OXOPlayer('X'));
         }
+        for(int i=0;i<gameModel.getWinThreshold()-1;i++){
+            array2.add(new OXOPlayer('X'));
+        }
+        array2.add(new OXOPlayer('O'));
         gameModel.addPlayer(new OXOPlayer('X'));
         gameModel.addPlayer(new OXOPlayer('O'));
 
-        assert !controller.checkForWin(array) || (gameModel.getWinner().getPlayingLetter() == 'X');
+        assert controller.checkForWin(array2) || (gameModel.getWinner() == null);
+        assert !controller.checkForWin(array1) || (gameModel.getWinner().getPlayingLetter() == 'X');
+
+    }
+
+    private static void testIsDraw()
+    {
+        OXOModel gameModel = new OXOModel(3,3,3,null);
+        OXOController controller=new OXOController(gameModel);
+        gameModel.addPlayer(new OXOPlayer('X'));
+        gameModel.addPlayer(new OXOPlayer('O'));
+
+        try {
+            controller.handleIncomingCommand("a1");
+            controller.handleIncomingCommand("a2");
+            controller.handleIncomingCommand("a3");
+            controller.handleIncomingCommand("b2");
+            controller.handleIncomingCommand("b1");
+            controller.handleIncomingCommand("b3");
+            controller.handleIncomingCommand("c2");
+            controller.handleIncomingCommand("c1");
+            assert (gameModel.isGameDrawn()==false);
+            controller.handleIncomingCommand("c3");
+            assert (gameModel.isGameDrawn()==true);
+        }catch(InvalidCellIdentifierException icie) {
+            System.out.println(icie);
+        } catch(CellAlreadyTakenException cnae) {
+            System.out.println(cnae);
+        } catch(CellDoesNotExistException cdnee) {
+            System.out.println(cdnee);
+        }
     }
 
 /*set a new board with (0,0) a X on it.*/
