@@ -1,17 +1,19 @@
-##COMSM0103_2019_TB-2: Object Oriented Programming with Java 2019
+#COMSM0103_2019_TB-2: Object Oriented Programming with Java 2019
 =================================
-####Compiler flag:
+##Compiler flag:
 
 ---
-###Update note:
+##Update note:
 ---
-####Undo:
+###Undo:
 
 ---
-####Force on:
+##Force on:
 
 ---
 
-###Catalog:
+##Catalog:
 - [x]week_1
 	- [x] 成绩等级转换
+	- [x] 三角形分类
+	- [x] OXO游戏
