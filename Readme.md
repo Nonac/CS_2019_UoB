@@ -15,5 +15,7 @@
 ## Catalog:
 - [x]week_1
 	- [x] 成绩等级转换
+- [x]week_2
 	- [x] 三角形分类
+- [x]week_3
 	- [x] OXO游戏
