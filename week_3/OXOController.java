@@ -27,8 +27,8 @@ class OXOController
                         col.add(gameState.getCellOwner(j,i));
                     }
                     if(checkArrayForWin(row)||checkArrayForWin(col)) return;
-                    slash1.add(gameState.getCellOwner(i,i));
-                    slash2.add(gameState.getCellOwner(gameState.getNumberOfRows()-1-i,i));
+                    slash1.add(gameState.getCellOwner(cuti+i,cutji));
+                    slash2.add(gameState.getCellOwner(cuti+gameState.getNumberOfRows()-1-i,cutj+i));
                 }
                 if(checkArrayForWin(slash1)||checkArrayForWin(slash2)) return;
                 isDraw();
