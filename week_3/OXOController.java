@@ -1,6 +1,7 @@
 /************************************************************************************************************************
  * Code by ff19085 Yinan Yang.
  * OXO controller can fit any size board, according to the oxoview set, the max size of board is 26*9.
+ * And it can fit any number of players.
  * The input command can only accept one lower case letter and one number, ie. a1 any other letters will be illegal.
  * Geometry algorithm used to determine win or draw, in the way the code is not redundant.
  ***********************************************************************************************************************/
