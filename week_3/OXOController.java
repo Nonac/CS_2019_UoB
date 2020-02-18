@@ -31,15 +31,19 @@ class OXOController
             segmentationOriginI++){
             for(segmentationOriginJ=0;segmentationOriginJ<(gameState.getNumberOfColumns()-gameState.getWinThreshold()+1);
                 segmentationOriginJ++){
+                /*slash1 is for left top to right bottom, slash2 is for left bottom to left top*/
                 slash1=new ArrayList<OXOPlayer>();
                 slash2=new ArrayList<OXOPlayer>();
                 for(i=segmentationOriginI;i<gameState.getWinThreshold()+segmentationOriginI;i++){
+                    /*Obtaining the row value uses the given method of oxomodel.*/
                     ArrayList<OXOPlayer> row=gameState.getRow(i);
+                    /*Obtaining the col value uses geometric reversed.*/
                     ArrayList<OXOPlayer> col=new ArrayList<OXOPlayer>();
                     for(j=segmentationOriginJ;j<gameState.getWinThreshold()+segmentationOriginJ;j++){
                         col.add(gameState.getCellOwner(j,i));
                     }
                     if(checkArrayForWin(row)||checkArrayForWin(col)) return;
+                    /*I am very proud of this highly adaptable oblique expression.*/
                     slash1.add(gameState.getCellOwner(i,i-segmentationOriginI+segmentationOriginJ));
                     slash2.add(gameState.getCellOwner(gameState.getNumberOfRows()-gameState.getWinThreshold()+
                             segmentationOriginI-i+segmentationOriginI, i-segmentationOriginI+segmentationOriginJ));
@@ -59,7 +63,8 @@ class OXOController
         }
         gameState.setGameDrawn();
     }
-
+/*This method is to solve the problem of finding consecutive specific elements in an array of indefinite length.
+Returns true if found.*/
     boolean checkArrayForWin(ArrayList<OXOPlayer> array){
        for(int i=0;i<(array.size()-gameState.getWinThreshold()+1);i++){
            OXOPlayer target=null;
@@ -98,6 +103,7 @@ class OXOController
 
         if((gameState.getWinner()==null)&&(!gameState.isGameDrawn())) OXOMoves();
     }
+
     void OXOMoves()
     {
         gameState.setCellOwner(coordinator[0], coordinator[1], gameState.getCurrentPlayer());
