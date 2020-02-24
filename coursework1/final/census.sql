@@ -65,7 +65,7 @@ create view genderbyregion as
     INNER JOIN Statistic SF on SF.wardId = W.code
     where SM.occId=1 and SF.occId=1 and SM.gender=0 and SF.gender=1
     group by R.name;
-select `region name`,male,female,female/`sum of ward` as proportion from totalbyregion,genderbyregion
+select `region name`,male,female,female/`sum of ward`*100 as proportion from totalbyregion,genderbyregion
 where totalbyregion.region=genderbyregion.`region name`
 ORDER BY proportion asc ;
 
