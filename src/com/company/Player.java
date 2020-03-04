@@ -40,12 +40,13 @@ public class Player extends Character {
     }
     public void artefactDescribe(BufferedWriter out){
         try {
+            out.write("Your health is "+this.getHealth()+".\n");
             if(Artefact.size()==0){
                 out.write("There is nothing artefact currently carried by "+this.getName()+".\n");
             }else {
                 out.write("There are artefacts currently carried by "+this.getName()+":\n");
                 for(Artefact artefact:Artefact){
-                    out.write("There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ ". " +
+                    out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ ". " +
                             "It is "+(artefact.descriptionIsVowel()?"an ":"a ")+artefact.getDescription()+".\n");
                 }
             }

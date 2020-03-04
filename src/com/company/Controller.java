@@ -154,17 +154,21 @@ public class Controller {
                             subjectExactMatch = subjectExactMatch & (Arrays.asList(this.command).contains(subject));
                         }
                     }
-                    if (triggersSwitch & subjectContain & subjectExactMatch) {
-                        return actionCheck(action);
-                    } else if (triggersSwitch & subjectContain & (!subjectExactMatch)) {
-                        possibleAction.add(action);
-                    } else if (triggersSwitch & (!subjectContain)) {
-                        this.out.write("You can not do this with that entities!\n");
-                    }
                 }
-
-
+                if (triggersSwitch & subjectContain & subjectExactMatch) {
+                    return actionCheck(action);
+                } else if (triggersSwitch & (!subjectExactMatch)) {
+                    possibleAction.add(action);
+                }
             }
+
+            if(possibleAction.size()!=0){
+                this.out.write("You can not do this with that entities!\n");
+                possibleActionTips(possibleAction);
+                return true;
+            }
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -174,15 +178,15 @@ public class Controller {
     }
 
     public boolean actionCheck(Action action) {
-        boolean actionFlag = false;
+        boolean actionFlag = true;
         for (String subject : action.getSubjects()) {
-            actionFlag = actionFlag | this.currentPlayer.artefactContains(subject)
+            actionFlag = actionFlag &( this.currentPlayer.artefactContains(subject)
                     | this.currentPlayer.getLocation().funitureContains(subject)
-                    | this.currentPlayer.getLocation().characterContains(subject);
+                    | this.currentPlayer.getLocation().characterContains(subject));
             try {
                 if (!actionFlag) {
                     this.out.write("There are not enough subjects to achieve this action.\n");
-                    return false;
+                    return true;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -194,6 +198,16 @@ public class Controller {
 
     private void actionExecution(Action action) {
         try {
+            for(String subject:action.getSubjects()){
+                if(this.currentPlayer.getLocation().characterContains(subject)){
+                    this.currentPlayer.getLocation().getCharacter(subject).characterDescribe(out);
+                }
+            }
+
+            for(String narration:action.getNarration()){
+                out.write(""+narration+".\n");
+            }
+
             for (String consumed : action.getConsumed()) {
                 if (consumed.equals("health")) {
                     this.currentPlayer.reduceHealth();
@@ -205,10 +219,6 @@ public class Controller {
                     out.write("You consume this location's "+consumed+".\n");
                     this.currentPlayer.getLocation().removeFuniture(consumed);
                 }
-            }
-
-            for(String narration:action.getNarration()){
-                out.write(""+narration+".\n");
             }
 
             for (String produces : action.getProduced()) {
@@ -223,8 +233,14 @@ public class Controller {
                         out.write("A path to "+produces+" appeared.\n");
                     }
                 }else if(this.world.locationContains("unplaced")){
-                    this.currentPlayer.getLocation().setArtefact(this.world.getLocation("unplaced").getArtefact(produces));
-                    this.world.getLocation("unplaced").removeArtefact(produces);
+                    if(this.world.getLocation("unplaced").artefactContains(produces)){
+                        this.currentPlayer.getLocation().setArtefact(this.world.getLocation("unplaced").getArtefact(produces));
+                        this.world.getLocation("unplaced").removeArtefact(produces);
+                    }else if(this.world.getLocation("unplaced").funitureContains(produces)){
+                        this.currentPlayer.getLocation().setFurniture(this.world.getLocation("unplaced").getFurniture(produces));
+                        this.world.getLocation("unplaced").removeFuniture(produces);
+                    }
+
                     out.write("A "+produces+" drop on the ground.\n");
                 }else {
                     Artefact newArtefact=new Artefact();
@@ -237,5 +253,20 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    void possibleActionTips(ArrayList<Action> possibleAction){
+        try {
+            for(Action action:possibleAction){
+                for(String s:action.getSubjects()){
+                    if(!Arrays.asList(command).contains(s)){
+                        out.write("It seems need "+s+"?\n");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -63,27 +63,51 @@ class Location extends Entity {
         return Furniture;
     }
 
+    public Furniture getFurniture(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Furniture furniture:this.Furniture){
+            if(furniture.getName().equals(s)){
+                return furniture;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Character> getCharacter() {
         return Character;
+    }
+
+    public Character getCharacter(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Character character:Character){
+            if(character.getName().equals(s)){
+                return character;
+            }
+        }
+        return null;
     }
 
     public void loctionDescribe(BufferedWriter out){
         try {
             out.write("You are at the "+this.getName()+".\n");
             for(Artefact artefact:Artefact){
-                out.write("There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ " which you could collect. " +
+                out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ " which you could collect. " +
                         "It is "+(artefact.descriptionIsVowel()?"an ":"a ")+artefact.getDescription()+".\n");
             }
             for(Furniture furniture:Furniture){
-                out.write("There is "+(furniture.nameIsVowel()?"an ":"a ")+furniture.getName()+
+                out.write("    There is "+(furniture.nameIsVowel()?"an ":"a ")+furniture.getName()+
                         ". It is "+(furniture.descriptionIsVowel()?"an ":"a ")+furniture.getDescription()+".\n");
             }
             for(Character character:Character){
-                out.write("There is "+(character.nameIsVowel()?"an ":"a ")+character.getName()+
-                        ". It is a/an "+(character.descriptionIsVowel()?"an ":"a ")+character.getDescription()+".\n");
+                out.write("    There is "+(character.nameIsVowel()?"an ":"a ")+character.getName()+
+                        ". It is "+(character.descriptionIsVowel()?"an ":"a ")+character.getDescription()+".\n");
             }
             for(Location path:Path){
-                out.write("There is a way to "+path.getName()+".\n");
+                out.write("    There is a way to "+path.getName()+".\n");
             }
             out.newLine();
         } catch (IOException e) {
@@ -100,7 +124,7 @@ class Location extends Entity {
     }
 
     public void removeFuniture(String s){
-        this.Artefact.removeIf(funiture -> funiture.getName().equals(s));
+        this.Furniture.removeIf(funiture -> funiture.getName().equals(s));
     }
 
     public boolean artefactContains(String s){
