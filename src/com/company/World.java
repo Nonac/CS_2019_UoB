@@ -143,6 +143,10 @@ public class World {
     }
 
     public Player getPlayer(String name) {
+        assert name != null;
+        if(name.length() == 0){
+            return null;
+        }
         for(Player player:Player){
             if(player.getName().equals(name)){
                 return player;
@@ -163,8 +167,33 @@ public class World {
         return Location;
     }
 
+    public Location getLocation(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Location location:this.Location){
+            if(location.getName().equals(s)){
+                return location;
+            }
+        }
+        return null;
+    }
+
     public Location getStart() {
         return start;
     }
+
+    public boolean locationContains(String s){
+        if(s==null||s.length()==0){
+            return false;
+        }
+        for(Location location:this.Location){
+            if(location.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 

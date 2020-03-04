@@ -1,7 +1,7 @@
 package com.company;
 
 public class Character extends Entity {
-    private int health=3;
+    public int health=3;
     public Character(){
         this.setProperty("character");
     }

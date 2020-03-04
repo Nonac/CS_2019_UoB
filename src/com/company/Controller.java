@@ -7,31 +7,31 @@ import java.util.Arrays;
 
 public class Controller {
     private World world;
-    private boolean firstLogIn=true;
+    private boolean firstLogIn = true;
     private Player currentPlayer;
     private String[] command;
     BufferedWriter out;
 
-    public Controller(World world){
-        this.world=world;
+    public Controller(World world) {
+        this.world = world;
     }
 
-    void readCommand(String in, BufferedWriter out){
+    void readCommand(String in, BufferedWriter out) {
 
         String[] temp = in.split(":\\s|\\s");
         world.setPlayer(temp[0]);
-        currentPlayer=world.getPlayer(temp[0]);
+        currentPlayer = world.getPlayer(temp[0]);
         setCommand(temp);
-        this.out=out;
+        this.out = out;
 
         try {
 
-            if(firstLogIn){
+            if (firstLogIn) {
                 out.write("Welcome to the world of Stag.\n");
                 out.newLine();
-                firstLogIn=false;
+                firstLogIn = false;
             }
-            if(!(inventory()||get()||look()||drop()||goTo()||action())){
+            if (!(inventory() || get() || look() || drop() || goTo() || action())) {
                 out.write("I can not understand what is your mean.");
             }
 
@@ -40,39 +40,39 @@ public class Controller {
         }
     }
 
-    void setCommand(String[] temp){
-        command=new String[temp.length-1];
+    void setCommand(String[] temp) {
+        command = new String[temp.length - 1];
         System.arraycopy(temp, 1, this.command, 0, temp.length - 1);
     }
 
-    boolean inventory(){
-        if(Arrays.asList(this.command).contains("inventory")||Arrays.asList(this.command).contains("inv")){
+    boolean inventory() {
+        if (Arrays.asList(this.command).contains("inventory") || Arrays.asList(this.command).contains("inv")) {
             currentPlayer.artefactDescribe(this.out);
             return true;
         }
         return false;
     }
 
-    boolean look(){
-        if(Arrays.asList(this.command).contains("look")){
+    boolean look() {
+        if (Arrays.asList(this.command).contains("look")) {
             currentPlayer.getLocation().loctionDescribe(this.out);
             return true;
         }
         return false;
     }
 
-    boolean get(){
+    boolean get() {
         Artefact getArtefact = null;
         try {
             if (Arrays.asList(this.command).contains("get")) {
-                for(String s:this.command){
-                    getArtefact=currentPlayer.getLocation().getArtefact(s);
-                    if(getArtefact!=null)break;
+                for (String s : this.command) {
+                    getArtefact = currentPlayer.getLocation().getArtefact(s);
+                    if (getArtefact != null) break;
                 }
-                if(getArtefact!=null){
+                if (getArtefact != null) {
                     currentPlayer.setArtefact(getArtefact);
                     currentPlayer.getLocation().removeArtefact(getArtefact);
-                    this.out.write("You got the "+getArtefact.getName()+".\n");
+                    this.out.write("You got the " + getArtefact.getName() + ".\n");
                     return true;
                 } else {
                     this.out.write("There is not your collect artefact in your location.\n");
@@ -85,18 +85,18 @@ public class Controller {
         return false;
     }
 
-    boolean drop(){
+    boolean drop() {
         Artefact dropArtefact = null;
         try {
             if (Arrays.asList(this.command).contains("drop")) {
-                for (String s :this.command) {
-                    dropArtefact=this.currentPlayer.getArtefact(s);
-                    if(dropArtefact!=null) break;
+                for (String s : this.command) {
+                    dropArtefact = this.currentPlayer.getArtefact(s);
+                    if (dropArtefact != null) break;
                 }
-                if (dropArtefact!=null) {
+                if (dropArtefact != null) {
                     currentPlayer.getLocation().setArtefact(dropArtefact);
                     currentPlayer.removeArtefact(dropArtefact);
-                    this.out.write("You drop the "+dropArtefact.getName()+".\n");
+                    this.out.write("You drop the " + dropArtefact.getName() + ".\n");
                     return true;
                 } else {
                     this.out.write("There is not your drop artefact in your backpack.\n");
@@ -109,19 +109,19 @@ public class Controller {
         return false;
     }
 
-    boolean goTo(){
+    boolean goTo() {
         Location goToLocation = null;
         try {
             if (Arrays.asList(this.command).contains("goto")) {
-                for (String s :this.command) {
-                    goToLocation=this.currentPlayer.getLocation().getPath(s);
-                    if (goToLocation!=null) break;
+                for (String s : this.command) {
+                    goToLocation = this.currentPlayer.getLocation().getPath(s);
+                    if (goToLocation != null) break;
                 }
-                if(goToLocation!=null){
+                if (goToLocation != null) {
                     currentPlayer.setLocation(goToLocation);
-                    this.out.write("You come to the "+goToLocation.getName()+".\n");
+                    this.out.write("You come to the " + goToLocation.getName() + ".\n");
                     return true;
-                }else {
+                } else {
                     this.out.write("There is not path to location you want to goto.\n");
                     return false;
                 }
@@ -132,36 +132,38 @@ public class Controller {
         return false;
     }
 
-    boolean action(){
+    boolean action() {
         boolean triggersSwitch;
         boolean subjectExactMatch;
         boolean subjectContain;
-        ArrayList<Action> possibleAction=new ArrayList<>();
+        ArrayList<Action> possibleAction = new ArrayList<>();
         try {
-            for(Action action:world.getAction()){
-                triggersSwitch=false;
-                subjectExactMatch=true;
-                subjectContain=false;
-                for(String s:this.command){
+            for (Action action : world.getAction()) {
+                triggersSwitch = false;
+                subjectExactMatch = true;
+                subjectContain = false;
+                for (String s : this.command) {
                     if (action.getTrigger().contains(s)) {
                         triggersSwitch = true;
                     }
-                    if(action.getSubjects().contains(s)){
-                        subjectContain=true;
+                    if (action.getSubjects().contains(s)) {
+                        subjectContain = true;
                     }
-                    if(subjectContain){
-                        for(String subject:action.getSubjects()){
-                            subjectExactMatch=subjectExactMatch&(Arrays.asList(this.command).contains(subject));
+                    if (subjectContain) {
+                        for (String subject : action.getSubjects()) {
+                            subjectExactMatch = subjectExactMatch & (Arrays.asList(this.command).contains(subject));
                         }
                     }
-                    if(triggersSwitch&subjectContain&subjectExactMatch){
+                    if (triggersSwitch & subjectContain & subjectExactMatch) {
                         return actionCheck(action);
-                    }else if(triggersSwitch&subjectContain&(!subjectExactMatch)){
+                    } else if (triggersSwitch & subjectContain & (!subjectExactMatch)) {
                         possibleAction.add(action);
-                    }else if(triggersSwitch&(!subjectContain)){
+                    } else if (triggersSwitch & (!subjectContain)) {
                         this.out.write("You can not do this with that entities!\n");
                     }
                 }
+
+
             }
 
         } catch (IOException e) {
@@ -190,7 +192,50 @@ public class Controller {
         return true;
     }
 
-    private void actionExecution(Action action){
+    private void actionExecution(Action action) {
+        try {
+            for (String consumed : action.getConsumed()) {
+                if (consumed.equals("health")) {
+                    this.currentPlayer.reduceHealth();
+                    out.write("You are losing your health. Now, your health is "+this.currentPlayer.getHealth()+".\n");
+                } else if (this.currentPlayer.artefactContains(consumed)) {
+                    out.write("You consume your "+consumed+".\n");
+                    this.currentPlayer.removeArtefact(consumed);
+                } else if (this.currentPlayer.getLocation().funitureContains(consumed)) {
+                    out.write("You consume this location's "+consumed+".\n");
+                    this.currentPlayer.getLocation().removeFuniture(consumed);
+                }
+            }
 
+            for(String narration:action.getNarration()){
+                out.write(""+narration+".\n");
+            }
+
+            for (String produces : action.getProduced()) {
+                if (produces.equals("health")) {
+                    this.currentPlayer.increaseHealth();
+                    out.write("You are increasing your health. Now, your health is "+this.currentPlayer.getHealth()+".\n");
+                } else if (this.world.locationContains(produces)) {
+                    if(this.currentPlayer.getLocation().pathContains(produces)){
+                        out.write("The path to "+produces+" has already existed.\n");
+                    }else {
+                        this.currentPlayer.getLocation().setPath(this.world.getLocation(produces));
+                        out.write("A path to "+produces+" appeared.\n");
+                    }
+                }else if(this.world.locationContains("unplaced")){
+                    this.currentPlayer.getLocation().setArtefact(this.world.getLocation("unplaced").getArtefact(produces));
+                    this.world.getLocation("unplaced").removeArtefact(produces);
+                    out.write("A "+produces+" drop on the ground.\n");
+                }else {
+                    Artefact newArtefact=new Artefact();
+                    newArtefact.setName(produces);
+                    newArtefact.setDescription("A mysterious item.");
+                    this.currentPlayer.getLocation().setArtefact(newArtefact);
+                    out.write("A "+produces+" drop on the ground.\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

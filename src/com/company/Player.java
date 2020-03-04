@@ -53,8 +53,13 @@ public class Player extends Character {
             e.printStackTrace();
         }
     }
+
     public void removeArtefact(Artefact artefact){
         this.Artefact.remove(artefact);
+    }
+
+    public void removeArtefact(String s){
+        this.Artefact.removeIf(artefact -> artefact.getName().equals(s));
     }
 
     public boolean artefactContains(String s){
@@ -64,5 +69,13 @@ public class Player extends Character {
             }
         }
         return false;
+    }
+
+    public void increaseHealth(){
+        this.health++;
+    }
+
+    public void  reduceHealth(){
+        this.health--;
     }
 }

@@ -95,6 +95,14 @@ class Location extends Entity {
         this.Artefact.remove(artefact);
     }
 
+    public void removeArtefact(String s){
+        this.Artefact.removeIf(artefact -> artefact.getName().equals(s));
+    }
+
+    public void removeFuniture(String s){
+        this.Artefact.removeIf(funiture -> funiture.getName().equals(s));
+    }
+
     public boolean artefactContains(String s){
         for(Artefact artefact:this.Artefact){
             if(artefact.getName().equals(s)){
