@@ -31,8 +31,32 @@ class Location extends Entity {
         return Path;
     }
 
+    public Location getPath(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Location location:this.Path){
+            if(location.getName().equals(s)){
+                return location;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Artefact> getArtefact() {
         return Artefact;
+    }
+
+    public Artefact getArtefact(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Artefact artefact:this.Artefact){
+            if(artefact.getName().equals(s)){
+                return artefact;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Furniture> getFurniture() {
@@ -69,5 +93,41 @@ class Location extends Entity {
 
     public void removeArtefact(Artefact artefact){
         this.Artefact.remove(artefact);
+    }
+
+    public boolean artefactContains(String s){
+        for(Artefact artefact:this.Artefact){
+            if(artefact.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean funitureContains(String s){
+        for(Furniture furniture:this.Furniture){
+            if(furniture.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean characterContains(String s){
+        for(Character character:this.Character){
+            if(character.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean pathContains(String s){
+        for(Location location:this.Path){
+            if(location.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
     }
 }

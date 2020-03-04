@@ -11,9 +11,11 @@ public class Controller {
     private Player currentPlayer;
     private String[] command;
     BufferedWriter out;
+
     public Controller(World world){
         this.world=world;
     }
+
     void readCommand(String in, BufferedWriter out){
 
         String[] temp = in.split(":\\s|\\s");
@@ -60,20 +62,14 @@ public class Controller {
     }
 
     boolean get(){
-        boolean getFlag=false;
         Artefact getArtefact = null;
         try {
             if (Arrays.asList(this.command).contains("get")) {
                 for(String s:this.command){
-                    for(Artefact artefact:currentPlayer.getLocation().getArtefact()){
-                        if(artefact.getName().equals(s)){
-                            getFlag=true;
-                            getArtefact=artefact;
-                            break;
-                        }
-                    }
+                    getArtefact=currentPlayer.getLocation().getArtefact(s);
+                    if(getArtefact!=null)break;
                 }
-                if(getFlag){
+                if(getArtefact!=null){
                     currentPlayer.setArtefact(getArtefact);
                     currentPlayer.getLocation().removeArtefact(getArtefact);
                     this.out.write("You got the "+getArtefact.getName()+".\n");
@@ -90,20 +86,14 @@ public class Controller {
     }
 
     boolean drop(){
-        boolean dropFlag=false;
         Artefact dropArtefact = null;
         try {
             if (Arrays.asList(this.command).contains("drop")) {
                 for (String s :this.command) {
-                    for (Artefact artefact : currentPlayer.getArtefact()) {
-                        if (artefact.getName().equals(s)) {
-                            dropFlag = true;
-                            dropArtefact = artefact;
-                            break;
-                        }
-                    }
+                    dropArtefact=this.currentPlayer.getArtefact(s);
+                    if(dropArtefact!=null) break;
                 }
-                if (dropFlag) {
+                if (dropArtefact!=null) {
                     currentPlayer.getLocation().setArtefact(dropArtefact);
                     currentPlayer.removeArtefact(dropArtefact);
                     this.out.write("You drop the "+dropArtefact.getName()+".\n");
@@ -120,20 +110,14 @@ public class Controller {
     }
 
     boolean goTo(){
-        boolean goToFlag=false;
         Location goToLocation = null;
         try {
             if (Arrays.asList(this.command).contains("goto")) {
                 for (String s :this.command) {
-                    for (Location location : currentPlayer.getLocation().getPath()) {
-                        if (location.getName().equals(s)) {
-                            goToFlag = true;
-                            goToLocation = location;
-                            break;
-                        }
-                    }
+                    goToLocation=this.currentPlayer.getLocation().getPath(s);
+                    if (goToLocation!=null) break;
                 }
-                if(goToFlag){
+                if(goToLocation!=null){
                     currentPlayer.setLocation(goToLocation);
                     this.out.write("You come to the "+goToLocation.getName()+".\n");
                     return true;
@@ -188,33 +172,11 @@ public class Controller {
     }
 
     public boolean actionCheck(Action action) {
-        boolean artefactFlag;
-        boolean funitureFlag;
-        boolean characterFlag;
         boolean actionFlag = false;
         for (String subject : action.getSubjects()) {
-            artefactFlag = false;
-            funitureFlag = false;
-            characterFlag = false;
-            for (Artefact artefact : this.currentPlayer.getArtefact()) {
-                if (artefact.getName().equals(subject)) {
-                    artefactFlag = true;
-                    break;
-                }
-            }
-            for (Furniture furniture : this.currentPlayer.getLocation().getFurniture()) {
-                if (furniture.getName().equals(subject)) {
-                    funitureFlag = true;
-                    break;
-                }
-            }
-            for (Character character : this.currentPlayer.getLocation().getCharacter()) {
-                if (character.getName().equals(subject)) {
-                    characterFlag = true;
-                    break;
-                }
-            }
-            actionFlag = actionFlag | artefactFlag | funitureFlag | characterFlag;
+            actionFlag = actionFlag | this.currentPlayer.artefactContains(subject)
+                    | this.currentPlayer.getLocation().funitureContains(subject)
+                    | this.currentPlayer.getLocation().characterContains(subject);
             try {
                 if (!actionFlag) {
                     this.out.write("There are not enough subjects to achieve this action.\n");
@@ -226,5 +188,9 @@ public class Controller {
         }
         actionExecution(action);
         return true;
+    }
+
+    private void actionExecution(Action action){
+
     }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Player extends Character {
     private Location location;
     private ArrayList<Artefact> Artefact=new ArrayList<>();
+
     public Player(Location location){
         this.location=location;
         this.setProperty("Player");
@@ -25,6 +26,18 @@ public class Player extends Character {
     public ArrayList<Artefact> getArtefact() {
         return Artefact;
     }
+
+    public Artefact getArtefact(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Artefact artefact:this.Artefact){
+            if(artefact.getName().equals(s)){
+                return artefact;
+            }
+        }
+        return null;
+    }
     public void artefactDescribe(BufferedWriter out){
         try {
             if(Artefact.size()==0){
@@ -42,5 +55,14 @@ public class Player extends Character {
     }
     public void removeArtefact(Artefact artefact){
         this.Artefact.remove(artefact);
+    }
+
+    public boolean artefactContains(String s){
+        for(Artefact artefact:this.Artefact){
+            if(artefact.getName().equals(s)){
+                return true;
+            }
+        }
+        return false;
     }
 }
