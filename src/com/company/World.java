@@ -139,6 +139,7 @@ public class World {
             Player newPlater=new Player(this.start);
             newPlater.setName(name);
             Player.add(newPlater);
+            this.start.setPlayer(newPlater);
         }
     }
 

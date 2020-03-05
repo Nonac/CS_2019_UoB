@@ -17,6 +17,15 @@ public class Character extends Entity {
         return health;
     }
 
+    public void getHealth(BufferedWriter out) {
+        try {
+            out.write("The health of "+this.getName()+" is "+this.getHealth()+".\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void characterDescribe(BufferedWriter out){
         try {
             out.write("There is "+(this.nameIsVowel()?"an ":"a ")+this.getName()+
@@ -25,6 +34,9 @@ public class Character extends Entity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public boolean isDead(){
+        return (this.health<=0);
     }
 }

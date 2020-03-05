@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Controller {
     private World world;
-    private boolean firstLogIn = true;
+
     private Player currentPlayer;
     private String[] command;
     BufferedWriter out;
@@ -19,19 +19,29 @@ public class Controller {
     void readCommand(String in, BufferedWriter out) {
 
         String[] temp = in.split(":\\s|\\s");
-        world.setPlayer(temp[0]);
-        currentPlayer = world.getPlayer(temp[0]);
+        this.world.setPlayer(temp[0]);
+        this.currentPlayer = world.getPlayer(temp[0]);
         setCommand(temp);
         this.out = out;
 
         try {
-
-            if (firstLogIn) {
+            if (this.currentPlayer.getFirstLogIn()) {
                 out.write("Welcome to the world of Stag.\n");
                 out.newLine();
-                firstLogIn = false;
+                this.currentPlayer.setFirstLogIn(false);
             }
-            if (!(inventory() || get() || look() || drop() || goTo() || action())) {
+            if(this.currentPlayer.isDead()){
+                if(this.currentPlayer.getKiller().size()!=0){
+                    this.currentPlayer.revenge(this.out);
+                    this.out.newLine();
+                }
+                this.currentPlayer.dead(this.world.getStart(),this.out);
+            }else if(this.currentPlayer.getKiller().size()!=0){
+                this.currentPlayer.revenge(this.out);
+                this.currentPlayer.getHealth(out);
+                this.out.newLine();
+            }
+            if (!(inventory() | get() | look() | drop() | goTo() |health()||PVP()| action())) {
                 out.write("I can not understand what is your mean.");
             }
 
@@ -55,7 +65,7 @@ public class Controller {
 
     boolean look() {
         if (Arrays.asList(this.command).contains("look")) {
-            currentPlayer.getLocation().loctionDescribe(this.out);
+            currentPlayer.getLocation().loctionDescribe(this.currentPlayer,this.out);
             return true;
         }
         return false;
@@ -76,7 +86,7 @@ public class Controller {
                     return true;
                 } else {
                     this.out.write("There is not your collect artefact in your location.\n");
-                    return false;
+                    return true;
                 }
             }
         } catch (IOException e) {
@@ -100,7 +110,7 @@ public class Controller {
                     return true;
                 } else {
                     this.out.write("There is not your drop artefact in your backpack.\n");
-                    return false;
+                    return true;
                 }
             }
         } catch (IOException e) {
@@ -118,16 +128,56 @@ public class Controller {
                     if (goToLocation != null) break;
                 }
                 if (goToLocation != null) {
+                    currentPlayer.getLocation().removePlayer(currentPlayer);
                     currentPlayer.setLocation(goToLocation);
+                    currentPlayer.getLocation().setPlayer(currentPlayer);
                     this.out.write("You come to the " + goToLocation.getName() + ".\n");
-                    return true;
                 } else {
                     this.out.write("There is not path to location you want to goto.\n");
-                    return false;
                 }
+                return true;
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    boolean health(){
+        if (Arrays.asList(this.command).contains("health")) {
+            this.currentPlayer.getHealth(this.out);
+            return true;
+        }
+        return false;
+    }
+
+    boolean PVP(){
+        Player targetPlayer=null;
+        Boolean PVE=false;
+        String[] PVPWord= new String[]{"fight", "hit", "punch", "kick", "slap", "attack", "kill"};
+        for(String literal:PVPWord){
+            if (Arrays.asList(this.command).contains(literal)) {
+                for(String s:command){
+                    targetPlayer=this.currentPlayer.getLocation().getPlayer(s);
+                    PVE=this.currentPlayer.getLocation().characterContains(s);
+                    if((targetPlayer!=null)||PVE) break;
+                }
+                try {
+                    if(targetPlayer!=null){
+                        targetPlayer.reduceHealth();
+                        this.out.write("You hit "+targetPlayer.getName()+", he/she bleeds blood, and gets angry.");
+                        targetPlayer.setKiller(currentPlayer);
+                        return true;
+                    }else {
+                        if(!PVE) {
+                            this.out.write("Without finding that player, you punched it in the air.");
+                            return true;
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return false;
     }
@@ -167,8 +217,6 @@ public class Controller {
                 possibleActionTips(possibleAction);
                 return true;
             }
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -212,6 +260,9 @@ public class Controller {
                 if (consumed.equals("health")) {
                     this.currentPlayer.reduceHealth();
                     out.write("You are losing your health. Now, your health is "+this.currentPlayer.getHealth()+".\n");
+                    if(this.currentPlayer.isDead()){
+                        this.currentPlayer.dead(this.world.getStart(),out);
+                    }
                 } else if (this.currentPlayer.artefactContains(consumed)) {
                     out.write("You consume your "+consumed+".\n");
                     this.currentPlayer.removeArtefact(consumed);

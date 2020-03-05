@@ -9,6 +9,7 @@ class Location extends Entity {
     private ArrayList<Furniture> Furniture=new ArrayList<>();
     private ArrayList<Location> Path= new ArrayList<>();
     private ArrayList<Character> Character=new ArrayList<>();
+    private ArrayList<Player> Player=new ArrayList<>();
     public Location(){
         this.setProperty("location");
     }
@@ -25,6 +26,26 @@ class Location extends Entity {
 
     public void setPath(Location path) {
         this.Path.add(path);
+    }
+
+    public void setPlayer(Player player){
+        this.Player.add(player);
+    }
+
+    public void removePlayer(Player currentPlayer){
+        Player.remove(currentPlayer);
+    }
+
+    public Player getPlayer(String s){
+        if(s==null||s.length()==0){
+            return null;
+        }
+        for(Player player:this.Player){
+            if(player.getName().equals(s)){
+                return player;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Location> getPath() {
@@ -91,23 +112,28 @@ class Location extends Entity {
         return null;
     }
 
-    public void loctionDescribe(BufferedWriter out){
+    public void loctionDescribe(Player currentPlayer,BufferedWriter out){
         try {
             out.write("You are at the "+this.getName()+".\n");
             for(Artefact artefact:Artefact){
                 out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ " which you could collect. " +
-                        "It is "+(artefact.descriptionIsVowel()?"an ":"a ")+artefact.getDescription()+".\n");
+                        "It is "+artefact.getDescription()+".\n");
             }
             for(Furniture furniture:Furniture){
                 out.write("    There is "+(furniture.nameIsVowel()?"an ":"a ")+furniture.getName()+
-                        ". It is "+(furniture.descriptionIsVowel()?"an ":"a ")+furniture.getDescription()+".\n");
+                        ". It is "+furniture.getDescription()+".\n");
             }
             for(Character character:Character){
                 out.write("    There is "+(character.nameIsVowel()?"an ":"a ")+character.getName()+
-                        ". It is "+(character.descriptionIsVowel()?"an ":"a ")+character.getDescription()+".\n");
+                        ". It is "+character.getDescription()+".\n");
             }
             for(Location path:Path){
                 out.write("    There is a way to "+path.getName()+".\n");
+            }
+            for(Player player:Player){
+                if(!player.getName().equals(currentPlayer.getName())){
+                    out.write("    There is a player named "+player.getName()+" looking at you.\n");
+                }
             }
             out.newLine();
         } catch (IOException e) {
