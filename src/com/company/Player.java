@@ -139,6 +139,7 @@ public class Player extends Character {
             }
             this.Artefact= new ArrayList<>();
             this.location=location;
+
             setHealth(3);
             this.rebirth++;
             out.write("You are reborn where you started.\n");

@@ -35,7 +35,9 @@ public class Controller {
                     this.currentPlayer.revenge(this.out);
                     this.out.newLine();
                 }
-                this.currentPlayer.dead(this.world.getStart(),this.out);
+                this.world.getStart().setPlayer(this.currentPlayer);
+                this.currentPlayer.getLocation().removePlayer(this.currentPlayer);
+                this.currentPlayer.dead(this.world.getStart(),out);
             }else if(this.currentPlayer.getKiller().size()!=0){
                 this.currentPlayer.revenge(this.out);
                 this.currentPlayer.getHealth(out);
@@ -261,6 +263,8 @@ public class Controller {
                     this.currentPlayer.reduceHealth();
                     out.write("You are losing your health. Now, your health is "+this.currentPlayer.getHealth()+".\n");
                     if(this.currentPlayer.isDead()){
+                        this.world.getStart().setPlayer(this.currentPlayer);
+                        this.currentPlayer.getLocation().removePlayer(this.currentPlayer);
                         this.currentPlayer.dead(this.world.getStart(),out);
                     }
                 } else if (this.currentPlayer.artefactContains(consumed)) {
