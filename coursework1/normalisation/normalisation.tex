@@ -1,183 +1,201 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Cleese Assignment (For Students)
-% LaTeX Template
-% Version 2.0 (27/5/2018)
-%
-% This template originates from:
-% http://www.LaTeXTemplates.com
-%
-% Author:
-% Vel (vel@LaTeXTemplates.com)
-%
-% License:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
-
 \documentclass[11pt]{article}
 
-\input{structure.tex} % Include the file specifying the document structure and custom commands
-
-%----------------------------------------------------------------------------------------
-%	ASSIGNMENT INFORMATION
-%----------------------------------------------------------------------------------------
-
-% Required
+\input{structure.tex} 
 \newcommand{\assignmentQuestionName}{Question} % The word to be used as a prefix to question numbers; example alternatives: Problem, Exercise
-\newcommand{\assignmentClass}{BIO101} % Course/class
-\newcommand{\assignmentTitle}{Assignment\ \#1} % Assignment title or name
-\newcommand{\assignmentAuthorName}{Yosuke Hanamura} % Student name
+\newcommand{\assignmentClass}{Databases} % Course/class
+\newcommand{\assignmentTitle}{Coursework 1 Normalisation exercise} % Assignment title or name
+\newcommand{\assignmentAuthorName}{FF19085} % Student name
 
-% Optional (comment lines to remove)
-\newcommand{\assignmentClassInstructor}{Jones 10:30am} % Intructor name/time/description
-\newcommand{\assignmentDueDate}{Monday,\ January\ 24,\ 2019} % Due date
-
-%----------------------------------------------------------------------------------------
 
 \begin{document}
 
-%----------------------------------------------------------------------------------------
-%	TITLE PAGE
-%----------------------------------------------------------------------------------------
-
-\maketitle % Print the title page
-
-\thispagestyle{empty} % Suppress headers and footers on the title page
-
-\newpage
-
-%----------------------------------------------------------------------------------------
-%	QUESTION 1
-%----------------------------------------------------------------------------------------
-
 \begin{question}
 
-\questiontext{What is the airspeed velocity of an unladen swallow?}
+\questiontext{A school’s database looks like this (it was set up by someone more used to spreadsheets):}
+	\begin{table}[h]
+		\centering % Centre the table
+		\begin{tabular}{l l l l l}
+			\toprule
+			\textit{stuId} & {name} & {gender}&{unit}&{grade} \\
+			\midrule
+			101 & Fred & M&Mathematics&75\\
+			101 & Fred & M&German&65\\
+			101 & Fred & M&English&90\\
+			102 & Sam & X&Mathematics&60\\
+			102 & Sam & X&English&60\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
 
-\begin{center}
-	\includegraphics[width=0.5\columnwidth]{swallow.jpg} % Example image
-\end{center}
+\questiontext{stuId is a student id that is unique per student. Students’ names are not required to be unique, i.e. you can have two ‘Fred’s in the school. Gender is one of {M, F, X}. For each student and each unit they take, there is one row containing among other things the student name, unit name and the grade (0-100) that the student got on this unit. In the example above, we can see that Fred took three units (Mathematics, German and English). No two units have the same name but a unit name can appear several times in the database since many students can take the same unit. The first row of the example tells us that there is a student called Fred with id 101, who is male, and took the Mathematics unit and got a grade of 75 on it.}
+\begin{subquestion}{Identify the candidate key(s) in every table.} % Subquestion within question
+	
+	\answer{
+		\begin{align*} 
+		Relation&=\left \{  stdId,name,gender,unit,grade \right \} \\
+		Function&=\begin{Bmatrix}
+		stuId\rightarrow name, \\ 
+		stuId \rightarrow gender,\\
+		stuId \rightarrow unit,\\
+		stuId\&unit  \rightarrow grade 
+		\end{Bmatrix}
+		\end{align*}
+		\newline In this way, we can get closure stuId:
+			\begin{flalign*}
+			\left ( stuId \right )^{+} & =   \left \{stuId \right \}\\
+			& = \left \{stuId, name \right \}  \quad  \left ( stdId\rightarrow name \right )\\
+			& =  \left \{stuId, name,gender  \right \}  \quad  \left ( stuId \rightarrow gender \right )\\		 	  
+			& =  \left \{stuId, name,gender,unit  \right \}  \quad  \left ( stuId \rightarrow unit\right )\\	
+			& = \left \{stuId, name,gender,unit,grade  \right \}  \quad  \left (stuId\&unit  \rightarrow grade \right )\\
+			So \;  we \; get: \left ( stuId \right )^{+} &\sqsupseteq  Relation
+			\end{flalign*}
+			So stuId is a candidate key.
+}
+	
+	
+\end{subquestion}
 
-\answer{While this question leaves out the crucial element of the geographic origin of the swallow, according to Jonathan Corum, an unladen European swallow maintains a cruising airspeed velocity of \textbf{11 metres per second}, or \textbf{24 miles an hour}. The velocity of the corresponding African swallows requires further research as kinematic data is severely lacking for these species.}
+\begin{subquestion}{Identify the key and non-key attributes in every table.} % Subquestion within question
+	
+	\answer{Because stuLd is the only candidate key we get in this table, so stuId is candidate key and primary key.\\
+	Name, gender, unit, grade are non-key.}
+	
+\end{subquestion}
 
-\end{question}
 
-%----------------------------------------------------------------------------------------
-%	QUESTION 2
-%----------------------------------------------------------------------------------------
+\begin{subquestion}{Determine which normal forms from (1NF, 2NF, 3NF, BCNF) the schema does or does not satisfy. Give evidence to support your answer.} % Subquestion within question
 
-\begin{question}
-
-\questiontext{How much wood would a woodchuck chuck if a woodchuck could chuck wood?}
-
-%--------------------------------------------
-
-\begin{subquestion}{Suppose ``chuck" implies throwing.} % Subquestion within question
-
-\answer{According to the Associated Press (1988), a New York Fish and Wildlife technician named Richard Thomas calculated the volume of dirt in a typical 25--30 foot (7.6--9.1 m) long woodchuck burrow and had determined that if the woodchuck had moved an equivalent volume of wood, it could move ``about \textbf{700 pounds (320 kg)} on a good day, with the wind at his back".}
+\answer{For function in this table:
+	\begin{align*} 
+	Let:\;Function &= F\_stuId \cap F\_grade\\
+	F\_stuId &=\begin{Bmatrix}
+	stuId\rightarrow name, \\ 
+	stuId \rightarrow gender,\\
+	stuId \rightarrow unit,\\
+	\end{Bmatrix}
+	\end{align*}
+	stuId is candidate key,	so F\_stuId is satisfy in BCNF. In F\_grade from Function, both unit and grade are non-key in Function. And unit relies on stdId in F\_stuId.
+	\begin{align*} 
+	F\_grade&=\begin{Bmatrix}
+	stuId\&unit  \rightarrow grade 
+	\end{Bmatrix}
+	\end{align*}
+	In this way, both F\_stuId  and F\_grade are satisfy in BCNF, but Function is not satisfy in BCNF. \\
+	Function is just satisfy in 1NF. For unit is non-key relying on stuId, however	stuId\&unit  be a candidate key in a subset of Function.
+	}
 
 \end{subquestion}
 
-%--------------------------------------------
-
-\begin{subquestion}{Suppose ``chuck" implies vomiting.} % Subquestion within question
-
-\answer{A woodchuck can ingest 361.92 cm\textsuperscript{3} (22.09 cu in) of wood per day. Assuming immediate expulsion on ingestion with a 5\% retainment rate, a woodchuck could chuck \textbf{343.82 cm\textsuperscript{3}} of wood per day.}
-
+\begin{subquestion}{If the schema is not in BCNF, normalise it as far as possible(up to BCNF).This means give a new schema (either as an ER diagram or SQL CREATE TABLE statements) that is a normalised version of the original.} % Subquestion within question
+	
+	\answer{	\lstinputlisting[
+		caption=question2, % Caption above the listing
+		label=lst:luftballons, % Label for referencing this listing
+		language=Sql, % Use Perl functions/syntax highlighting
+		frame=single, % Frame around the code listing
+		showstringspaces=false, % Don't put marks in string spaces
+		numbers=left, % Line numbers on left
+		numberstyle=\tiny, % Line numbers styling
+		basicstyle=\tiny
+		]{question1.sql}}
+	
 \end{subquestion}
 
-%--------------------------------------------
-
 \end{question}
-
-%----------------------------------------------------------------------------------------
-%	QUESTION 3
-%----------------------------------------------------------------------------------------
 
 \begin{question}
-
-\questiontext{Identify the author of Equation \ref{eq:bayes} below and briefly describe it in English.}
-
-\begin{equation}\label{eq:bayes}
-	P(A|B) = \frac{P(B|A)P(A)}{P(B)}
-\end{equation}
-
-\answer{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porttitor arcu luctus, imperdiet urna iaculis, mattis eros. Pellentesque iaculis odio vel nisl ullamcorper, nec faucibus ipsum molestie. Sed dictum nisl non aliquet porttitor. Etiam vulputate arcu dignissim, finibus sem et, viverra nisl. Aenean luctus congue massa, ut laoreet metus ornare in. Nunc fermentum nisi imperdiet lectus tincidunt vestibulum at ac elit. Nulla mattis nisl eu malesuada suscipit.}
-
+	
+	\questiontext{The CIA world factbook contains geographical, political and military information about the world. Here is part of one table listing principal cities from 2015:}
+	\begin{table}[h]
+		\centering % Centre the table
+		\begin{tabular}{l l l l l}
+			\toprule
+			\textit{city} & {country} & {pop}&{co\_pop}&{capital} \\
+			\midrule
+			Paris & France & 10.843M&66.8M&yes\\ 
+			Lyon & France & 1.609M&66.8M&no\\
+			Marseille & France & 1.605M&66.8M&no\\
+			Papeete& French Polynesia& 133K&285K&60\\
+			Libreville& Gabon& 707K&1.7M&60\\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	
+	\questiontext{We will assume for this exercise that city names are globally unique and therefore the “City” column has been chosen as the primary key for this table. The “pop” column lists the city’s population and the “co\_pop” lists the population of the country in which the city is located (with abbreviations K = 1000, M=1000000). The “capital” column is a Boolean yes/no value that is set to “yes” for exactly one city in each country. (While the capital is included in the table for every country however small, non-captial cities are only included if they are of international significance.)}
+	\begin{subquestion}{Identify the candidate key(s) in every table.} % Subquestion within question
+		
+		\answer{\begin{align*} 
+			Relation&=\left \{ city,country,pop,co\_pop,capital \right \} \\
+			Function&=\begin{Bmatrix}
+			city\rightarrow country, \\ 
+			city\rightarrow pop,\\
+			country \rightarrow co\_pop,\\
+			city  \rightarrow captial
+			\end{Bmatrix}
+			\end{align*}
+		    \newline In this way, we can get closure city:
+		    \begin{flalign*}
+		    \left ( city\right )^{+} & =   \left \{city\right \}\\
+		    & = \left \{ city,country \right \}  \quad  \left (city\rightarrow country \right )\\
+		     & = \left \{ city,country,pop \right \}  \quad  \left (city\rightarrow pop \right )\\
+		    & = \left \{ city,country,pop,co\_pop \right \}  \quad  \left (country \rightarrow co\_pop \right )\\
+		    & = \left \{ city,country,pop,co\_pop ,captial\right \}  \quad  \left (city \rightarrow captial \right )\\
+		    So \;  we \; get: \left ( city \right )^{+} &\sqsupseteq  Relation
+		    \end{flalign*}
+		    So city is a candidate key.
+	}
+			
+		
+	\end{subquestion}
+	
+	\begin{subquestion}{Identify the key and non-key attributes in every table.} % Subquestion within question
+		
+		\answer{Because city is the only candidate key we get, so city is the candidate key and primary key.\\
+		Country, pop, co\_pop, captial is non-key.}
+		
+	\end{subquestion}
+	
+	
+	\begin{subquestion}{Determine which normal forms from (1NF, 2NF, 3NF, BCNF) the schema does or does not satisfy. Give evidence to support your answer.} % Subquestion within question
+		
+		\answer{For function in this table:
+		\begin{align*} 
+		Let:\;Function &= F\_city \cap F\_country\\
+		F\_city&=\begin{Bmatrix}
+		city\rightarrow country, \\ 
+		city\rightarrow pop,\\
+		city  \rightarrow captial
+		\end{Bmatrix}
+		\end{align*}
+		City is candidate key,	so F\_city is satisfy in BCNF. In F\_country from Function, co\_pop is non-key, and country is not a candidate key for Function but a candidate key for F\_country.
+		\begin{align*} 
+		F\_country&=\begin{Bmatrix}
+		country \rightarrow co\_pop
+		\end{Bmatrix}
+		\end{align*}
+		In this way, both F\_city and F\_country are satisfy in BCNF, but Function is not satisfy in BCNF. \\
+		Function is just satisfy in 2NF, for both country and co\_pop are non-key .
+}
+		
+	\end{subquestion}
+	
+	\begin{subquestion}{If the schema is not in BCNF, normalise it as far as possible(up to BCNF).This means give a new schema (either as an ER diagram or SQL CREATE TABLE statements) that is a normalised version of the original.} % Subquestion within question
+		
+		\answer{
+		\lstinputlisting[
+		caption=question2, % Caption above the listing
+		label=lst:luftballons, % Label for referencing this listing
+		language=Sql, % Use Perl functions/syntax highlighting
+		frame=single, % Frame around the code listing
+		showstringspaces=false, % Don't put marks in string spaces
+		numbers=left, % Line numbers on left
+		numberstyle=\tiny, % Line numbers styling
+		basicstyle=\tiny
+		]{question2.sql}
+	}
+		
+	\end{subquestion}
+	
 \end{question}
-
-%----------------------------------------------------------------------------------------
-
-\assignmentSection{Bonus Questions}
-
-%----------------------------------------------------------------------------------------
-%	QUESTION 4
-%----------------------------------------------------------------------------------------
-
-\begin{question}
-
-\questiontext{The table below shows the nutritional consistencies of two sausage types. Explain their relative differences given what you know about daily adult nutritional recommendations.}
-
-\begin{table}[h]
-	\centering % Centre the table
-	\begin{tabular}{l l l}
-		\toprule
-		\textit{Per 50g} & Pork & Soy \\
-		\midrule
-		Energy & 760kJ & 538kJ\\
-		Protein & 7.0g & 9.3g\\
-		Carbohydrate & 0.0g & 4.9g\\
-		Fat & 16.8g & 9.1g\\
-		Sodium & 0.4g & 0.4g\\
-		Fibre & 0.0g & 1.4g\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-\answer{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porttitor arcu luctus, imperdiet urna iaculis, mattis eros. Pellentesque iaculis odio vel nisl ullamcorper, nec faucibus ipsum molestie. Sed dictum nisl non aliquet porttitor. Etiam vulputate arcu dignissim, finibus sem et, viverra nisl. Aenean luctus congue massa, ut laoreet metus ornare in. Nunc fermentum nisi imperdiet lectus tincidunt vestibulum at ac elit. Nulla mattis nisl eu malesuada suscipit.}
-
-\end{question}
-
-%----------------------------------------------------------------------------------------
-%	QUESTION 5
-%----------------------------------------------------------------------------------------
-
-\begin{question}
-
-\lstinputlisting[
-	caption=Luftballons Perl Script, % Caption above the listing
-	label=lst:luftballons, % Label for referencing this listing
-	language=Perl, % Use Perl functions/syntax highlighting
-	frame=single, % Frame around the code listing
-	showstringspaces=false, % Don't put marks in string spaces
-	numbers=left, % Line numbers on left
-	numberstyle=\tiny, % Line numbers styling
-	]{luftballons.pl}
-
-%--------------------------------------------
-
-\begin{subquestion}{How many luftballons will be output by the Listing \ref{lst:luftballons} above?} % Subquestion within question
-
-\answer{99 luftballons.}
-
-\end{subquestion}
-
-%--------------------------------------------
-
-\begin{subquestion}{Identify the regular expression in Listing \ref{lst:luftballons} and explain how it relates to the anti-war sentiments found in the rest of the script.} % Subquestion within question
-
-\answer{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent porttitor arcu luctus, imperdiet urna iaculis, mattis eros. Pellentesque iaculis odio vel nisl ullamcorper, nec faucibus ipsum molestie. Sed dictum nisl non aliquet porttitor. Etiam vulputate arcu dignissim, finibus sem et, viverra nisl. Aenean luctus congue massa, ut laoreet metus ornare in. Nunc fermentum nisi imperdiet lectus tincidunt vestibulum at ac elit. Nulla mattis nisl eu malesuada suscipit.}
-
-\end{subquestion}
-
-%--------------------------------------------
-
-\end{question}
-
-%----------------------------------------------------------------------------------------
 
 \end{document}
