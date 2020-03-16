@@ -1,5 +1,3 @@
-package com.company;
-
 class Entity {
     private String property;
     private String name;

@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -253,11 +251,18 @@ public class Controller {
             } else if (this.currentPlayer.getLocation().funitureContains(consumed)) {
                 out.write("You consume this location's "+consumed+".\n");
                 this.currentPlayer.getLocation().removeFuniture(consumed);
+            } else if(this.currentPlayer.getLocation().characterContains(consumed)){
+                out.write(""+consumed+" is dead.\n");
+                this.currentPlayer.getLocation().removeCharacter(consumed);
+            }else if(this.currentPlayer.getLocation().pathContains(consumed)){
+                out.write("The path to"+consumed+" is closed.\n");
+                this.currentPlayer.getLocation().removePath(consumed);
             }
         }
     }
 
     void actionExecutionProduces(Action action) throws IOException{
+        boolean newArtefactFlag=true;
         for (String produces : action.getProduced()) {
             if (produces.equals("health")) {
                 this.currentPlayer.increaseHealth();
@@ -276,15 +281,30 @@ public class Controller {
                 }else if(this.world.getLocation("unplaced").funitureContains(produces)){
                     this.currentPlayer.getLocation().setFurniture(this.world.getLocation("unplaced").getFurniture(produces));
                     this.world.getLocation("unplaced").removeFuniture(produces);
+                }else if(this.world.getLocation("unplaced").characterContains(produces)){
+                    this.currentPlayer.getLocation().setCharacter(this.world.getLocation("unplaced").getCharacter(produces));
+                    this.world.getLocation("unplaced").removeCharacter(produces);
                 }
-
                 out.write("A "+produces+" drop on the ground.\n");
             }else {
-                Artefact newArtefact=new Artefact();
-                newArtefact.setName(produces);
-                newArtefact.setDescription("A mysterious item.");
-                this.currentPlayer.getLocation().setArtefact(newArtefact);
-                out.write("A "+produces+" drop on the ground.\n");
+                for(Location location:this.world.getLocation()){
+                    if((location.getArtefact(produces)!=null)||
+                            (location.getCharacter(produces)!=null)||
+                            (location.getFurniture(produces)!=null)){
+                        newArtefactFlag=false;
+                        break;
+                    }
+                }
+                if(newArtefactFlag){
+                    Artefact newArtefact=new Artefact();
+                    newArtefact.setName(produces);
+                    newArtefact.setDescription("A mysterious item.");
+                    this.currentPlayer.getLocation().setArtefact(newArtefact);
+                    out.write("A "+produces+" drop on the ground.\n");
+                }else {
+                    out.write("The creator seems to have made a mistake, " +
+                            "and the resulting items cannot have taboo names.");
+                }
             }
         }
     }

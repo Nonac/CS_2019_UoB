@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 

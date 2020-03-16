@@ -5,7 +5,7 @@ import java.net.*;
 
 public class StagClient
 {
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         if(args.length != 1) System.out.println("Usage: java StageClient <player-name>");
         else {

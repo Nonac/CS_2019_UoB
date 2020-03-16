@@ -1,5 +1,3 @@
-package com.company;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -176,6 +174,10 @@ class Location extends Entity {
         return false;
     }
 
+    public void removeCharacter(String s){
+        this.Character.removeIf(character -> character.getName().equals(s));
+    }
+
     public boolean pathContains(String s){
         for(Location location:this.Path){
             if(location.getName().equals(s)){
@@ -183,5 +185,8 @@ class Location extends Entity {
             }
         }
         return false;
+    }
+    public void removePath(String s){
+        this.Path.removeIf(path -> path.getName().equals(s));
     }
 }
