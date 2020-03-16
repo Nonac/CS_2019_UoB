@@ -112,33 +112,29 @@ class Location extends Entity {
         return null;
     }
 
-    public void loctionDescribe(Player currentPlayer,BufferedWriter out){
-        try {
-            out.write("You are at the "+this.getName()+".\n");
-            for(Artefact artefact:Artefact){
-                out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ " which you could collect. " +
-                        "It is "+artefact.getDescription()+".\n");
-            }
-            for(Furniture furniture:Furniture){
-                out.write("    There is "+(furniture.nameIsVowel()?"an ":"a ")+furniture.getName()+
-                        ". It is "+furniture.getDescription()+".\n");
-            }
-            for(Character character:Character){
-                out.write("    There is "+(character.nameIsVowel()?"an ":"a ")+character.getName()+
-                        ". It is "+character.getDescription()+".\n");
-            }
-            for(Location path:Path){
-                out.write("    There is a way to "+path.getName()+".\n");
-            }
-            for(Player player:Player){
-                if(!player.getName().equals(currentPlayer.getName())){
-                    out.write("    There is a player named "+player.getName()+" looking at you.\n");
-                }
-            }
-            out.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void loctionDescribe(Player currentPlayer,BufferedWriter out) throws IOException {
+        out.write("You are at the "+this.getName()+". It is "+this.getDescription()+".\n");
+        for(Artefact artefact:Artefact){
+            out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ " which you could collect. " +
+                    "It is "+artefact.getDescription()+".\n");
         }
+        for(Furniture furniture:Furniture){
+            out.write("    There is "+(furniture.nameIsVowel()?"an ":"a ")+furniture.getName()+
+                    ". It is "+furniture.getDescription()+".\n");
+        }
+        for(Character character:Character){
+            out.write("    There is "+(character.nameIsVowel()?"an ":"a ")+character.getName()+
+                    ". It is "+character.getDescription()+".\n");
+        }
+        for(Location path:Path){
+            out.write("    There is a way to "+path.getName()+". It is "+path.getDescription()+".\n");
+        }
+        for(Player player:Player){
+            if(!player.getName().equals(currentPlayer.getName())){
+                out.write("    There is a player named "+player.getName()+" looking at you.\n");
+            }
+        }
+        out.newLine();
     }
 
     public void removeArtefact(Artefact artefact){

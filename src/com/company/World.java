@@ -20,106 +20,99 @@ public class World {
     private ArrayList<Player> Player=new ArrayList<>();
     private Location start=null;
 
-    public World(String entityFilename, String actionFilename){
+    public World(String entityFilename, String actionFilename) throws IOException, ParseException,
+            org.json.simple.parser.ParseException {
         setEntity(entityFilename);
         setAction(actionFilename);
         setStart();
     }
 
-    public void setEntity(String entityFilename){
-        try {
-            Parser parser=new Parser();
-            FileReader reader=new FileReader(entityFilename);
-            parser.parse(reader);
-            ArrayList<Graph> graphs=parser.getGraphs();
-            ArrayList<Graph> subGraphs=graphs.get(0).getSubgraphs();
-            for(Graph g:subGraphs){
-                ArrayList<Graph> subGraph1=g.getSubgraphs();
+    public void setEntity(String entityFilename) throws FileNotFoundException, ParseException {
+        Parser parser=new Parser();
+        FileReader reader=new FileReader(entityFilename);
+        parser.parse(reader);
+        ArrayList<Graph> graphs=parser.getGraphs();
+        ArrayList<Graph> subGraphs=graphs.get(0).getSubgraphs();
+        for(Graph g:subGraphs){
+            ArrayList<Graph> subGraph1=g.getSubgraphs();
 
-                for(Graph g1:subGraph1){
-                    ArrayList<Node> nodesloc =g1.getNodes(false);
-                    Node nLoc=nodesloc.get(0);
-                    Location newLocation=new Location();
-                    newLocation.setName(nLoc.getId().getId());
-                    ArrayList<Graph> subGraph2=g1.getSubgraphs();
-                    for(Graph g2:subGraph2){
-                        switch (g2.getId().getId()) {
-                            case "artefacts": {
-                                ArrayList<Node> nodesEnt = g2.getNodes(false);
-                                for (Node nEnt : nodesEnt) {
-                                    Artefact newArtefact = new Artefact();
-                                    newArtefact.setName(nEnt.getId().getId());
-                                    newArtefact.setDescription(nEnt.getAttribute("description"));
-                                    newLocation.setArtefact(newArtefact);
-                                }
-                                break;
+            for(Graph g1:subGraph1){
+                ArrayList<Node> nodesloc =g1.getNodes(false);
+                Node nLoc=nodesloc.get(0);
+                Location newLocation=new Location();
+                newLocation.setName(nLoc.getId().getId());
+                newLocation.setDescription(nLoc.getAttribute("description"));
+                ArrayList<Graph> subGraph2=g1.getSubgraphs();
+                for(Graph g2:subGraph2){
+                    switch (g2.getId().getId()) {
+                        case "artefacts": {
+                            ArrayList<Node> nodesEnt = g2.getNodes(false);
+                            for (Node nEnt : nodesEnt) {
+                                Artefact newArtefact = new Artefact();
+                                newArtefact.setName(nEnt.getId().getId());
+                                newArtefact.setDescription(nEnt.getAttribute("description"));
+                                newLocation.setArtefact(newArtefact);
                             }
-                            case "furniture": {
-                                ArrayList<Node> nodesEnt = g2.getNodes(false);
-                                for (Node nEnt : nodesEnt) {
-                                    Furniture newFurniture = new Furniture();
-                                    newFurniture.setName(nEnt.getId().getId());
-                                    newFurniture.setDescription(nEnt.getAttribute("description"));
-                                    newLocation.setFurniture(newFurniture);
-                                }
-                                break;
+                            break;
+                        }
+                        case "furniture": {
+                            ArrayList<Node> nodesEnt = g2.getNodes(false);
+                            for (Node nEnt : nodesEnt) {
+                                Furniture newFurniture = new Furniture();
+                                newFurniture.setName(nEnt.getId().getId());
+                                newFurniture.setDescription(nEnt.getAttribute("description"));
+                                newLocation.setFurniture(newFurniture);
                             }
-                            case "characters": {
-                                ArrayList<Node> nodesEnt = g2.getNodes(false);
-                                for (Node nEnt : nodesEnt) {
-                                    Character newCharacter = new Character();
-                                    newCharacter.setName(nEnt.getId().getId());
-                                    newCharacter.setDescription(nEnt.getAttribute("description"));
-                                    newLocation.setCharacter(newCharacter);
-                                }
-                                break;
+                            break;
+                        }
+                        case "characters": {
+                            ArrayList<Node> nodesEnt = g2.getNodes(false);
+                            for (Node nEnt : nodesEnt) {
+                                Character newCharacter = new Character();
+                                newCharacter.setName(nEnt.getId().getId());
+                                newCharacter.setDescription(nEnt.getAttribute("description"));
+                                newLocation.setCharacter(newCharacter);
                             }
+                            break;
                         }
                     }
-                    this.Location.add(newLocation);
                 }
+                this.Location.add(newLocation);
+            }
 
-                ArrayList<Edge> edges = g.getEdges();
-                for(Edge e:edges){
-                    for(Location locationFrom : Location){
-                        for (Location locationTo : Location) {
-                            if (locationFrom.getName().equals(e.getSource().getNode().getId().getId())
-                                    & locationTo.getName().equals(e.getTarget().getNode().getId().getId())) {
-                                locationFrom.setPath(locationTo);
-                            }
+            ArrayList<Edge> edges = g.getEdges();
+            for(Edge e:edges){
+                for(Location locationFrom : Location){
+                    for (Location locationTo : Location) {
+                        if (locationFrom.getName().equals(e.getSource().getNode().getId().getId())
+                                & locationTo.getName().equals(e.getTarget().getNode().getId().getId())) {
+                            locationFrom.setPath(locationTo);
                         }
                     }
                 }
             }
-        }catch (FileNotFoundException | ParseException e) {
-            e.printStackTrace();
         }
     }
 
-    public void setAction(String actionFilename)  {
-        try {
-            JSONParser parser=new JSONParser();
-            FileReader f=new FileReader(actionFilename);
-            JSONObject json= (JSONObject) parser.parse(f);
-            JSONArray jsonArray=(JSONArray) json.get("actions");
-            for (Object o : jsonArray) {
-                Action newAction = new Action();
-                JSONObject jsonNewAction = (JSONObject) o;
-                JSONArray triggers = (JSONArray) jsonNewAction.get("triggers");
-                JSONArray subjects = (JSONArray) jsonNewAction.get("subjects");
-                JSONArray consumed = (JSONArray) jsonNewAction.get("consumed");
-                JSONArray produced = (JSONArray) jsonNewAction.get("produced");
-                String narration = (String) jsonNewAction.get("narration");
-                for (Object subO:triggers) { newAction.setTrigger((String)subO); }
-                for (Object subO:subjects) { newAction.setSubjects((String)subO); }
-                for (Object subO:consumed) { newAction.setConsumed((String)subO); }
-                for (Object subO:produced) { newAction.setProduced((String)subO); }
-                newAction.setNarration(narration);
-                Action.add(newAction);
-            }
-
-        } catch (org.json.simple.parser.ParseException | IOException e){
-            e.printStackTrace();
+    public void setAction(String actionFilename) throws IOException, org.json.simple.parser.ParseException {
+        JSONParser parser=new JSONParser();
+        FileReader f=new FileReader(actionFilename);
+        JSONObject json= (JSONObject) parser.parse(f);
+        JSONArray jsonArray=(JSONArray) json.get("actions");
+        for (Object o : jsonArray) {
+            Action newAction = new Action();
+            JSONObject jsonNewAction = (JSONObject) o;
+            JSONArray triggers = (JSONArray) jsonNewAction.get("triggers");
+            JSONArray subjects = (JSONArray) jsonNewAction.get("subjects");
+            JSONArray consumed = (JSONArray) jsonNewAction.get("consumed");
+            JSONArray produced = (JSONArray) jsonNewAction.get("produced");
+            String narration = (String) jsonNewAction.get("narration");
+            for (Object subO:triggers) { newAction.setTrigger((String)subO); }
+            for (Object subO:subjects) { newAction.setSubjects((String)subO); }
+            for (Object subO:consumed) { newAction.setConsumed((String)subO); }
+            for (Object subO:produced) { newAction.setProduced((String)subO); }
+            newAction.setNarration(narration);
+            Action.add(newAction);
         }
     }
 

@@ -63,53 +63,48 @@ public class Player extends Character {
         return false;
     }
 
-    public void revenge(BufferedWriter out) {
-        try {
-            if(this.isDead()){
-                out.write("You are killed by ");
-            }else {
-                out.write("You are punched by ");
-            }
-
-            for(Player player:this.killer){
-                out.write(player.getName()+" ");
-            }
-            out.write(".\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void revenge(BufferedWriter out) throws IOException {
+        if(this.isDead()){
+            out.write("You are killed by ");
+        }else {
+            out.write("You are punched by ");
         }
+
+        for(Player player:this.killer){
+            out.write(player.getName()+" ");
+        }
+        out.write(".\n");
+
         killer=new ArrayList<>();
     }
 
-    public void artefactDescribe(BufferedWriter out){
-        try {
-            if(Artefact.size()==0){
-                out.write("There is nothing artefact currently carried by "+this.getName()+".\n");
-            }else {
-                out.write("There are artefacts currently carried by "+this.getName()+":\n");
-                for(Artefact artefact:Artefact){
-                    out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ ". " +
-                            "It is "+(artefact.descriptionIsVowel()?"an ":"a ")+artefact.getDescription()+".\n");
-                }
+    public void artefactDescribe(BufferedWriter out) throws IOException {
+        if(Artefact.size()==0){
+            out.write("There is nothing artefact currently carried by "+this.getName()+".\n");
+        }else {
+            out.write("There are artefacts currently carried by "+this.getName()+":\n");
+            for(Artefact artefact:Artefact){
+                out.write("    There is "+(artefact.nameIsVowel()?"an ":"a ")+artefact.getName()+ ". " +
+                        "It is "+(artefact.descriptionIsVowel()?"an ":"a ")+artefact.getDescription()+".\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public void getHealth(BufferedWriter out) {
-        try {
-            out.write("Your health is "+this.getHealth()+".\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void getHealth(BufferedWriter out) throws IOException {
+        out.write("Your health is "+this.getHealth()+".\n");
     }
 
-    public void removeArtefact(Artefact artefact){
+    public void removeArtefact(Artefact artefact)throws NullPointerException{
         this.Artefact.remove(artefact);
     }
 
-    public void removeArtefact(String s){
+    private void removeArtefact(ArrayList<Artefact> artefact)throws NullPointerException{
+        if (artefact.size() > 0) {
+            artefact.subList(0, artefact.size()).clear();
+        }
+    }
+
+    public void removeArtefact(String s)throws NullPointerException{
         this.Artefact.removeIf(artefact -> artefact.getName().equals(s));
     }
 
@@ -130,22 +125,19 @@ public class Player extends Character {
         this.health--;
     }
 
-    public void dead(Location location,BufferedWriter out){
-        try{
-            out.write("You are dead.\n");
-            for(Artefact artefact:this.Artefact){
-                this.getLocation().setArtefact(artefact);
-                out.write("Your "+artefact.getName()+" drop on the ground.\n");
-            }
-            this.Artefact= new ArrayList<>();
-            this.location=location;
-
-            setHealth(3);
-            this.rebirth++;
-            out.write("You are reborn where you started.\n");
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void dead(Location location,BufferedWriter out) throws NullPointerException, IOException {
+        out.write("You are dead.\n");
+        for(Artefact artefact:this.Artefact){
+            this.getLocation().setArtefact(artefact);
+            out.write("Your "+artefact.getName()+" drop on the ground.\n");
         }
+        this.removeArtefact(this.Artefact);
+        this.location=location;
+
+        setHealth(3);
+        this.rebirth++;
+        out.write("You are reborn where you started.\n");
+        out.newLine();
     }
 
     private void setRebirth(int n){

@@ -17,23 +17,14 @@ public class Character extends Entity {
         return health;
     }
 
-    public void getHealth(BufferedWriter out) {
-        try {
-            out.write("The health of "+this.getName()+" is "+this.getHealth()+".\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void getHealth(BufferedWriter out) throws IOException {
+        out.write("The health of "+this.getName()+" is "+this.getHealth()+".\n");
     }
 
-    public void characterDescribe(BufferedWriter out){
-        try {
-            out.write("There is "+(this.nameIsVowel()?"an ":"a ")+this.getName()+
-                    ". It is "+(this.descriptionIsVowel()?"an ":"a ")+this.getDescription()+". ");
-            out.write("The health of "+this.getName()+" is "+this.getHealth()+".\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void characterDescribe(BufferedWriter out) throws IOException {
+        out.write("There is "+(this.nameIsVowel()?"an ":"a ")+this.getName()+
+                ". It is "+(this.descriptionIsVowel()?"an ":"a ")+this.getDescription()+". ");
+        out.write("The health of "+this.getName()+" is "+this.getHealth()+".\n");
     }
 
     public boolean isDead(){
