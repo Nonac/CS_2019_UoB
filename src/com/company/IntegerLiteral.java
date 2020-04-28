@@ -1,8 +1,8 @@
 package com.company;
 
-public class IntegerLiteral extends ValueType {
+public class IntegerLiteral extends ValueLiteral {
 
-    private void main(){
-        setVariableType(VariableType.INTEGER);
+    public IntegerLiteral(){
+        this.setVariableType(VariableType.INTEGER);
     }
 }

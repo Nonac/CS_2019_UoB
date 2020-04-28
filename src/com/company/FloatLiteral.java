@@ -1,8 +1,8 @@
 package com.company;
 
-public class FloatLiteral extends ValueType {
+public class FloatLiteral extends ValueLiteral {
 
-    private void main(){
-        setVariableType(VariableType.FLOAT);
+    public FloatLiteral(){
+        this.setVariableType(VariableType.FLOAT);
     }
 }

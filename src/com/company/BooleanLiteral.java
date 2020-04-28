@@ -1,8 +1,8 @@
 package com.company;
 
-public class BooleanLiteral extends ValueType {
+public class BooleanLiteral extends ValueLiteral {
 
-    private void main(){
-        setVariableType(VariableType.BOOLEAN);
+    public BooleanLiteral(){
+        this.setVariableType(VariableType.BOOLEAN);
     }
 }

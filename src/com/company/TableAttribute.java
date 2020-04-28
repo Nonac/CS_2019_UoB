@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class TableAttribute<E> {
     private ArrayList<E> Attribute;
     private int RecordCnt;
+    private String AttributeName;
 
-    private void main(){
+    public TableAttribute(){
         Attribute=new ArrayList<>();
         this.setRecordCnt(0);
+        this.AttributeName=null;
     }
 
     public void add(E value){
@@ -27,4 +29,17 @@ public class TableAttribute<E> {
     public void setRecordCnt(int recordCnt) {
         RecordCnt = recordCnt;
     }
+
+    public void setAttribute(ArrayList<E> attribute) {
+        Attribute = attribute;
+    }
+
+    public void setAttributeName(String attributeName) {
+        AttributeName = attributeName;
+    }
+
+    public String getAttributeName() {
+        return AttributeName;
+    }
+
 }

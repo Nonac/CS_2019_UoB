@@ -23,9 +23,16 @@ public class TokenElement {
             this.value = value;
         }else if(value.charAt(0)=='\''&&value.charAt(value.length()-1)=='\''){
             this.setVariableType(VariableType.STRING);
-            this.value = value.substring(1,value.length()-2);
+            this.value = value.substring(1,value.length()-1);
+        }else if(this.isStr2Num(value)){
+            this.setVariableType(VariableType.INTEGER);
+            this.value = value;
+        }else if(value.matches("^[0-9]+(.[0-9]+)?$")){
+            this.setVariableType(VariableType.FLOAT);
+            this.value=value;
+        }else {
+            this.value=value;
         }
-        this.value = value;
     }
 
     public VariableType getVariableType() {
@@ -42,5 +49,14 @@ public class TokenElement {
 
     public boolean propertyIsValue(){
         return this.property == TokenType.VALUE;
+    }
+
+    public boolean isStr2Num(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

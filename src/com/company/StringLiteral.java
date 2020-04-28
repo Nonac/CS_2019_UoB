@@ -1,9 +1,9 @@
 package com.company;
 
-public class StringLiteral extends ValueType {
+public class StringLiteral extends ValueLiteral {
 
-    private void main(){
-        setVariableType(VariableType.STRING);
+    public StringLiteral(){
+        this.setVariableType(VariableType.STRING);
     }
 
 }

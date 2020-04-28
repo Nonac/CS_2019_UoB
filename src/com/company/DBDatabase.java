@@ -6,7 +6,7 @@ public class DBDatabase {
     private ArrayList<DBTable> database;
     private int RecordCnt;
 
-    private void main(){
+    private DBDatabase(){
         this.setRecordCnt(0);
         this.database=new ArrayList<>();
     }
