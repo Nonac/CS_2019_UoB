@@ -74,6 +74,8 @@ public class DBParser {
             return TokenType.LIKE;
         }else if(buff.equalsIgnoreCase("Into")){
             return TokenType.INTO;
+        }else if(buff.equalsIgnoreCase("Add")){
+            return TokenType.ADD;
         }else if(buff.equals("(")){
             return TokenType.LEFTPARENTHESIS;
         }else if(buff.equals(")")){

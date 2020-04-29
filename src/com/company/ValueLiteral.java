@@ -1,6 +1,8 @@
 package com.company;
 
-public class ValueLiteral {
+import java.io.Serializable;
+
+public class ValueLiteral implements Serializable {
 
     private VariableType variableType;
     private String value;

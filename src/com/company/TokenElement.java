@@ -5,8 +5,8 @@ public class TokenElement {
     private String value;
     private VariableType variableType;
 
-    private void main(String[] args) {
-
+    public TokenElement() {
+        this.value=null;
     }
 
     public void setProperty(TokenType property) {

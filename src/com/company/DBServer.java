@@ -23,13 +23,12 @@ public class DBServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             while (true) processNextCommand(in,out);
-        } catch (IOException ioe) {
+        } catch (IOException | ClassNotFoundException ioe) {
             System.err.println(ioe);
         }
     }
 
-    private void processNextCommand (BufferedReader in, BufferedWriter out) throws IOException, NoSuchMethodError
-    {
+    private void processNextCommand (BufferedReader in, BufferedWriter out) throws IOException, NoSuchMethodError, ClassNotFoundException {
         String line = in.readLine();
         this.controller.readCommand(line,out);
         out.write(""+EOT+"\n");
