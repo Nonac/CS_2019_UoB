@@ -152,7 +152,7 @@ public class DBTable implements Serializable {
             this.tableAttributes.get(i).add(valueLiteral);
         }
 
-        for(int i=left.getTable().size()-1;i<(left.getTable().size()+right.getTable().size()-1);i++){
+        for(int i=left.getTable().size();i<(left.getTable().size()+right.getTable().size()-1);i++){
             valueLiteral=new ValueLiteral();
             valueLiteral.setValue(right.getTable().get(i-left.getTable().size()+1).getAttribute().get(rightindex).getValue());
             valueLiteral.setVariableType(right.getTable().get(i-left.getTable().size()+1).getAttribute().get(rightindex).getVariableType());
