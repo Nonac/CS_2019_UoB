@@ -5,14 +5,15 @@ import java.util.ArrayList;
 public class DBParser {
     private ArrayList<TokenElement> token;
     private int beginCharacter,endCharacter;
+    boolean stringswitch;
 
-    public  void main(){
+    public  DBParser(){
 
     }
 
     public ArrayList<TokenElement> parseStringToToken(String in){
         this.token=new ArrayList<>();
-
+        this.stringswitch=false;
         this.setBeginCharacter(0);
         while (in.charAt(beginCharacter)==' '){
             beginCharacter++;
@@ -76,6 +77,10 @@ public class DBParser {
             return TokenType.INTO;
         }else if(buff.equalsIgnoreCase("Add")){
             return TokenType.ADD;
+        }else if(buff.equalsIgnoreCase("Set")){
+            return TokenType.SET;
+        } else if(buff.equalsIgnoreCase("On")){
+            return TokenType.ON;
         }else if(buff.equals("(")){
             return TokenType.LEFTPARENTHESIS;
         }else if(buff.equals(")")){
@@ -100,13 +105,16 @@ public class DBParser {
             return TokenType.EQUAL;
         }else if(buff.equals("!=")){
             return TokenType.NOTEQUAL;
+        }else if(buff.equals("=")){
+            return TokenType.ASSIGN;
         }
         return TokenType.VALUE;
     }
 
 
-    public void interceptWord(String in){
-        while (endCharacter<in.length()) {
+    public void interceptWord(String in) {
+
+        while (endCharacter < in.length()) {
             switch (in.charAt(endCharacter)) {
                 case '(':
                 case ')':
@@ -114,32 +122,47 @@ public class DBParser {
                 case ',':
                 case ' ':
                 case '*':
-                    if(beginCharacter==endCharacter){
+                    if (beginCharacter == endCharacter) {
                         endCharacter++;
                     }
-                    return;
+                    if(!stringswitch){
+                        return;
+                    }else {
+                        endCharacter++;
+                    }
                 case '>':
                 case '<':
                 case '!':
                 case '=':
-                    if(in.charAt(endCharacter+1)=='='){
-                        endCharacter+=2;
+                    if (in.charAt(endCharacter + 1) == '=') {
+                        endCharacter += 2;
                     }
-                    if(beginCharacter==endCharacter){
+                    if (beginCharacter == endCharacter) {
                         endCharacter++;
                     }
-                    return;
+                    if(!stringswitch){
+                        return;
+                    }else {
+                        endCharacter++;
+                    }
             }
+
             if (Character.isLowerCase(in.charAt(endCharacter)) ||
                     Character.isUpperCase(in.charAt(endCharacter)) ||
                     Character.isDigit(in.charAt(endCharacter)) ||
-                    in.charAt(endCharacter) == '\'' ||
                     in.charAt(endCharacter) == '.' ||
                     in.charAt(endCharacter) == '_') {
+                this.endCharacter++;
+            } else if ((in.charAt(endCharacter) == '\'') && (!stringswitch)) {
+                this.stringswitch = true;
+                this.endCharacter++;
+            } else if ((in.charAt(endCharacter) == '\'') && (stringswitch)) {
+                this.stringswitch = false;
                 this.endCharacter++;
             }
         }
     }
+
 
     public void setBeginCharacter(int beginCharacter) {
         this.beginCharacter = beginCharacter;

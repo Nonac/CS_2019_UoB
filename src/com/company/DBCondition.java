@@ -36,10 +36,140 @@ public class DBCondition {
         return null;
     }
 
-    private DBTable logicOr(DBTable left, DBTable right, BufferedWriter out) {
+    public DBTable logicOr(DBTable left, DBTable right, BufferedWriter out) {
+        DBTable res=new DBTable();
+        int left_index=0,right_index=0;
+        while (left_index<left.getTable().get(0).getAttribute().size()
+                &&right_index<right.getTable().get(0).getAttribute().size()) {
+            if (Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    < Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())) {
+                res.insertData(left, left_index);
+                left_index++;
+            } else if (Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    == Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())) {
+                res.insertData(left, left_index);
+                left_index++;
+                right_index++;
+            } else if (Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    > Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())) {
+                res.insertData(right, right_index);
+                right_index++;
+            }
+        }
+        while (left_index<left.getTable().get(0).getAttribute().size()){
+            res.insertData(left, left_index);
+            left_index++;
+        }
+        while (right_index<right.getTable().get(0).getAttribute().size()){
+            res.insertData(right, right_index);
+            right_index++;
+        }
+        res.setEmptyTable(false);
+        res.setTableName(left.getTableName());
+        return res;
     }
 
-    private DBTable logicAnd(DBTable left, DBTable right, BufferedWriter out) {
+    public DBTable logicAnd(DBTable left, DBTable right, BufferedWriter out) {
+        DBTable res=new DBTable();
+        int left_index=0,right_index=0;
+        while (left_index<left.getTable().get(0).getAttribute().size()
+                &&right_index<right.getTable().get(0).getAttribute().size()){
+            if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    <Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                //res.insertDate(left,left_index);
+                left_index++;
+            }else if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    ==Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                res.insertData(left,left_index);
+                left_index++;
+                right_index++;
+            }else if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    >Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                //res.insertDate(right,left_index);
+                right_index++;
+            }
+        }
+        while (left_index<left.getTable().get(0).getAttribute().size()){
+            res.insertData(left, left_index);
+            left_index++;
+        }
+        while (right_index<right.getTable().get(0).getAttribute().size()){
+            res.insertData(right, right_index);
+            right_index++;
+        }
+        res.setEmptyTable(false);
+        res.setTableName(left.getTableName());
+        return res;
+    }
+
+    public DBTable logicAnd(DBTable left, DBTable right,String leftAttribute,String rightAttribut
+            , BufferedWriter out) {
+        DBTable res=new DBTable();
+        int leftAttributeIndex=left.findIndexOfAttribute(leftAttribute);
+        int rightAttributeIndex=right.findIndexOfAttribute(rightAttribut);
+
+        TableAttribute newTableAttribute=new TableAttribute();
+        newTableAttribute.setAttributeName("id");
+        res.setTable(newTableAttribute);
+
+        for(int i=1;i<(left.getTable().size());i++){
+            TableAttribute tableAttribute=new TableAttribute();
+            tableAttribute.setAttributeName(""+left.getTableName()+"."
+                    +left.getTable().get(i).getAttributeName());
+            res.setTable(tableAttribute);
+        }
+        for(int i=1;i<(right.getTable().size());i++){
+            TableAttribute tableAttribute=new TableAttribute();
+            tableAttribute.setAttributeName(""+right.getTableName()+"."
+                    +right.getTable().get(i).getAttributeName());
+            res.setTable(tableAttribute);
+        }
+
+        for(int i=0;i<left.getTable().get(leftAttributeIndex).getAttribute().size();i++){
+            for(int j=0;j<right.getTable().get(rightAttributeIndex).getAttribute().size();j++){
+                if(left.getTable().get(leftAttributeIndex).getAttribute().get(i).getValue().equals(
+                        right.getTable().get(rightAttributeIndex).getAttribute().get(j).getValue())){
+                    res.insertData(left,right,i,j,out);
+                }
+            }
+        }
+
+        res.setEmptyTable(false);
+        res.setTableName(left.getTableName());
+        return res;
+    }
+
+    public DBTable logicNot(DBTable left,DBTable right,BufferedWriter out){
+        DBTable res=new DBTable();
+        int left_index=0,right_index=0;
+        while (left_index<left.getTable().get(0).getAttribute().size()
+                &&right_index<right.getTable().get(0).getAttribute().size()){
+            if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    <Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                res.insertData(left,left_index);
+                left_index++;
+            }else if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    ==Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                //res.insertData(left,left_index);
+                left_index++;
+                right_index++;
+            }else if(Float.parseFloat(left.getTable().get(0).getAttribute().get(left_index).getValue())
+                    >Float.parseFloat(right.getTable().get(0).getAttribute().get(right_index).getValue())){
+                res.insertData(right,right_index);
+                right_index++;
+            }
+        }
+        while (left_index<left.getTable().get(0).getAttribute().size()){
+            res.insertData(left, left_index);
+            left_index++;
+        }
+        while (right_index<right.getTable().get(0).getAttribute().size()){
+            res.insertData(right, right_index);
+            right_index++;
+        }
+        res.setEmptyTable(false);
+        res.setTableName(left.getTableName());
+        return res;
     }
 
     private DBTable calLike(TokenElement left, TokenElement right, DBTable table, BufferedWriter out) throws IOException {
@@ -70,8 +200,8 @@ public class DBCondition {
         if(leftindex==0){
             out.write("Attribute does not exist\n");
             return null;
-        }else if(table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT
-                ||table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER){
+        }else if((table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT)
+                &&(table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER)){
             out.write("Attribute cannot be converted to number\n");
             return null;
         }
@@ -95,8 +225,8 @@ public class DBCondition {
         if(leftindex==0){
             out.write("Attribute does not exist\n");
             return null;
-        }else if(table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT
-                ||table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER){
+        }else if((table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT)
+                &&(table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER)){
             out.write("Attribute cannot be converted to number\n");
             return null;
         }
@@ -120,8 +250,8 @@ public class DBCondition {
         if(leftindex==0){
             out.write("Attribute does not exist\n");
             return null;
-        }else if(table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT
-                ||table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER){
+        }else if((table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT)
+                &&(table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER)){
             out.write("Attribute cannot be converted to number\n");
             return null;
         }
@@ -145,8 +275,8 @@ public class DBCondition {
         if(leftindex==0){
             out.write("Attribute does not exist\n");
             return null;
-        }else if(table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT
-                ||table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER){
+        }else if((table.getTable().get(leftindex).getVariableType()!=VariableType.FLOAT)
+                &&(table.getTable().get(leftindex).getVariableType()!=VariableType.INTEGER)){
             out.write("Attribute cannot be converted to number\n");
             return null;
         }

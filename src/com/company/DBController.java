@@ -27,7 +27,7 @@ public class DBController {
             return;
         }
         this.excuteCommand(out);
-        this.out.write("success\n");
+       // this.out.write("success\n");
     }
 
     public boolean checkSemicolonGrammar(BufferedWriter out) throws IOException {
@@ -108,25 +108,60 @@ public class DBController {
 
     public boolean isLegalAttributeList(int begin,int end){
         Stack<TokenElement> stack=new Stack<>();
-        Boolean RightOrder=false;
+        boolean RightOrder=false;
+        boolean ignorePar=true;
         for(int i=begin;i<end;i++){
             if(token.get(i).getProperty()==TokenType.VALUE
                     ||token.get(i).getProperty()==TokenType.MULTIPLY){
-                if(!RightOrder) RightOrder= i == begin;
+                if((!RightOrder)&&ignorePar) RightOrder= true;
                 stack.push(token.get(i));
             }else if(token.get(i).getProperty()==TokenType.COMMA){
                 stack.pop();
+                ignorePar=false;
             }
         }
         return RightOrder && stack.size()==1;
     }
 
+    public boolean isLegalNameValueList(int begin,int end){
+        int cnt=0;
+        boolean left=false;
+        boolean assign=false;
+        boolean right=false;
+        for(int i=begin;i<end;i++){
+            if(cnt==3){
+                if(!(left&&assign&&right)){
+                    return false;
+                }
+                left=false;
+                assign=false;
+                right=false;
+                cnt=0;
+            }
+            if(token.get(i).getProperty()==TokenType.VALUE&&(!left)){
+                left=true;
+                cnt++;
+                continue;
+            }else if(token.get(i).getProperty()==TokenType.ASSIGN){
+                assign=true;
+                cnt++;
+                continue;
+            }else if ((token.get(i).getProperty()==TokenType.VALUE)&&left){
+                right=true;
+                cnt++;
+                continue;
+            }
+        }
+        return (left&&assign&&right)&&(cnt==3);
+    }
+
     public boolean isLegalCondition(int begin,int end){
         Stack<TokenElement> stack=new Stack<>();
         boolean RightOrder=false;
+        boolean ignorePar=true;
         for(int i=begin;i<end;i++){
             if(token.get(i).getProperty()==TokenType.VALUE){
-                if(!RightOrder) RightOrder= i == begin;
+                if((!RightOrder)&&ignorePar) RightOrder= true;
                 stack.push(token.get(i));
             }
             switch (token.get(i).getProperty()){
@@ -139,7 +174,8 @@ public class DBController {
                 case GREATEREQUAL:
                 case NOTEQUAL:
                 case LIKE:
-                stack.pop();
+                    stack.pop();
+                    ignorePar=false;
             }
         }
         return RightOrder && stack.size()==1;
@@ -200,7 +236,7 @@ public class DBController {
         return whereindex;
     }
 
-    public boolean isSelete() {
+    public boolean isSelect() {
         int whereindex=findWhere();
 
         if(whereindex==token.size()){
@@ -218,6 +254,42 @@ public class DBController {
         }
     }
 
+    public boolean isDelete(){
+        int whereindex=findWhere();
+        if(whereindex!=token.size()){
+            return (this.token.get(0).getProperty().equals(TokenType.DELETE)
+                    &&this.token.get(1).getProperty().equals(TokenType.FROM)
+                    &&this.token.get(2).getProperty().equals(TokenType.VALUE)
+                    &&this.token.get(3).getProperty().equals(TokenType.WHERE))
+                    &&isLegalCondition(4,token.size()-1);
+        }
+        return false;
+    }
+
+    public boolean isUpdate(){
+        int whereindex=findWhere();
+        if(whereindex!=token.size()){
+            return (this.token.get(0).getProperty().equals(TokenType.UPDATE)
+                    &&this.token.get(1).getProperty().equals(TokenType.VALUE)
+                    &&this.token.get(2).getProperty().equals(TokenType.SET))
+                    &&isLegalCondition(whereindex+1,token.size()-1)
+                    &&isLegalNameValueList(3,whereindex);
+        }
+        return false;
+    }
+
+    public boolean isJoin(){
+        return (token.size()==9
+                &&this.token.get(0).getProperty().equals(TokenType.JOIN)
+                &&this.token.get(1).getProperty().equals(TokenType.VALUE)
+                &&this.token.get(2).getProperty().equals(TokenType.AND)
+                &&this.token.get(3).getProperty().equals(TokenType.VALUE)
+                &&this.token.get(4).getProperty().equals(TokenType.ON)
+                &&this.token.get(5).getProperty().equals(TokenType.VALUE)
+                &&this.token.get(6).getProperty().equals(TokenType.AND)
+                &&this.token.get(7).getProperty().equals(TokenType.VALUE));
+    }
+
     public void excuteCommand(BufferedWriter out) throws IOException, ClassNotFoundException {
         if(this.isCreateDB()){
             this.createDB(out);
@@ -233,52 +305,137 @@ public class DBController {
             this.dropDB(out);
         }else if(this.isAlter()) {
             this.alterTable(out);
-        }else if(isSelete()){
-            seleteDB(out);
+        }else if(isSelect()){
+            selectDB(out);
+        }else if(isDelete()){
+            deleteDB(out);
+        }else if(isUpdate()){
+            updateDB(out);
+        }else if(isJoin()){
+            joinDB(out);
         }
         System.out.println(1);
     }
 
-    public void seleteDB(BufferedWriter out) throws IOException, ClassNotFoundException {
-        int whereindex=findWhere();
-        ArrayList<TokenElement> RNP;
-        DBTable TempTable;
-        Stack<TokenElement> tokenElementStack;
-        Stack<DBTable> dbTableStack;
-        if(whereindex!=token.size()){
-            RNP=tokentoRPN(out);
-            tokenElementStack=new Stack<>();
-            dbTableStack=new Stack<>();
+    public void joinDB(BufferedWriter out) throws IOException, ClassNotFoundException {
+        DBTable leftDB=loadTableFromHD(token.get(1).getValue(),out);
+        DBTable rightDB=loadTableFromHD(token.get(3).getValue(),out);
 
-            for(TokenElement tokenElement:RNP){
-                TempTable=loadTableFromHD(token.get(whereindex-1).getValue(),out);
-                if(tokenElement.getProperty()==TokenType.VALUE){
-                    tokenElementStack.push(tokenElement);
-                }else if(tokenElement.getProperty()==TokenType.EQUAL
-                        ||tokenElement.getProperty()==TokenType.GREATER
-                        ||tokenElement.getProperty()==TokenType.GREATEREQUAL
-                        ||tokenElement.getProperty()==TokenType.LESS
-                        ||tokenElement.getProperty()==TokenType.LESSEQUAL
-                        ||tokenElement.getProperty()==TokenType.NOTEQUAL
-                        ||tokenElement.getProperty()==TokenType.LIKE){
-                    TokenElement rightvalue=tokenElementStack.pop();
-                    TokenElement leftvalue=tokenElementStack.pop();
-                    dbTableStack.push(dbCondition.calulateCondition(leftvalue,rightvalue,
-                            tokenElement.getProperty(),TempTable,out));
-                }else if(tokenElement.getProperty()==TokenType.AND
-                        ||tokenElement.getProperty()==TokenType.OR){
-                    DBTable rightDBTable=dbTableStack.pop();
-                    DBTable leftDBtable=dbTableStack.pop();
-                    dbTableStack.push(dbCondition.logicCondition(leftDBtable,rightDBTable,
-                            tokenElement.getProperty(),out));
+        dbCondition.logicAnd(leftDB,rightDB,token.get(5).getValue(),token.get(7).getValue(),out).printAll(out);
+    }
+
+    public void updateDB(BufferedWriter out) throws IOException, ClassNotFoundException {
+        int whereindex=findWhere();
+        DBTable currentTable=loadTableFromHD(token.get(1).getValue(),out);
+        DBTable TempTable=interperteWhere(out,1);
+        currentTable=dbCondition.logicNot(TempTable,currentTable,out);
+        if(TempTable==null){
+            return;
+        }
+
+        for(int j=3;j<whereindex;j++){
+            if(token.get(j).getProperty()==TokenType.ASSIGN){
+                int attributeIndex=TempTable.findIndexOfAttribute(token.get(j-1).getValue());
+                if(attributeIndex==0){
+                    out.write("Attribute does not exist\n");
+                    return;
+                }
+                for(int i=0;i<TempTable.getTable().get(0).getAttribute().size();i++){
+                    TempTable.getTable().get(attributeIndex).getAttribute().get(i).setValue(
+                            token.get(j+1).getValue());
                 }
             }
+        }
+        this.saveTableToHD(dbCondition.logicOr(currentTable,TempTable,out),out);
+        out.write("OK\n");
+    }
 
+    public void deleteDB(BufferedWriter out) throws IOException, ClassNotFoundException {
+        int whereindex=findWhere();
+        DBTable currentTable=loadTableFromHD(token.get(whereindex-1).getValue(),out);
+        DBTable TempTable=interperteWhere(out,whereindex-1);
+        if(TempTable==null){
+            return;
+        }
+        this.saveTableToHD(dbCondition.logicNot(TempTable,currentTable,out),out);
+        out.write("OK\n");
+    }
 
-
+    public void selectDB(BufferedWriter out) throws IOException, ClassNotFoundException {
+        int whereindex=findWhere();
+        DBTable TempTable;
+        if(whereindex!=token.size()){
+            TempTable=interperteWhere(out,whereindex-1);
         }else {
             TempTable=loadTableFromHD(token.get(token.size()-2).getValue(),out);
         }
+
+        if(TempTable==null){
+            return;
+        }
+
+        if(this.token.get(1).getProperty().equals(TokenType.MULTIPLY)){
+            TempTable.printAll(out);
+        }else {
+            ArrayList<Integer> printIndex=new ArrayList<>();
+            printIndex.add(0);
+            for(int i=1;token.get(i).getProperty()!=TokenType.FROM;i++){
+                if(token.get(i).getProperty()==TokenType.VALUE){
+                    int temp=TempTable.findIndexOfAttribute(token.get(i).getValue());
+                    if(temp==-1){
+                        out.write("Attribute does not exist\n");
+                        return;
+                    }
+                    printIndex.add(temp);
+                }
+            TempTable.printPart(printIndex,out);
+            }
+        }
+    }
+
+    public DBTable interperteWhere(BufferedWriter out,int tablenameIndex) throws IOException, ClassNotFoundException {
+        DBTable TempTable;
+        ArrayList<TokenElement> RNP;
+        Stack<TokenElement> tokenElementStack=new Stack<>();;
+        Stack<DBTable> dbTableStack=new Stack<>();;
+        RNP=tokentoRPN(out);
+
+        for(TokenElement tokenElement:RNP){
+            TempTable=loadTableFromHD(token.get(tablenameIndex).getValue(),out);
+            if(tokenElement.getProperty()==TokenType.VALUE){
+                tokenElementStack.push(tokenElement);
+            }else if(tokenElement.getProperty()==TokenType.EQUAL
+                    ||tokenElement.getProperty()==TokenType.GREATER
+                    ||tokenElement.getProperty()==TokenType.GREATEREQUAL
+                    ||tokenElement.getProperty()==TokenType.LESS
+                    ||tokenElement.getProperty()==TokenType.LESSEQUAL
+                    ||tokenElement.getProperty()==TokenType.NOTEQUAL
+                    ||tokenElement.getProperty()==TokenType.LIKE){
+                if(tokenElementStack.size()<2){
+                    out.write("Invalid query");
+                    return null;
+                }
+                TokenElement rightvalue=tokenElementStack.pop();
+                TokenElement leftvalue=tokenElementStack.pop();
+                dbTableStack.push(dbCondition.calulateCondition(leftvalue,rightvalue,
+                        tokenElement.getProperty(),TempTable,out));
+            }else if(tokenElement.getProperty()==TokenType.AND
+                    ||tokenElement.getProperty()==TokenType.OR){
+                if(dbTableStack.size()<2){
+                    out.write("Invalid query");
+                    return null;
+                }
+                DBTable rightDBTable=dbTableStack.pop();
+                DBTable leftDBtable=dbTableStack.pop();
+                dbTableStack.push(dbCondition.logicCondition(leftDBtable,rightDBTable,
+                        tokenElement.getProperty(),out));
+            }
+        }
+        if(dbTableStack.size()!=1){
+            out.write("Invalid query");
+            return null;
+        }
+        return dbTableStack.pop();
     }
 
      public ArrayList<TokenElement> tokentoRPN(BufferedWriter out){
@@ -331,6 +488,12 @@ public class DBController {
         if(this.token.get(3).getProperty().equals(TokenType.ADD)){
             TableAttribute newTableAttribute=new TableAttribute();
             newTableAttribute.setAttributeName(token.get(4).getValue());
+            for(int i=0;i<currentTable.getTable().get(0).getAttribute().size();i++)
+            {
+                ValueLiteral valueLiteral=new ValueLiteral();
+                valueLiteral.setValue("");
+                newTableAttribute.getAttribute().add(valueLiteral);
+            }
             currentTable.setTable(newTableAttribute);
             currentTable.setEmptyTable(true);
         }else if(this.token.get(3).getProperty().equals(TokenType.DROP)){
@@ -382,7 +545,7 @@ public class DBController {
         if(currentTable.getEmptyTable()){
             currentTable.setTableAttributeFromInsertToken(token);
         }
-        currentTable.insertDate(token,out);
+        currentTable.insertData(token,out);
         this.saveTableToHD(currentTable,out);
         out.write("OK\n");
     }
@@ -421,13 +584,13 @@ public class DBController {
 
     public void useDB(BufferedWriter out) throws IOException {
         File dir=new File(this.token.get(1).getValue());
-        if(!dir.exists()){
-            out.write("\"Database does not exist.\\n");
-        }
         this.setCurrentDB(this.token.get(1).getValue());
         this.setIsEnterDB(true);
-        out.write("OK\n");
-
+        if(!dir.exists()){
+            out.write("Unknown database\n");
+        }else {
+            out.write("OK\n");
+        }
     }
 
     public void saveTableToHD(DBTable newTable,BufferedWriter out) throws IOException {
@@ -441,22 +604,24 @@ public class DBController {
         fileOut.close();
     }
 
-    public DBTable loadTableFromHD(String TableName, BufferedWriter out) throws IOException, ClassNotFoundException {
+    public DBTable loadTableFromHD(String TableName, BufferedWriter out) throws IOException {
 
         if(currentDB==null){
             out.write("Database does not exist\n");
         }
         File file = new File("./"+this.currentDB+"/"+TableName+".db");
-        if(!file.exists()){
+
+        DBTable newTable=null;
+        try {
+            FileInputStream fileIn = new FileInputStream("./"+this.currentDB+"/"+TableName+".db");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            newTable = (DBTable) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (ClassNotFoundException | FileNotFoundException ignored) {
             out.write("Table does not exist\n");
         }
 
-        DBTable newTable;
-        FileInputStream fileIn = new FileInputStream("./"+this.currentDB+"/"+TableName+".db");
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        newTable = (DBTable) in.readObject();
-        in.close();
-        fileIn.close();
         return newTable;
     }
 

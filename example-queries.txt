@@ -54,3 +54,5 @@ Server response: ERROR Unknown table 'grades'
 Entered query:   DELETE INTO marks WHERE name == 'Steve';
 Server response: ERROR Unexpected token 'INTO'
 
+select * from marks where (( mark<40) or( mark>60));
+update marks set mark=60 where name =='Steve';
