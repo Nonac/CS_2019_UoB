@@ -1,5 +1,7 @@
 package com.company;
 
+import com.sun.source.doctree.ValueTree;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -177,8 +179,9 @@ public class DBCondition {
         if(leftindex==0){
             out.write("Attribute does not exist\n");
             return null;
-        }else if(table.getTable().get(leftindex).getVariableType()!=VariableType.STRING){
-            out.write(" String expected\n");
+        }else if((table.getTable().get(leftindex).getVariableType()!=VariableType.STRING)
+                ||(right.getVariableType()!=VariableType.STRING)){
+            out.write("String expected\n");
             return null;
         }
 

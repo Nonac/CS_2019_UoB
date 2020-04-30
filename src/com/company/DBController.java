@@ -89,7 +89,7 @@ public class DBController {
         return false;
     }
 
-    public boolean isCreateTable(){
+    public boolean isCreateTable(BufferedWriter out) throws IOException {
 
         if(this.token.size()==4){
             return (this.token.get(0).getProperty().equals(TokenType.CREATE)
@@ -101,12 +101,12 @@ public class DBController {
                     &&this.token.get(2).getProperty().equals(TokenType.VALUE)
                     &&this.token.get(3).getProperty().equals(TokenType.LEFTPARENTHESIS)
                     &&this.token.get(this.token.size()-2).getProperty().equals(TokenType.RIGHTPARENTHESIS)
-                    &&this.isLegalAttributeList(4,this.token.size()-2));
+                    &&this.isLegalAttributeList(4,this.token.size()-2,out));
         }
         return false;
     }
 
-    public boolean isLegalAttributeList(int begin,int end){
+    public boolean isLegalAttributeList(int begin,int end,BufferedWriter out) throws IOException {
         Stack<TokenElement> stack=new Stack<>();
         boolean RightOrder=false;
         boolean ignorePar=true;
@@ -119,6 +119,9 @@ public class DBController {
                 stack.pop();
                 ignorePar=false;
             }
+        }
+        if(stack.size()>1){
+            out.write("Invalid query\n");
         }
         return RightOrder && stack.size()==1;
     }
@@ -181,7 +184,7 @@ public class DBController {
         return RightOrder && stack.size()==1;
     }
 
-    public boolean isInsert() {
+    public boolean isInsert(BufferedWriter out) throws IOException {
         if(this.token.size()>=8){
             return (this.token.get(0).getProperty().equals(TokenType.INSERT)
                     &&this.token.get(1).getProperty().equals(TokenType.INTO)
@@ -189,7 +192,7 @@ public class DBController {
                     &&this.token.get(3).getProperty().equals(TokenType.VALUES)
                     &&this.token.get(4).getProperty().equals(TokenType.LEFTPARENTHESIS)
                     &&this.token.get(this.token.size()-2).getProperty().equals(TokenType.RIGHTPARENTHESIS)
-                    &&this.isLegalAttributeList(5,this.token.size()-2));
+                    &&this.isLegalAttributeList(5,this.token.size()-2,out));
         }
         return false;
     }
@@ -236,20 +239,20 @@ public class DBController {
         return whereindex;
     }
 
-    public boolean isSelect() {
+    public boolean isSelect(BufferedWriter out) throws IOException {
         int whereindex=findWhere();
 
         if(whereindex==token.size()){
             return (this.token.get(0).getProperty().equals(TokenType.SELECT)
                     &&this.token.get(token.size()-3).getProperty().equals(TokenType.FROM)
                     &&this.token.get(token.size()-2).getProperty().equals(TokenType.VALUE))
-                    &&isLegalAttributeList(1,token.size()-3);
+                    &&isLegalAttributeList(1,token.size()-3,out);
         }else{
             return (this.token.get(0).getProperty().equals(TokenType.SELECT)
                     &&this.token.get(whereindex-2).getProperty().equals(TokenType.FROM)
                     &&this.token.get(whereindex-1).getProperty().equals(TokenType.VALUE)
                     &&this.token.get(whereindex).getProperty().equals(TokenType.WHERE))
-                    &&isLegalAttributeList(1,whereindex-2)
+                    &&isLegalAttributeList(1,whereindex-2,out)
                     &&isLegalCondition(whereindex+1,token.size()-1);
         }
     }
@@ -295,26 +298,37 @@ public class DBController {
             this.createDB(out);
         }else if(this.isUseDB()){
             this.useDB(out);
-        }else if(this.isCreateTable()){
-            this.createTable(out);
-        }else if(this.isInsert()){
-            this.insertDB(out);
-        }else if(this.isDropTable()){
-            this.dropTable(out);
-        }else if(this.isDropDB()) {
-            this.dropDB(out);
-        }else if(this.isAlter()) {
-            this.alterTable(out);
-        }else if(isSelect()){
-            selectDB(out);
-        }else if(isDelete()){
-            deleteDB(out);
-        }else if(isUpdate()){
-            updateDB(out);
-        }else if(isJoin()){
-            joinDB(out);
         }
-        System.out.println(1);
+        if(currentDB!=null){
+            if(this.isCreateDB()){
+                this.createDB(out);
+            }else if(this.isUseDB()){
+                this.useDB(out);
+            }else if(this.isCreateTable(out)){
+                this.createTable(out);
+            }else if(this.isInsert(out)){
+                this.insertDB(out);
+            }else if(this.isDropTable()){
+                this.dropTable(out);
+            }else if(this.isDropDB()) {
+                this.dropDB(out);
+            }else if(this.isAlter()) {
+                this.alterTable(out);
+            }else if(isSelect(out)){
+                selectDB(out);
+            }else if(isDelete()){
+                deleteDB(out);
+            }else if(isUpdate()){
+                updateDB(out);
+            }else if(isJoin()){
+                joinDB(out);
+            }else {
+                out.write("Invalid query\n");
+            }
+        }else {
+            out.write("Database does not load\n");
+        }
+
     }
 
     public void joinDB(BufferedWriter out) throws IOException, ClassNotFoundException {
