@@ -1,5 +1,7 @@
 package com.company;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DBParser {
@@ -11,7 +13,7 @@ public class DBParser {
 
     }
 
-    public ArrayList<TokenElement> parseStringToToken(String in){
+    public ArrayList<TokenElement> parseStringToToken(String in) {
         this.token=new ArrayList<>();
         this.stringswitch=false;
         this.setBeginCharacter(0);
@@ -23,6 +25,10 @@ public class DBParser {
         while (this.endCharacter<in.length()) {
             String buff;
             this.interceptWord(in);
+            if(endCharacter>=in.length()&&stringswitch){
+
+                return null;
+            }
             buff = in.substring(beginCharacter, endCharacter);
             TokenElement tokenElement=new TokenElement();
             tokenElement.setProperty(this.identifyToken(buff));
@@ -112,7 +118,7 @@ public class DBParser {
     }
 
 
-    public void interceptWord(String in) {
+    public void interceptWord(String in){
 
         while (endCharacter < in.length()) {
             switch (in.charAt(endCharacter)) {
@@ -125,26 +131,30 @@ public class DBParser {
                     if (beginCharacter == endCharacter) {
                         endCharacter++;
                     }
-                    if(!stringswitch){
+                    if ((!stringswitch)||(endCharacter > in.length())) {
                         return;
-                    }else {
+                    } else {
                         endCharacter++;
                     }
                 case '>':
                 case '<':
                 case '!':
                 case '=':
-                    if (in.charAt(endCharacter + 1) == '=') {
+                    if ((endCharacter < in.length())&&(in.charAt(endCharacter + 1) == '=')) {
                         endCharacter += 2;
                     }
                     if (beginCharacter == endCharacter) {
                         endCharacter++;
                     }
-                    if(!stringswitch){
+                    if (!stringswitch) {
                         return;
-                    }else {
+                    } else {
                         endCharacter++;
                     }
+
+            }
+            if (endCharacter >= in.length()) {
+                return;
             }
 
             if (Character.isLowerCase(in.charAt(endCharacter)) ||
@@ -162,6 +172,7 @@ public class DBParser {
             }
         }
     }
+
 
 
     public void setBeginCharacter(int beginCharacter) {

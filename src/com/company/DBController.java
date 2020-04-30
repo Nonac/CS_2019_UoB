@@ -23,6 +23,10 @@ public class DBController {
     public void readCommand(String line, BufferedWriter out) throws IOException, ClassNotFoundException {
         this.out=out;
         token=DBParser.parseStringToToken(line);
+        if(token==null){
+            out.write("Invalid query\n");
+            return;
+        }
         if((!this.checkSemicolonGrammar(out))||(!this.checkParenthesisIsComplete(out))){
             return;
         }
@@ -120,9 +124,9 @@ public class DBController {
                 ignorePar=false;
             }
         }
-        if(stack.size()>1){
+        /*if(stack.size()>1){
             out.write("Invalid query\n");
-        }
+        }*/
         return RightOrder && stack.size()==1;
     }
 
@@ -296,8 +300,16 @@ public class DBController {
     public void excuteCommand(BufferedWriter out) throws IOException, ClassNotFoundException {
         if(this.isCreateDB()){
             this.createDB(out);
+            return;
         }else if(this.isUseDB()){
             this.useDB(out);
+            return;
+        }else if(this.isDropTable()){
+            this.dropTable(out);
+            return;
+        }else if(this.isDropDB()) {
+            this.dropDB(out);
+            return;
         }
         if(currentDB!=null){
             if(this.isCreateDB()){

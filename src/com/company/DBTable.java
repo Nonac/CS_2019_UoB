@@ -110,6 +110,9 @@ public class DBTable implements Serializable {
             valueLiteral.setValue(token.get(i).getValue());
             valueLiteral.setVariableType(token.get(i).getVariableType());
             this.tableAttributes.get((i - 3) / 2).add(valueLiteral);
+            if(valueLiteral.getValue().length()>this.tableAttributes.get((i - 3) / 2).getMaxStringSize()){
+                this.tableAttributes.get((i - 3) / 2).setMaxStringSize(valueLiteral.getValue().length());
+            }
             i++;
         }
     }
@@ -128,6 +131,9 @@ public class DBTable implements Serializable {
             ValueLiteral valueLiteral;
             valueLiteral=target.getTable().get(i).getAttribute().get(index);
             this.getTable().get(i).getAttribute().add(valueLiteral);
+            if(valueLiteral.getValue().length()>this.getTable().get(i).getMaxStringSize()){
+                this.getTable().get(i).setMaxStringSize(valueLiteral.getValue().length());
+            }
         }
         this.setRecordCnt(this.RecordCnt+1);
     }
