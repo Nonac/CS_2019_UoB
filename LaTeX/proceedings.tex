@@ -1,5 +1,7 @@
 \documentclass{sigchi}
 
+
+
 % Use this section to set the ACM copyright statement (e.g. for
 % preprints).  Consult the conference website for the camera-ready
 % copyright statement.
@@ -58,6 +60,8 @@
 \usepackage{color}
 \usepackage{booktabs}
 \usepackage{textcomp}
+\usepackage{tikz}
+\usepackage{gantt}
 
 % Some optional stuff you might like/need.
 \usepackage{microtype}        % Improved Tracking and Kerning
@@ -135,14 +139,15 @@
 
 \numberofauthors{3}
 \author{%
+	 \alignauthor{John Lapinskas\\
+		\affaddr{Unicersity of Bristol}\\
+		\affaddr{Bristol, UK}\\
+		\email{john.lapinskas@bristol.ac.uk}}\\
   \alignauthor{Yinan Yang\\
     \affaddr{Unicersity of Bristol}\\
     \affaddr{Bristol, UK}\\
     \email{ff19085@bristol.ac.uk}}\\
-  \alignauthor{John Lapinskas\\
-   \affaddr{Unicersity of Bristol}\\
-   \affaddr{Bristol, UK}\\
-    \email{john.lapinskas@bristol.ac.uk}}\\
+ 
  
 }
 
@@ -176,19 +181,16 @@ Let us go back to the SAT problem. Going further, we will not only be content to
 To find the final solution to a complete Boolean expression, we split out each of the propositional variables. Each propositional variable can contain either true or false. We define a literal to denote both a propositional variable x and its negation ¬x. A disjunction of literals is defined as a clause. And a conjunctive nurmal form, short for CNF, is a conjunction of clauses.
 
 So we can represent some special case SAT questions, such as if each clause contains at most 2 literals, then we call this formula a 2-SAT formula. A more general representation is that if each clause contains at most no more than k literals in a hypothetical CNF, then we call it a k\-SAT formula (k>0). The \#2-SAT question of concern for this project can then be expressed as: how many possible solutions are there to make the formula satisfy a maximum of 2 liters per clause in any given proposed formula. Take for example the following.
-
 \begin{align*}  
 \left ( x_{0}\vee x_{1} \right )\wedge \left ( x_{1}\vee x_{2} \right )\wedge \left ( x_{2}\vee  x_{3} \right )\wedge \left ( x_{4}\right )
 \end{align*}
-
-
 Since we cannot give specific conclusions for all Boolean expressions, and indeed it is impossible, in this research area, we usually design a computational model to calculate the time complexity O of this model method. The time complexity usually describes the running time of an algorithm in a worst-case scenario. Computational models get different results in many branches, and we usually verify the worst time complexity to determine the time complexity of this algorithm.
 
-In this project, the \#2SAT algorithm is explored from the initial upper bound of $ O\left ( 2^{n} \right )$, as proposed by Dubois, Zhang, Littman, and Dahllöf\cite{10.1007/3-540-45655-4_57} et al. The scheme is continuously optimized to propose $ O\left ( 1.3247^{n} \right )$, until this paper we forced uses the computer-verified work of Magnus Wahlström, who accelerated the algorithmic model of \#2SAT to $ O\left ( 1.2561^{n} \right )$ in 2004\cite{10.1016/j.tcs.2004.10.037}.
+In this project, the \#2SAT algorithm is explored from the initial upper bound of $ O\left ( 2^{n} \right )$, as proposed by Dubois, Zhang, Littman, and Dahllöf\cite{10.1007/3-540-45655-4_57} et al. The scheme is continuously optimized to propose $ O\left ( 1.3247^{n} \right )$, until this paper we forced uses the computer-verified work of Magnus Wahlström, who accelerated the algorithmic model of \#2SAT to $ O\left ( 1.2561^{n} \right )$ in 2004\cite{10.1016/j.tcs.2004.10.037}. This is by far the fastest counting algorithm time in this field. Recursive calls and weighted clause analysis do the worst time branching.
 
 However, research in this field is purely theoretical, and the literature and papers are full of mathematical expressions and model reasoning. Papers in this field do not usually provide a specific computer code reproduction process for the given model, a process that is often hidden in the deductions of formulas, and it is difficult for later readers to rely solely on this paper to reproduce the full process of deductions. Moreover, as the theoretical research progresses, the inability to replicate the work of previously distinguished practitioners will have a very significant impact on subsequent research.
 
-A survey of previous research in the field found that theory proponents tend to present only descriptions of algorithmic models, which in turn mostly use recursive algorithms, a method of solving problems by repeatedly decomposing them into subproblems of the same kind. The advantage of recursive algorithms is that they often effectively divide significant branching problems into small branching problems, and then solve them by targeting each branching problem that can be effectively focused on. However, recursive algorithms also have an irreparable disadvantage, if the recursive algorithm is simulated manually and the results are calculated manually, this leads to a considerable amount of computation, making it difficult or even impossible for later readers to verify the correctness of the reasoning process.
+It found that theory proponents tend to present only descriptions of algorithmic models and a final description of the results of the calculation, which in turn mostly use recursive algorithms, a method of solving problems by repeatedly decomposing them into subproblems of the same kind. The advantage of recursive algorithms is that they often effectively divide significant branching problems into small branching problems, and then solve them by targeting each branching problem that can be effectively focused on. However, recursive algorithms also have an irreparable disadvantage, if the recursive algorithm is simulated manually and the results are calculated manually, this leads to a considerable amount of computation, making it difficult or even impossible for later readers to verify the correctness of the reasoning process.
 
 With the refinement of computer science and programming languages, we now can use more sophisticated language tools to refine the verification recursion problem. Moreover, with the increase in computer computing power in recent years, running large-scale recursion is no longer difficult. So both the theoretical basis and the hardware facilities were prepared for this project.
 
@@ -207,7 +209,17 @@ The evaluation criteria will be determined by the degree of branching that compl
 \section{Literature Review}
 Algorithms on counting problems had continued to evolve since the 1860s when Ryser proposed the first counting algorithm\cite{10.1017/s0013091500011299}, and Ryser pioneered the counting problem algorithm by proposing a time complexity of A for counting perfectly matched numbers in a binary graph. In the late 1870s, Valiant concluded that the complexity of the counting problem makes it a \#P class problem and can be statute as a \#P problem, so it is a \#P-complete problem\cite{10.1016/0304-3975(79)90044-6}.
 
-Further, in the work of Magnus Wahlstrom et al. in 2004, they designed a computational model that reduced the temporal complexity of \#2SAT to  $ O\left ( 1.2561^{n} \right )$ \cite{10.1016/j.tcs.2004.10.037}., which is a great achievement. In this mathematical model, they designed a set of weights to measure the impact of each branch in the CNF on the final result. Under the influence of such a weighting model, the CNF can be continuously reduced by the recursive algorithm, thus speeding up the algorithm.This weighting model allows us to split a constraint graph into its dual connected components. Among other things, this provides a way to remove variables that appear only once in the formula during the polynomial time.On the other hand, the model can condense formula complexity into a single value containing the number of variables and variable clauses, which is more reflective of the complexity of a CNF than the original way of expressing formula complexity in numbers only, without regard to clause weights.
+Further, in the work of Magnus Wahlstrom et al. in 2004, they designed a computational model that reduced the temporal complexity of \#2SAT to  $ O\left ( 1.2561^{n} \right )$ \cite{10.1016/j.tcs.2004.10.037}., which is a great achievement. To date, Wahlstrom's algorithm remains the fastest algorithm currently available for counting independent sets of graphs, uses polynomial space, and is suitable for the more general problem of calculating the maximum number of weight assignments for the 2-CNF formula. To reduce the need to move from calculating independent sets to calculating maximum weight assignments that satisfy 2 CNF formulas, where the number of variables is equal to the number of vertices. In this mathematical model, they designed a set of weights to measure the impact of each branch in the CNF on the final result. Under the influence of such a weighting model, the CNF can be continuously reduced by the recursive algorithm, thus speeding up the algorithm.This weighting model allows us to split a constraint graph into its dual connected components. Among other things, this provides a way to remove variables that appear only once in the formula during the polynomial time.On the other hand, the model can condense formula complexity into a single value containing the number of variables and variable clauses, which is more reflective of the complexity of a CNF than the original way of expressing formula complexity in numbers only, without regard to clause weights.
+
+We note that Junosza-Szaniawski and Tuczynski, in a technical report, proposed an algorithm for counting independent collections with run times of O (1.2369n).\cite{undefined} For graphs where the maximum number of degrees is 3 and all neighbors with degrees 3 do not have 3-degree vertices, they propose a new algorithm with a run time of $2^{n_{3}/5} +O\left( n \right))$, where n3 is the number of 3-degree vertices and the overall run Inserting the results into the fastest algorithm before Wahlstrom \cite{10.1016/j.tcs.2004.10.037} can save time.
+
+In 2007, Magnus Wahlström summarized his findings by releasing a book summarizing his findings in this area.\cite{Wahlstrom} In this book, he introduces two new complexity metrics that represent two ways to add this applicability limitation to the analysis. In the first metric, the execution of an algorithm is seen as moving between a finite set of states (e.g., structures or properties that exist or do not exist), the current state determines which branches are applicable, and each branch of each branch contains information about the resulting state. In the second measure, what controls the applicability of the branch is the relative size of the modelling properties (e.g., the degree of averaging or other density concepts).
+
+
+Edward J. Lee released a polynomial space algorithm in 2016
+\cite{Lee} by improving Wahlstrom's algorithm to slightly improve analysis by using the potential to amortize some of the worst branching cases with better ones. 
+
+The study of exact algorithms is still in its infancy, and the study of exact algorithms is now a dynamic field. While there are still many unresolved problems, and new technologies to solve them continue to emerge, Furer and Kasiviswanathan thought it was time to summarize the work of precision algorithms into a book. They published a book in 2013 that was used to provide a detailed introduction to exponential algorithms, with the main aim of providing an introduction to the field and explaining the most common algorithmic techniques.\cite{10.1145/2428556.2428575}
 
 Since the main process of this project was to replicate the process of this paper and to simulate the validation with a computer program, our first task was to investigate what the technical line of this paper was. First let's introduce the computational tools and computational models he uses.
 
@@ -219,24 +231,24 @@ First of all, as introduced in the introduction above, the fundamental conceptua
 In this paper, we define the degree $d\left( x \right)$ of a variable x in formula F as the number of clauses in $F$ containing $x$.
 e.g.:in $\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $ d$\left( B \right)$=2.
 And the maximum degree of  any variable in F is d$\left(F\right)$, the number is $n_{d}\left ( F \right )$.\\
-In this way, we get a method to measure formula complexity:\\
+In this way, we get a method to measure formula complexity:
 \begin{center}
 	$m\left(F\right)=\sum_{x\in Var\left(F\right)} d\left(x\right)$
 \end{center}
-We define a model $M$ for $F$, a set L of all liters in $F$,and a weight vector $w$:\\
+We define a model $M$ for $F$, a set L of all liters in $F$,and a weight vector $w$:
 \begin{center}
-$W\left ( M \right )=\sum_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} w\left ( l \right )$\\
+$W\left ( M \right )=\sum_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} w\left ( l \right )$
 \end{center}
-Be the same, we get a cardinality vector $c$ for $F$:\\
+Be the same, we get a cardinality vector $c$ for $F$:
 \begin{center}
 $C\left ( M \right )=\prod_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} c\left ( l \right )$\\
 \end{center}
-In this way, we get a weighted model  of F for \#2-SAT$\left(\#3-SAT\right)$:\\
+In this way, we get a weighted model  of F for \#2-SAT$\left(\#3-SAT\right)$:
 \begin{center}
 $\#2SAT_{w}(F, c, w)=\left ( \sum_{M\in S}C(M),W({M}') \right )$
 \end{center}
 
-At the same time, Magnus Wahlström introduced the concept of some graphs to illustrate the relationship between branches and branches better.Graphs are another way we look at Boolean expressions. We define a constraint graph of a formula:
+At the same time, Magnus Wahlström introduced the concept of some graphs to illustrate the relationship between branches and branches better. Graphs are another way we look at Boolean expressions. We define a constraint graph of a formula:
 \begin{center}
 $\left \{ \left ( a,b \right ) |a\;and \;b\; occur \;together\;in\;at\;least\; one\;clause\right \}$
 \end{center}
@@ -265,7 +277,7 @@ Think of a tree of formula. There is a node $v$ which has $d$ branches children.
 We defined the branching number of tuple
  $\left(t_1,t_2...t_d\right)$ is $\tau\left(t_1,t_2...t_d\right)$ ie. $\tau(4,4)\rightarrow x=\sqrt[4]{2}\approx 1.1892$
 
-	In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.\\
+	In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.
 \begin{enumerate}
 \item If $F$ contains an empty clause then $F:=(\varnothing), c:=0$ and $w:=0$
 \item If there is a clause $(1 \vee \ldots),$ then it is removed. If any variable $a$ thereby gets removed then there are three cases:
@@ -276,13 +288,13 @@ We defined the branching number of tuple
 \item If there is a clause $(a),$ then it is removed and $c:=c \cdot c(a), w:=w+w(a) .$ If $a$ still appears in $F$ then $F:=F[a=1]$
 \item If there are two clauses $x=\left(a \vee b \vee a^{\prime}\right), y=(a \vee b)$ then remove $x$. If the variable $a^{\prime}$ thereby gets removed then handle it as in case 2 .
 \end{enumerate}
-After some steps of simplification and proof we get Lemma 1:\\
+After some steps of simplification and proof we get Lemma 1:
 \begin{quote}[Lemma 1]
 $Let({F}',c,w)=Prop(F,c,w)\\and\;({c}',{w}')=\#2SAT_{w}({F}',c,w).\\
 Then\; \#2SATw(F ,c,w)=(c*{c}',w+{w}')$.
 \end{quote}
 
-In order to simplify the formula $F$, we have $F_{1}$, $F_{2}$, such that \\$Var(F_{1})\bigcap Var(F_2)=\left \{ v \right \} $.
+In order to simplify the formula $F$, we have $F_{1}$, $F_{2}$, such that $Var(F_{1})\bigcap Var(F_2)=\left \{ v \right \} $.
 \begin{enumerate} 
 \item Let $\left(c_{t}, w_{t}\right)=\# 2 S A T_{w}\left(F_{1}[v=1], \mathbf{c}, \mathbf{w}\right)$ and $\left(c_{f}, w_{f}\right)=\# 2 S A T_{w}\left(F_{1}[v=0], \mathbf{c}, \mathbf{w}\right)$
 \item Modify c and $\mathbf{w}$ so that $c(v) \leftarrow c_{t} \cdot c(v), c(\neg v) \leftarrow c_{f} \cdot c(\neg v), w(v) \leftarrow w_{t}+w(v)$ and
@@ -293,12 +305,10 @@ This procedure is to remove $F_1$ by multiplier reduction. And we get Lemma 2:
 \begin{quote}[Lemma 2]
 Applying multiplier reduction does not change the return value of $\#2SAT w (F, c, w)$.
 \end{quote}
-
 	According to Lemma 1 and Lemma 2, we can naturally get Lemma 3:
 \begin{quote}[Lemma 3]
 	The result of recursively branching on the variable $v$ in the formula $F$ equals $\#2SAT_{w}(F, c, w)$.
 \end{quote}
-
 Since $d(F)$ is discrete, it is discussed in three cases:
 \begin{enumerate}
 	\item the main function: $d(F)>5$
@@ -307,7 +317,7 @@ Since $d(F)$ is discrete, it is discussed in three cases:
 \end{enumerate}
 	At First, we need to solve the $C_{3}(F,c,w)$.Algorithm $C_{3}(F, \mathbf{c}, \mathbf{w})$ as follow:
 \begin{enumerate}	
-	\item Case 1: If $F$ contains no clauses, return (1, 0). If $F$ contains an empty clause, return (0, 0).\
+	\item Case 1: If $F$ contains no clauses, return (1, 0). If $F$ contains an empty clause, return (0, 0).
 	\item Case 2: If $F$ is not connected, return $(c, w)$ where $c=\prod_{i=0}^{j} c_{i}, w=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c}, \mathbf{w}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
 	\item Case 3: If multiplier reduction applies, apply it, removing the part with lowest $n_{3}(F)$ value.
 	\item Case 4: If $d(F)=3,$ pick a variable $x, d(x)=3,$ with as many neighbours of degree 3 as possible, and recursively branch on it. Otherwise, recursively branch on any variable.$  $
@@ -327,9 +337,12 @@ In the same way, we can get	algorithm $C_{5}(F, \mathbf{c}, \mathbf{w})$
 	(b) Otherwise, branch on $x .$
 	$S(x)=\sum_{y \in N(x)} d(y)$
 \end{enumerate}
-From the quotient of the complexity of the formula and the maximum number of branches, it can be inferred that the larger the quotient, the greater the time complexity of the worst case.\\So discuss the worst case of C5 in the value range of linear function $f\left(n,m\right)$, where $n=n(F)$ and $m=m(F)$. \\
-We need a sequence of worst cases as the $m / n$ quotient increases, and with each worst case we associate a linear function $f_{i}(n, m)=a_{i} n+b_{i} m$. \\
-$\begin{aligned} f(n, m) &=f_{i}(n, m) \text { if } k_{i}<m / n \leqslant k_{i+1}, \quad 0 \leqslant i \leqslant 9 \\ f_{i}(n, m) &=\chi_{i} n+\left(m-k_{i} n\right) b_{i}, \quad 0 \leqslant i \leqslant 9 \\ \chi_{0} &=0 \\ \chi_{i} &=\chi_{i-1}+\left(k_{i}-k_{i-1}\right) b_{i-1}, \quad 1 \leqslant i \leqslant 10 \\ a_{i} &=\chi_{i}-k_{i} b_{i} \end{aligned}$\\
+From the quotient of the complexity of the formula and the maximum number of branches, it can be inferred that the larger the quotient, the greater the time complexity of the worst case.So discuss the worst case of C5 in the value range of linear function $f\left(n,m\right)$, where $n=n(F)$ and $m=m(F)$. 
+We need a sequence of worst cases as the $m / n$ quotient increases, and with each worst case we associate a linear function 
+\begin{center}
+	$f_{i}(n, m)=a_{i} n+b_{i} m$. \\
+	$\begin{aligned} f(n, m) &=f_{i}(n, m) \text { if } k_{i}<m / n \leqslant k_{i+1}, \quad 0 \leqslant i \leqslant 9 \\ f_{i}(n, m) &=\chi_{i} n+\left(m-k_{i} n\right) b_{i}, \quad 0 \leqslant i \leqslant 9 \\ \chi_{0} &=0 \\ \chi_{i} &=\chi_{i-1}+\left(k_{i}-k_{i-1}\right) b_{i-1}, \quad 1 \leqslant i \leqslant 10 \\ a_{i} &=\chi_{i}-k_{i} b_{i} \end{aligned}$\\
+\end{center}
 
 \begin{center}
 	$T_{a b}$
@@ -374,7 +387,6 @@ $\begin{aligned} f(n, m) &=f_{i}(n, m) \text { if } k_{i}<m / n \leqslant k_{i+1
 			\hline
 	\end{tabular}}
 \end{table*}
-
  We have got $a_{i},b_{i},k_{i}$. We need a lemma that allows us to make a connection between the value of m(F )/n(F ) and worst-case branchings.
 \begin{quote}[Lemma 6]
 	Let $F$ be a non-empty formula such that $m(F) / n(F)=k,$ and define $\alpha(x)$ and
@@ -405,381 +417,19 @@ After all of the above branches have been recursively calculated, we can deduce 
 \begin{quote}[Theorem 11]
 	$C(F, \mathbf{c}, \mathbf{w})$ runs in $\mathrm{O}\left(1.2561^{n}\right)$ time.
 \end{quote}
-\section{Typeset Text}
-The styles contained in this document have been modified from the
-default styles to reflect ACM formatting conventions. For example,
-content paragraphs like this one are formatted using the Normal style.
+The above is a basic introduction to Wahlstrom's algorithmic theory, and it can be noted that a large number of calculations and proofs are in numerous Lemma. The original paper does not specify this. The task of this project is to perform a computational validation analysis of the algorithm of the above theory. This is an essential and essential validation process and serves as a reference and guide for future researchers. The tools and methods for computer validation to implement this algorithm will be detailed in later sections.
 
-\LaTeX\ sometimes will create overfull lines that extend into columns.
-To attempt to combat this, the \texttt{.cls} file has a command,
-\texttt{{\textbackslash}sloppy}, that essentially asks \LaTeX\ to
-prefer underfull lines with extra whitespace.  For more details on
-this, and info on how to control it more finely, check out
-{\url{http://www.economics.utoronto.ca/osborne/latex/PMAKEUP.HTM}}.
+\section{Methodology}
+Since this project is based on a digital reproduction of published theory, the application method of this project will be relatively simple. There are three main parts: the first part, a careful reading of the relevant papers to understand the theoretical background and related reasoning processes. In the second part, write code to carry out the computer simulation algorithm process. A simulation of the calculation process is performed. In the third part, testing the code, in this part we put our code to the test, testing the correctness of the original theory under a limited number of inputs that can be tested for results. In the following, we present the distribution of appropriate research methods.
 
-\subsection{Title and Authors}
+First of all, there are a few points to note about the first reading of the thesis section for this project. The papers involved in this project are all staggered into an unordered jumble and never readable. Read the essay with the mindset of reading slowly, with the result that a certain amount of time is never enough. Therefore, be sure to read the essay with questions to read it, and look for answers to specific questions each time to read it. Therefore, it must be read selectively, and it must be understood gradually from coarse to fine layer by layer. The order of reading the paper as planned above is to go from thick to thin, and with each round of reading, our knowledge of the subject increases by a layer. Based on this layer of knowledge, one can ask the next layer of more nuanced questions, and by rereadingthem based on these more nuanced questions, one can understand more. So it must be read together in a batch to some level, rather than piece by piece, whole piece at a time.
 
-Your paper's title, authors and affiliations should run across the
-full width of the page in a single column 17.8 cm (7 in.) wide.  The
-title should be in Helvetica or Arial 18-point bold.  Authors' names
-should be in Times New Roman or Times Roman 12-point bold, and
-affiliations in 12-point regular.  
+There is another benefit to reading this way: after the first round, we can tell which papers are not relevant to topic based on the knowledge I gained in the first round, and the ones that are not relevant will not need to be read further. In this way, it is possible to sift through a wide range of papers, layer by layer, to accurately identify the parts of the project that are genuinely essential to understand. The vast majority of papers only need to understand its main ideas, which is often more comfortable, not its detailed derivation process, which is instead more time-consuming. Secondly, there is another advantage to reading a whole batch together: the same school of thought, some authors speak more quickly and some not so bright. After skimming through the whole batch once, plan out a reading sequence that we thought would be easier to understand without banging we head hard against the wall there. So, reading in whole batches is a lot like playing checkers, going to plot out the most energy-efficient path for our reading.
 
-See \texttt{{\textbackslash}author} section of this template for
-instructions on how to format the authors. For more than three
-authors, you may have to place some address information in a footnote,
-or in a named section at the end of your paper. Names may optionally
-be placed in a single centered row instead of at the top of each
-column. Leave one 10-point line of white space below the last line of
-affiliations.
+In the second part, we are going to introduce the tools for writing code that will be used in this project. We chose python3.8.2 as the project code language. The Python language has many advantages, of which the following are particularly notable. First, it is easy to learn. Python is a relatively easy language to learn compared to other programming languages, and it focuses on how to solve problems rather than the syntax and structure of the programming language. It is because of its simplicity and ease of learning that more and more beginners are already choosing Python as an introductory language for programming. Secondly, the syntax is beautiful, and the Python language strives to be simple and beautiful. In Python, the use of indentation to identify code blocks, by reducing useless curly brackets and removing visual noise such as semicolons at the end of statements, the readability of the code is significantly improved. Reading a good Python program feels like reading English, and it allows to focus on solving problems without getting too caught up in the syntax of the programming language itself. The third is the rich and powerful library, which is called BatteryIncluded, meaning that the Python library is very comprehensive and contains libraries to solve various problems. Whatever functionality is implemented, there are ready-made class libraries that can be used. The rational use of Python libraries and open source projects can quickly implement the functionality needed for this project. Fourth, development efficiency. For example, the Python language can be developed significantly more efficiently because of its rich and powerful class libraries. Compared to compiled languages like C, C++ and Java, Python developers are several times more efficient. Fifth, the application area is extensive. Another great thing about the Python language is that it has a wide range of applications, and engineers can do many things with Python. For example, web development, web programming, automated operations, Linux system management, data analysis, scientific computing, artificial intelligence, machine learning. The Python language is somewhere between a scripting language and a system language. The code to be implemented in this project can foreseeably be refined into a separately callable library that can be referenced by other open-source projects and thus applied in a variety of industries.
+However, Python is not without its drawbacks, the main ones being the following. First, Python does not execute fast enough. Of course, this is not a severe problem, as the project does not require much speed, and in general, we do not compare Python languages directly with languages like C/C++. In terms of execution speed of the Python language, on the one hand, the latency of the network or disk will offset some of the time consumed by Python itself; on the other hand, because Python is particularly easy to combine with C, we can improve the overall efficiency of the program by separating a portion of the application that needs to be optimized for speed, converting it into a compiled extension, and using Python scripts to connect this portion of the application throughout the system. Second, Python's GIL lock restricts concurrency. Another big problem with Python is that it does not support multiprocessors well.GIL refers to the Python Global InterpreterLock, which is required when Python's default interpreter wants to execute bytecode. This means that attempts to extend an application through multiple threads will always be limited by this global interpreter lock. Of course, we can use a multi-process architecture to improve the concurrency of our programs, or we can choose a different Python implementation to run our programs. Third, Python2 does not go hand in hand with Python3. If a standard software or library cannot be backwards-compatible, then it will be ruthlessly abandoned by the user. In Python, one slot is that Python2 is not compatible with Python3. Instead, version 3.8.2 has been selected for this project to maximize the interface with future readers and enable them to use the findings and results of this project. So to avoid compatibility issues, opt for the latest python version.
 
-\subsection{Abstract and Keywords}
-
-Every submission should begin with an abstract of about 150 words,
-followed by a set of Author Keywords and ACM Classification
-Keywords. The abstract and keywords should be placed in the left
-column of the first page under the left half of the title. The
-abstract should be a concise statement of the problem, approach, and
-conclusions of the work described. It should clearly state the paper's
-contribution to the field of HCI\@.
-
-\subsection{Normal or Body Text}
-
-Please use a 10-point Times New Roman or Times Roman font or, if this
-is unavailable, another proportional font with serifs, as close as
-possible in appearance to Times Roman 10-point. Other than Helvetica
-or Arial headings, please use sans-serif or non-proportional fonts
-only for special purposes, such as source code text.
-
-\subsection{First Page Copyright Notice}
-This template include a sample ACM copyright notice at the bottom of
-page 1, column 1.  Upon acceptance, you will be provided with the
-appropriate copyright statement and unique DOI string for publication.
-Accepted papers will be distributed in the conference
-publications. They will also be placed in the ACM Digital Library,
-where they will remain accessible to thousands of researchers and
-practitioners worldwide. See
-\url{http://acm.org/publications/policies/copyright_policy} for the
-ACM's copyright and permissions policy.
-
-\subsection{Subsequent Pages}
-
-On pages beyond the first, start at the top of the page and continue
-in double-column format.  The two columns on the last page should be
-of equal length.
-
-\begin{figure}
-\centering
-  \includegraphics[width=0.9\columnwidth]{figures/sigchi-logo}
-  \caption{Insert a caption below each figure. Do not alter the
-    Caption style.  One-line captions should be centered; multi-line
-    should be justified. }~\label{fig:figure1}
-\end{figure}
-
-\subsection{References and Citations}
-
-Use a numbered list of references at the end of the article, ordered
-alphabetically by last name of first author, and referenced by numbers
-in
-brackets~\cite{acm_categories,ethics,Klemmer:2002:WSC:503376.503378}.
-Your references should be published materials accessible to the
-public. Internal technical reports may be cited only if they are
-easily accessible (i.e., you provide the address for obtaining the
-report within your citation) and may be obtained by any reader for a
-nominal fee. Proprietary information may not be cited. Private
-communications should be acknowledged in the main text, not referenced
-(e.g., ``[Borriello, personal communication]'').
-
-References should be in ACM citation format:
-\url{http://acm.org/publications/submissions/latex_style}. This
-includes citations to internet
-resources~\cite{acm_categories,cavender:writing,CHINOSAUR:venue,psy:gangnam}
-according to ACM format, although it is often appropriate to include
-URLs directly in the text, as above.
-
-
-% Use a numbered list of references at the end of the article, ordered
-% alphabetically by first author, and referenced by numbers in
-% brackets~\cite{ethics, Klemmer:2002:WSC:503376.503378,
-%   Mather:2000:MUT, Zellweger:2001:FAO:504216.504224}. For papers from
-% conference proceedings, include the title of the paper and an
-% abbreviated name of the conference (e.g., for Interact 2003
-% proceedings, use \textit{Proc. Interact 2003}). Do not include the
-% location of the conference or the exact date; do include the page
-% numbers if available. See the examples of citations at the end of this
-% document. Within this template file, use the \texttt{References} style
-% for the text of your citation.
-
-% Your references should be published materials accessible to the
-% public.  Internal technical reports may be cited only if they are
-% easily accessible (i.e., you provide the address for obtaining the
-% report within your citation) and may be obtained by any reader for a
-% nominal fee.  Proprietary information may not be cited. Private
-% communications should be acknowledged in the main text, not referenced
-% (e.g., ``[Robertson, personal communication]'').
-
-\begin{table}
-  \centering
-  \begin{tabular}{l r r r}
-    % \toprule
-    & & \multicolumn{2}{c}{\small{\textbf{Test Conditions}}} \\
-    \cmidrule(r){3-4}
-    {\small\textit{Name}}
-    & {\small \textit{First}}
-      & {\small \textit{Second}}
-    & {\small \textit{Final}} \\
-    \midrule
-    Marsden & 223.0 & 44 & 432,321 \\
-    Nass & 22.2 & 16 & 234,333 \\
-    Borriello & 22.9 & 11 & 93,123 \\
-    Karat & 34.9 & 2200 & 103,322 \\
-    % \bottomrule
-  \end{tabular}
-  \caption{Table captions should be placed below the table. We
-    recommend table lines be 1 point, 25\% black. Minimize use of
-    table grid lines.}~\label{tab:table1}
-\end{table}
-
-\section{Sections}
-
-The heading of a section should be in Helvetica or Arial 9-point bold,
-all in capitals. Sections should \textit{not} be numbered.
-
-\subsection{Subsections}
-
-Headings of subsections should be in Helvetica or Arial 9-point bold
-with initial letters capitalized.  For sub-sections and
-sub-subsections, a word like \emph{the} or \emph{of} is not
-capitalized unless it is the first word of the heading.
-
-\subsubsection{Sub-subsections}
-
-Headings for sub-subsections should be in Helvetica or Arial 9-point
-italic with initial letters capitalized.  Standard
-\texttt{{\textbackslash}section}, \texttt{{\textbackslash}subsection},
-and \texttt{{\textbackslash}subsubsection} commands will work fine in
-this template.
-
-\section{Figures/Captions}
-
-Place figures and tables at the top or bottom of the appropriate
-column or columns, on the same page as the relevant text (see
-Figure~\ref{fig:figure1}). A figure or table may extend across both
-columns to a maximum width of 17.78 cm (7 in.).
-
-\begin{figure*}
-  \centering
-  \includegraphics[width=1.75\columnwidth]{figures/map}
-  \caption{In this image, the map maximizes use of space. You can make
-    figures as wide as you need, up to a maximum of the full width of
-    both columns. Note that \LaTeX\ tends to render large figures on a
-    dedicated page. Image: \ccbynd~ayman on
-    Flickr.}~\label{fig:figure2}
-\end{figure*}
-
-Captions should be Times New Roman or Times Roman 9-point bold.  They
-should be numbered (e.g., ``Table~\ref{tab:table1}'' or
-``Figure~\ref{fig:figure1}''), centered and placed beneath the figure
-or table.  Please note that the words ``Figure'' and ``Table'' should
-be spelled out (e.g., ``Figure'' rather than ``Fig.'') wherever they
-occur. Figures, like Figure~\ref{fig:figure2}, may span columns and
-all figures should also include alt text for improved accessibility.
-Papers and notes may use color figures, which are included in the page
-limit; the figures must be usable when printed in black-and-white in
-the proceedings.
-
-The paper may be accompanied by a short video figure up to five
-minutes in length. However, the paper should stand on its own without
-the video figure, as the video may not be available to everyone who
-reads the paper.  
-
-\subsection{Inserting Images}
-When possible, include a vector formatted graphic (i.e. PDF or EPS).
-When including bitmaps,  use an image editing tool to resize the image
-at the appropriate printing resolution (usually 300 dpi).
-
-\section{Quotations}
-Quotations may be italicized when \textit{``placed inline''} (Anab,
-23F).
-
-\begin{quote}
-Longer quotes, when placed in their own paragraph, need not be
-italicized or in quotation marks when indented (Ramon, 39M).  
-\end{quote}
-
-\section{Language, Style, and Content}
-
-The written and spoken language of SIGCHI is English. Spelling and
-punctuation may use any dialect of English (e.g., British, Canadian,
-US, etc.) provided this is done consis- tently. Hyphenation is
-optional. To ensure suitability for an international audience, please
-pay attention to the following:
-
-\begin{itemize}
-\item Write in a straightforward style.
-\item Try to avoid long or complex sentence structures.
-\item Briefly define or explain all technical terms that may be
-  unfamiliar to readers.
-\item Explain all acronyms the first time they are used in your
-  text---e.g., ``Digital Signal Processing (DSP)''.
-\item Explain local references (e.g., not everyone knows all city
-  names in a particular country).
-\item Explain ``insider'' comments. Ensure that your whole audience
-  understands any reference whose meaning you do not describe (e.g.,
-  do not assume that everyone has used a Macintosh or a particular
-  application).
-\item Explain colloquial language and puns. Understanding phrases like
-  ``red herring'' may require a local knowledge of English.  Humor and
-  irony are difficult to translate.
-\item Use unambiguous forms for culturally localized concepts, such as
-  times, dates, currencies, and numbers (e.g., ``1--5--97'' or
-  ``5/1/97'' may mean 5 January or 1 May, and ``seven o'clock'' may
-  mean 7:00 am or 19:00). For currencies, indicate equivalences:
-  ``Participants were paid {\fontfamily{txr}\selectfont \textwon}
-  25,000, or roughly US \$22.''
-\item Be careful with the use of gender-specific pronouns (he, she)
-  and other gendered words (chairman, manpower, man-months). Use
-  inclusive language that is gender-neutral (e.g., she or he, they,
-  s/he, chair, staff, staff-hours, person-years). See the
-  \textit{Guidelines for Bias-Free Writing} for further advice and
-  examples regarding gender and other personal
-  attributes~\cite{Schwartz:1995:GBF}. Be particularly aware of
-  considerations around writing about people with disabilities.
-\item If possible, use the full (extended) alphabetic character set
-  for names of persons, institutions, and places (e.g.,
-  Gr{\o}nb{\ae}k, Lafreni\'ere, S\'anchez, Nguy{\~{\^{e}}}n,
-  Universit{\"a}t, Wei{\ss}enbach, Z{\"u}llighoven, \r{A}rhus, etc.).
-  These characters are already included in most versions and variants
-  of Times, Helvetica, and Arial fonts.
-\end{itemize}
-
-\section{Accessibility}
-The Executive Council of SIGCHI has committed to making SIGCHI
-conferences more inclusive for researchers, practitioners, and
-educators with disabilities. As a part of this goal, the all authors
-are asked to work on improving the accessibility of their
-submissions. Specifically, we encourage authors to carry out the
-following five steps:
-\begin{enumerate}
-\item Add alternative text to all figures
-\item Mark table headings
-\item Add tags to the PDF
-\item Verify the default language
-\item Set the tab order to ``Use Document Structure''
-\end{enumerate}
-For more information and links to instructions and resources, please
-see: \url{http://chi2016.acm.org/accessibility}.  The
-\texttt{{\textbackslash}hyperref} package allows you to create well tagged PDF files,
-please see the preamble of this template for an example.
-
-\section{Page Numbering, Headers and Footers}
-Your final submission should not contain footer or header information
-at the top or bottom of each page. Specifically, your final submission
-should not include page numbers. Initial submissions may include page
-numbers, but these must be removed for camera-ready. Page numbers will
-be added to the PDF when the proceedings are assembled.
-
-\section{Producing and Testing PDF Files}
-
-We recommend that you produce a PDF version of your submission well
-before the final deadline.  Your PDF file must be ACM DL
-Compliant. The requirements for an ACM Compliant PDF are available at:
-{\url{http://www.sheridanprinting.com/typedept/ACM-distilling-settings.htm}}.
-
-Test your PDF file by viewing or printing it with the same software we
-will use when we receive it, Adobe Acrobat Reader Version 10. This is
-widely available at no cost. Note that most
-reviewers will use a North American/European version of Acrobat
-reader, so please check your PDF accordingly.
-
-When creating your PDF from Word, ensure that you generate a tagged
-PDF from improved accessibility. This can be done by using the Adobe
-PDF add-in, also called PDFMaker. Select Acrobat | Preferences from
-the ribbon and ensure that ``Enable Accessibility and Reflow with
-tagged Adobe PDF'' is selected. You can then generate a tagged PDF by
-selecting ``Create PDF'' from the Acrobat ribbon.
-
-\section{Conclusion}
-
-It is important that you write for the SIGCHI audience. Please read
-previous years' proceedings to understand the writing style and
-conventions that successful authors have used. It is particularly
-important that you state clearly what you have done, not merely what
-you plan to do, and explain how your work is different from previously
-published work, i.e., the unique contribution that your work makes to
-the field. Please consider what the reader will learn from your
-submission, and how they will find your work useful. If you write with
-these questions in mind, your work is more likely to be successful,
-both in being accepted into the conference, and in influencing the
-work of our field.
-
-\section{Acknowledgments}
-
-Sample text: We thank all the volunteers, and all publications support
-and staff, who wrote and provided helpful comments on previous
-versions of this document. Authors 1, 2, and 3 gratefully acknowledge
-the grant from NSF (\#1234--2012--ABC). \textit{This whole paragraph is
-  just an example.}
-
-% Balancing columns in a ref list is a bit of a pain because you
-% either use a hack like flushend or balance, or manually insert
-% a column break.  http://www.tex.ac.uk/cgi-bin/texfaq2html?label=balance
-% multicols doesn't work because we're already in two-column mode,
-% and flushend isn't awesome, so I choose balance.  See this
-% for more info: http://cs.brown.edu/system/software/latex/doc/balance.pdf
-%
-% Note that in a perfect world balance wants to be in the first
-% column of the last page.
-%
-% If balance doesn't work for you, you can remove that and
-% hard-code a column break into the bbl file right before you
-% submit:
-%
-% http://stackoverflow.com/questions/2149854/how-to-manually-equalize-columns-
-% in-an-ieee-paper-if-using-bibtex
-%
-% Or, just remove \balance and give up on balancing the last page.
-%
-\balance{}
-
-\section{References Format}
-Your references should be published materials accessible to the
-public. Internal technical reports may be cited only if they are
-easily accessible and may be obtained by any reader for a nominal
-fee. Proprietary information may not be cited. Private communications
-should be acknowledged in the main text, not referenced (e.g.,
-[Golovchinsky, personal communication]). References must be the same
-font size as other body text. References should be in alphabetical
-order by last name of first author. Use a numbered list of references
-at the end of the article, ordered alphabetically by last name of
-first author, and referenced by numbers in brackets. For papers from
-conference proceedings, include the title of the paper and the name of
-the conference. Do not include the location of the conference or the
-exact date; do include the page numbers if available. 
-
-References should be in ACM citation format:
-\url{http://www.acm.org/publications/submissions/latex_style}.  This
-includes citations to Internet
-resources~\cite{CHINOSAUR:venue,cavender:writing,psy:gangnam}
-according to ACM format, although it is often appropriate to include
-URLs directly in the text, as above. Example reference formatting for
-individual journal articles~\cite{ethics}, articles in conference
-proceedings~\cite{Klemmer:2002:WSC:503376.503378},
-books~\cite{Schwartz:1995:GBF}, theses~\cite{sutherland:sketchpad},
-book chapters~\cite{winner:politics}, an entire journal
-issue~\cite{kaye:puc},
-websites~\cite{acm_categories,cavender:writing},
-tweets~\cite{CHINOSAUR:venue}, patents~\cite{heilig:sensorama}, 
-games~\cite{supermetroid:snes}, and
-online videos~\cite{psy:gangnam} is given here.  See the examples of
-citations at the end of this document and in the accompanying
-\texttt{BibTeX} document. This formatting is a edited version of the
-format automatically generated by the ACM Digital Library
-(\url{http://dl.acm.org}) as ``ACM Ref.'' DOI and/or URL links are
-optional but encouraged as are full first names. Note that the
-Hyperlink style used throughout this document uses blue links;
-however, URLs in the references section may optionally appear in
-black.
+In part three, we will talk about the third phase of this project, the testing code phase. First, our algorithm needs test case validation, without which it is not enough to verify the correctness of our code. We will write some random Boolean expressions to get through our run based on the requirements of the original theory. Second, any optimization should be based on testing. We cannot guarantee that the first time the code is completed, it will be the fastest and most elegant version. During the non-stop sample testing, we are sure to finish the functionality in a better way than just now. That is why it is better to test and modify while we are at it. The third point is that testing and code writing should be done in parallel. With each completed part, we test the completion of this part's functionality. The test passes before moving on to the next part, so writing code and testing alternate like a double helix. The last and most crucial point is that the successful operation of an algorithm is done step by step, and the success of each step must be established on top of the initial success. Only the success of each step will guarantee a smooth completion of the project.
 
 % BALANCE COLUMNS
 \balance{}
@@ -789,6 +439,29 @@ black.
 \bibliographystyle{SIGCHI-Reference-Format}
 \bibliography{reference}
 
+\newpage
+\begin{center}
+\begin{gantt}[xunitlength=1.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{6}{9}
+	\begin{ganttitle}
+		\titleelement{Gannt Chart of Project Plan}{9}
+	\end{ganttitle}
+	\begin{ganttitle}
+	\titleelement{Jan}{1}
+	\titleelement{Feb}{1}
+	\titleelement{Mar}{1}
+	\titleelement{Apr}{1}
+	\titleelement{May}{1}
+	\titleelement{Jun}{1}
+	\titleelement{Jul}{1}
+	\titleelement{Aug}{1}
+	\titleelement{Sep}{1}
+	\end{ganttitle}
+	\ganttbar{Read paper}{0}{5}
+	\ganttbarcon[color=red]{Write code}{5}{1}
+	\ganttbarcon{Test code}{6}{1}
+	\ganttbarcon{Write report}{7}{2}
+\end{gantt}
+\end{center}
 \end{document}
 
 %%% Local Variables:
