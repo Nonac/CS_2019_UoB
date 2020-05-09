@@ -1,7 +1,5 @@
 \documentclass{sigchi}
 
-
-
 % Use this section to set the ACM copyright statement (e.g. for
 % preprints).  Consult the conference website for the camera-ready
 % copyright statement.
@@ -16,11 +14,11 @@
 %\setcopyright{cagov}
 %\setcopyright{cagovmixed}
 % DOI
-\doi{http://dx.doi.org/10.475/123_4}
+\doi{https://doi.org/10.1145/3313831.XXXXXXX}
 % ISBN
-\isbn{123-4567-24-567/08/06}
+\isbn{978-1-4503-6708-0/20/04}
 %Conference
-\conferenceinfo{CHI'16,}{May 07--12, 2016, San Jose, CA, USA}
+\conferenceinfo{CHI'20,}{April  25--30, 2020, Honolulu, HI, USA}
 %Price
 \acmPrice{\$15.00}
 
@@ -60,14 +58,16 @@
 \usepackage{color}
 \usepackage{booktabs}
 \usepackage{textcomp}
-\usepackage{tikz}
-\usepackage{gantt}
+
 
 % Some optional stuff you might like/need.
 \usepackage{microtype}        % Improved Tracking and Kerning
 % \usepackage[all]{hypcap}    % Fixes bug in hyperref caption linking
 \usepackage{ccicons}          % Cite your images correctly!
 % \usepackage[utf8]{inputenc} % for a UTF8 editor only
+
+\usepackage{tikz}
+\usepackage{gantt}
 
 % If you want to use todo notes, marginpars etc. during creation of
 % your draft document, you have to enable the "chi_draft" option for
@@ -82,7 +82,7 @@
 % so you remain anonymous.
 \def\plaintitle{Show the proposed algorithm has the claimed running time by making all the computer verification explicit}
 \def\plainauthor{First Author, Second Author, Third Author,
-  Fourth Author, Fifth Author, Sixth Author}
+	Fourth Author, Fifth Author, Sixth Author}
 \def\emptyauthor{}
 \def\plainkeywords{\#SAT; \#2SAT; graph theory; complexity theory}
 \def\plaingeneralterms{Documentation, Standardization}
@@ -139,16 +139,16 @@
 
 \numberofauthors{2}
 \author{%
-	 \alignauthor{John Lapinskas\\
+	\alignauthor{John Lapinskas\\
 		\affaddr{Unicersity of Bristol}\\
 		\affaddr{Bristol, UK}\\
 		\email{john.lapinskas@bristol.ac.uk}}\\
-  \alignauthor{Yinan Yang\\
-    \affaddr{Unicersity of Bristol}\\
-    \affaddr{Bristol, UK}\\
-    \email{ff19085@bristol.ac.uk}}\\
- 
- 
+	\alignauthor{Yinan Yang\\
+		\affaddr{Unicersity of Bristol}\\
+		\affaddr{Bristol, UK}\\
+		\email{ff19085@bristol.ac.uk}}\\
+	
+	
 }
 
 \maketitle
@@ -161,15 +161,43 @@
   On hardware systems, with the development of computer computing power, the amount of computing that was previously not readily available has become very easy. Thus the recursive calculations also become more reproducible than when the original paper was published. This also provides the hardware basis for the conduct of this project.
   
   For the evaluation of the validation of the results, since this project is a factual validation of existing theories, the results are compared according to the original thesis. If the results are entirely consistent, it is proved that the results are accurate in the original hypothesis, thus also proving the correctness of the original theory. If the results are not entirely consistent, then both the accuracy of the results of this project and the accuracy of the original theory need to be checked.
-  
 \end{abstract}
 
-\category{H.5.m.}{Information Interfaces and Presentation
-  (e.g. HCI)}{Miscellaneous} \category{See
-  \url{http://acm.org/about/class/1998/} for the full list of ACM
-  classifiers. This section is required.}{}{}
 
+% ACM Classfication
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10003120.10003121</concept_id>
+<concept_desc>Human-centered computing~Human computer interaction (HCI)</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003120.10003121.10003125.10011752</concept_id>
+<concept_desc>Human-centered computing~Haptic devices</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10003120.10003121.10003122.10003334</concept_id>
+<concept_desc>Human-centered computing~User studies</concept_desc>
+<concept_significance>100</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Human-centered computing~Human computer interaction (HCI)}
+\ccsdesc[300]{Human-centered computing~Haptic devices}
+\ccsdesc[100]{Human-centered computing~User studies}
+
+% Author Keywords
 \keywords{\plainkeywords}
+
+% Print the classficiation codes
+\printccsdesc
+Please use the 2012 Classifiers and see this link to embed them in the text: \url{https://dl.acm.org/ccs/ccs_flat.cfm}
+
+
 
 \section{Introduction}
 First, the project will design a computer validation process of Magnus Wahlström's work in 2004.\cite{10.1016/j.tcs.2004.10.037} This project will focus on the \#2-SAT area of the algorithm domain, which will be covered in detail later in this introduction.
@@ -225,7 +253,7 @@ Since the main process of this project was to replicate the process of this pape
 
 First of all, as introduced in the introduction above, the fundamental conceptual element of the field in which the project is located is literal, which contains either a variable $x$ or its negation $\neg x$. A clause is the disjunction of literals, and then the conjunction of multiple clauses forms the conjunction normal form, abbreviated to CNF. If each clause in a CNF contains up to k characters, we can call this CNF the k-SAT formula. For example.
 \begin{center}
-2-SAT:  $\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $\\3-SAT:$\left ( A \vee B\vee C \right )\wedge \left ( B \vee C\vee D \right )$
+	2-SAT:  $\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $\\3-SAT:$\left ( A \vee B\vee C \right )\wedge \left ( B \vee C\vee D \right )$
 \end{center}
 
 In this paper, we define the degree $d\left( x \right)$ of a variable x in formula F as the number of clauses in $F$ containing $x$.
@@ -237,75 +265,75 @@ In this way, we get a method to measure formula complexity:
 \end{center}
 We define a model $M$ for $F$, a set L of all liters in $F$,and a weight vector $w$:
 \begin{center}
-$W\left ( M \right )=\sum_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} w\left ( l \right )$
+	$W\left ( M \right )=\sum_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} w\left ( l \right )$
 \end{center}
 Be the same, we get a cardinality vector $c$ for $F$:
 \begin{center}
-$C\left ( M \right )=\prod_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} c\left ( l \right )$\\
+	$C\left ( M \right )=\prod_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} c\left ( l \right )$\\
 \end{center}
 In this way, we get a weighted model  of F for \#2-SAT$\left(\#3-SAT\right)$:
 \begin{center}
-$\#2SAT_{w}(F, c, w)=\left ( \sum_{M\in S}C(M),W({M}') \right )$
+	$\#2SAT_{w}(F, c, w)=\left ( \sum_{M\in S}C(M),W({M}') \right )$
 \end{center}
 
 At the same time, Magnus Wahlström introduced the concept of some graphs to illustrate the relationship between branches and branches better. Graphs are another way we look at Boolean expressions. We define a constraint graph of a formula:
 \begin{center}
-$\left \{ \left ( a,b \right ) |a\;and \;b\; occur \;together\;in\;at\;least\; one\;clause\right \}$
+	$\left \{ \left ( a,b \right ) |a\;and \;b\; occur \;together\;in\;at\;least\; one\;clause\right \}$
 \end{center}
 Connect: A formula F is connected iff in the corresponding constraint graph, there is a path from each variable to every other.As follow is a tree for 
 \begin{center}
-$\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $:\\
-\tikz \node {B}
-child {node {A}}
-child {node {C}};
+	$\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $:\\
+	\tikz \node {B}
+	child {node {A}}
+	child {node {C}};
 \end{center}
 
 Next, after the model style is built, we start calculating the temporal complexity of the branch.
 
 \begin{center}
-\tikz \node {v}
-child {node {t1}}
-child {node {t2}}
-child {node {t3}}
-child {node {t4}}
-child {node {td}};
+	\tikz \node {v}
+	child {node {t1}}
+	child {node {t2}}
+	child {node {t3}}
+	child {node {t4}}
+	child {node {td}};
 \end{center}
 Think of a tree of formula. There is a node $v$ which has $d$ branches children. Each branch is labeled by recution complexity positive real number$\left(t_1,t_2...t_d\right)$ ,the branching number is the positive real-valued solution of
 \begin{center}
 	$\sum_{i=1}^{d} x^{-t_{i}}=1$
 \end{center}
 We defined the branching number of tuple
- $\left(t_1,t_2...t_d\right)$ is $\tau\left(t_1,t_2...t_d\right)$ ie. $\tau(4,4)\rightarrow x=\sqrt[4]{2}\approx 1.1892$
+$\left(t_1,t_2...t_d\right)$ is $\tau\left(t_1,t_2...t_d\right)$ ie. $\tau(4,4)\rightarrow x=\sqrt[4]{2}\approx 1.1892$
 
-	In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.
+In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.
 \begin{enumerate}
-\item If $F$ contains an empty clause then $F:=(\varnothing), c:=0$ and $w:=0$
-\item If there is a clause $(1 \vee \ldots),$ then it is removed. If any variable $a$ thereby gets removed then there are three cases:
-(a) If $w(a)=w(\neg a)$ then $c:=c \cdot(c(a)+c(\neg a)) ; w:=w+w(a)$\\
-(b) If $w(a)<w(\neg a)$ then $c:=c \cdot c(\neg a) ; w:=w+w(\neg a)$\\
-(c) If $w(a)>w(\neg a)$ then $c:=c \cdot c(a) ; w:=w+w(a)$
-\item If there is a clause $(0 \vee \ldots),$ then 0 is removed from it.
-\item If there is a clause $(a),$ then it is removed and $c:=c \cdot c(a), w:=w+w(a) .$ If $a$ still appears in $F$ then $F:=F[a=1]$
-\item If there are two clauses $x=\left(a \vee b \vee a^{\prime}\right), y=(a \vee b)$ then remove $x$. If the variable $a^{\prime}$ thereby gets removed then handle it as in case 2 .
+	\item If $F$ contains an empty clause then $F:=(\varnothing), c:=0$ and $w:=0$
+	\item If there is a clause $(1 \vee \ldots),$ then it is removed. If any variable $a$ thereby gets removed then there are three cases:
+	(a) If $w(a)=w(\neg a)$ then $c:=c \cdot(c(a)+c(\neg a)) ; w:=w+w(a)$\\
+	(b) If $w(a)<w(\neg a)$ then $c:=c \cdot c(\neg a) ; w:=w+w(\neg a)$\\
+	(c) If $w(a)>w(\neg a)$ then $c:=c \cdot c(a) ; w:=w+w(a)$
+	\item If there is a clause $(0 \vee \ldots),$ then 0 is removed from it.
+	\item If there is a clause $(a),$ then it is removed and $c:=c \cdot c(a), w:=w+w(a) .$ If $a$ still appears in $F$ then $F:=F[a=1]$
+	\item If there are two clauses $x=\left(a \vee b \vee a^{\prime}\right), y=(a \vee b)$ then remove $x$. If the variable $a^{\prime}$ thereby gets removed then handle it as in case 2 .
 \end{enumerate}
 After some steps of simplification and proof we get Lemma 1:
 \begin{quote}[Lemma 1]
-$Let({F}',c,w)=Prop(F,c,w)\\and\;({c}',{w}')=\#2SAT_{w}({F}',c,w).\\
-Then\; \#2SATw(F ,c,w)=(c*{c}',w+{w}')$.
+	$Let({F}',c,w)=Prop(F,c,w)\\and\;({c}',{w}')=\#2SAT_{w}({F}',c,w).\\
+	Then\; \#2SATw(F ,c,w)=(c*{c}',w+{w}')$.
 \end{quote}
 
 In order to simplify the formula $F$, we have $F_{1}$, $F_{2}$, such that $Var(F_{1})\bigcap Var(F_2)=\left \{ v \right \} $.
 \begin{enumerate} 
-\item Let $\left(c_{t}, w_{t}\right)=\# 2 S A T_{w}\left(F_{1}[v=1], \mathbf{c}, \mathbf{w}\right)$ and $\left(c_{f}, w_{f}\right)=\# 2 S A T_{w}\left(F_{1}[v=0], \mathbf{c}, \mathbf{w}\right)$
-\item Modify c and $\mathbf{w}$ so that $c(v) \leftarrow c_{t} \cdot c(v), c(\neg v) \leftarrow c_{f} \cdot c(\neg v), w(v) \leftarrow w_{t}+w(v)$ and
-$w(\neg v) \leftarrow w_{f}+w(\neg v)$
-\item Finally, return $\# 2 \operatorname{SAT}_{w}\left(F_{2}, \mathbf{c}, \mathbf{w}\right)$
+	\item Let $\left(c_{t}, w_{t}\right)=\# 2 S A T_{w}\left(F_{1}[v=1], \mathbf{c}, \mathbf{w}\right)$ and $\left(c_{f}, w_{f}\right)=\# 2 S A T_{w}\left(F_{1}[v=0], \mathbf{c}, \mathbf{w}\right)$
+	\item Modify c and $\mathbf{w}$ so that $c(v) \leftarrow c_{t} \cdot c(v), c(\neg v) \leftarrow c_{f} \cdot c(\neg v), w(v) \leftarrow w_{t}+w(v)$ and
+	$w(\neg v) \leftarrow w_{f}+w(\neg v)$
+	\item Finally, return $\# 2 \operatorname{SAT}_{w}\left(F_{2}, \mathbf{c}, \mathbf{w}\right)$
 \end{enumerate}
 This procedure is to remove $F_1$ by multiplier reduction. And we get Lemma 2:
 \begin{quote}[Lemma 2]
-Applying multiplier reduction does not change the return value of $\#2SAT w (F, c, w)$.
+	Applying multiplier reduction does not change the return value of $\#2SAT w (F, c, w)$.
 \end{quote}
-	According to Lemma 1 and Lemma 2, we can naturally get Lemma 3:
+According to Lemma 1 and Lemma 2, we can naturally get Lemma 3:
 \begin{quote}[Lemma 3]
 	The result of recursively branching on the variable $v$ in the formula $F$ equals $\#2SAT_{w}(F, c, w)$.
 \end{quote}
@@ -315,7 +343,7 @@ Since $d(F)$ is discrete, it is discussed in three cases:
 	\item help function1 $4<=d(F)<=5$
 	\item help function2 $d(F)<=3$
 \end{enumerate}
-	At First, we need to solve the $C_{3}(F,c,w)$.Algorithm $C_{3}(F, \mathbf{c}, \mathbf{w})$ as follow:
+At First, we need to solve the $C_{3}(F,c,w)$.Algorithm $C_{3}(F, \mathbf{c}, \mathbf{w})$ as follow:
 \begin{enumerate}	
 	\item Case 1: If $F$ contains no clauses, return (1, 0). If $F$ contains an empty clause, return (0, 0).
 	\item Case 2: If $F$ is not connected, return $(c, w)$ where $c=\prod_{i=0}^{j} c_{i}, w=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c}, \mathbf{w}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
@@ -367,12 +395,12 @@ Here take after the deﬁnitions of the terms included.
 \end{center}
 
 \begin{table*}
-\begin{center}
-	Table 2 $b_{i}$ and $a_{i}$ parameters\\
-\end{center}
+	\begin{center}
+		Table 2 $b_{i}$ and $a_{i}$ parameters\\
+	\end{center}
 	%\resizebox{\textwidth}{30mm}{
 	\centering
-		{
+	{
 		\begin{tabular}{llll}
 			\hline$i$ & $b_{i}$, definitions & $b_{i}$ & $a_{i}$ \\
 			\hline 0 & 0 & 0 & 0 \\
@@ -403,7 +431,7 @@ The precise values of $k_i$ can be found in Table1, along with rounded-off value
 We will need to prove that the worst-case branching number in each section is $\tau(4,4)$. For different ranges of m/n values, we need to show that when $m/n\leqslant5$, the time complexity is less than $\mathrm{O}\left(1.2561^{n}\right)$. So we broke down a number of situations.
 \begin{enumerate}
 	\item Case: $m / n \leqslant2$
-		\item Case: $m / n \in[2,3]$
+	\item Case: $m / n \in[2,3]$
 	\item Case: $d(F)=5$ which gets a branching number less than $\tau(4,4)$.
 	\item Case: $m / n \in[3,3.5], d(F)=4$
 	\item Case: $m / n \in[3.5,3.75], d(F)=4$
@@ -439,29 +467,28 @@ In part three, we will talk about the third phase of this project, the testing c
 % References must be the same font size as other body text.
 \bibliographystyle{SIGCHI-Reference-Format}
 \bibliography{reference}
-
 \newpage
 \begin{center}
-\begin{gantt}[xunitlength=1.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{6}{9}
-	\begin{ganttitle}
-		\titleelement{Gannt Chart of Project Plan}{9}
-	\end{ganttitle}
-	\begin{ganttitle}
-	\titleelement{Jan}{1}
-	\titleelement{Feb}{1}
-	\titleelement{Mar}{1}
-	\titleelement{Apr}{1}
-	\titleelement{May}{1}
-	\titleelement{Jun}{1}
-	\titleelement{Jul}{1}
-	\titleelement{Aug}{1}
-	\titleelement{Sep}{1}
-	\end{ganttitle}
-	\ganttbar{Read paper}{0}{5}
-	\ganttbarcon[color=red]{Write code}{5}{1}
-	\ganttbarcon{Test code}{6}{1}
-	\ganttbarcon{Write report}{7}{2}
-\end{gantt}
+	\begin{gantt}[xunitlength=1.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{6}{9}
+		\begin{ganttitle}
+			\titleelement{Gannt Chart of Project Plan}{9}
+		\end{ganttitle}
+		\begin{ganttitle}
+			\titleelement{Jan}{1}
+			\titleelement{Feb}{1}
+			\titleelement{Mar}{1}
+			\titleelement{Apr}{1}
+			\titleelement{May}{1}
+			\titleelement{Jun}{1}
+			\titleelement{Jul}{1}
+			\titleelement{Aug}{1}
+			\titleelement{Sep}{1}
+		\end{ganttitle}
+		\ganttbar{Read paper}{0}{5}
+		\ganttbarcon[color=red]{Write code}{5}{1}
+		\ganttbarcon{Test code}{6}{1}
+		\ganttbarcon{Write report}{7}{2}
+	\end{gantt}
 \end{center}
 
 \begin{table*}[]
