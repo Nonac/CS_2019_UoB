@@ -22,6 +22,8 @@
 %Price
 \acmPrice{\$15.00}
 
+
+
 % Use this command to override the default ACM copyright statement
 % (e.g. for preprints).  Consult the conference website for the
 % camera-ready copyright statement.
@@ -194,8 +196,7 @@
 \keywords{\plainkeywords}
 
 % Print the classficiation codes
-\printccsdesc
-Please use the 2012 Classifiers and see this link to embed them in the text: \url{https://dl.acm.org/ccs/ccs_flat.cfm}
+
 
 
 
@@ -206,9 +207,9 @@ Most algorithm designs are algorithm designs for decision problems. For example,
 
 Let us go back to the SAT problem. Going further, we will not only be content to find out if we can satisfy a particular Boolean expression, but we are trying to find out exactly how many solutions can satisfy that expression. This is the \#SAT question, brought up by Valiant in 1979.\cite{10.1016/0304-3975(79)90044-6} Valiant, meanwhile, raised the issue that this is a \#P-complete.
 
-To find the final solution to a complete Boolean expression, we split out each of the propositional variables. Each propositional variable can contain either true or false. We define a literal to denote both a propositional variable x and its negation ¬x. A disjunction of literals is defined as a clause. And a conjunctive nurmal form, short for CNF, is a conjunction of clauses.
+To find the final solution to a complete Boolean expression, we split out each of the propositional variables. Each propositional variable can contain either true or false. We define a literal to denote both a propositional variable x and its negation ¬x. A disjunction of literals is defined as a clause. Moreover, a conjunctive normal form, short for CNF, is a conjunction of clauses.
 
-So we can represent some special case SAT questions, such as if each clause contains at most 2 literals, then we call this formula a 2-SAT formula. A more general representation is that if each clause contains at most no more than k literals in a hypothetical CNF, then we call it a k\-SAT formula (k>0). The \#2-SAT question of concern for this project can then be expressed as: how many possible solutions are there to make the formula satisfy a maximum of 2 liters per clause in any given proposed formula. Take for example the following.
+So we can represent some particular case SAT questions, such as if each clause contains at most two literals, then we call this formula a 2-SAT formula. A more general representation is that if each clause contains at most no more than k literals in a hypothetical CNF, then we call it a k\-SAT formula (k>0). The \#2-SAT question of concern for this project can then be expressed as: how many possible solutions are there to make the formula satisfy a maximum of 2 liters per a clause in any given proposed formula. Take, for example, the following.
 \begin{align*}  
 \left ( x_{0}\vee x_{1} \right )\wedge \left ( x_{1}\vee x_{2} \right )\wedge \left ( x_{2}\vee  x_{3} \right )\wedge \left ( x_{4}\right )
 \end{align*}
@@ -241,8 +242,9 @@ Further, in the work of Magnus Wahlstrom et al. in 2004, they designed a computa
 
 We note that Junosza-Szaniawski and Tuczynski, in a technical report, proposed an algorithm for counting independent collections with run times of O (1.2369n).\cite{undefined} For graphs where the maximum number of degrees is 3 and all neighbors with degrees 3 do not have 3-degree vertices, they propose a new algorithm with a run time of $2^{n_{3}/5} +O\left( n \right))$, where n3 is the number of 3-degree vertices and the overall run Inserting the results into the fastest algorithm before Wahlstrom \cite{10.1016/j.tcs.2004.10.037} can save time.
 
-In 2007, Magnus Wahlström summarized his findings by releasing a book summarizing his findings in this area.\cite{Wahlstrom} In this book, he introduces two new complexity metrics that represent two ways to add this applicability limitation to the analysis. In the first metric, the execution of an algorithm is seen as moving between a finite set of states (e.g., structures or properties that exist or do not exist), the current state determines which branches are applicable, and each branch of each branch contains information about the resulting state. In the second measure, what controls the applicability of the branch is the relative size of the modelling properties (e.g., the degree of averaging or other density concepts).
+To speak to the corresponding decision problem, we see that it is not 2SAT, but a weighted variant. We do not know of any specific algorithm to solve this problem. However, in order to understand its hardness, we can note that it contains MAXIMUM INDEPENDENT SET as a particular case. MAXIMUM INDEPENDENT SET is known as NP-complete, and the fastest multi-space algorithm to date runs at O(1.2025n), implemented by Robson.\cite{robson2001finding}
 
+In 2007, Magnus Wahlström summarized his findings by releasing a book summarizing his findings in this area.\cite{Wahlstrom} In this book, he introduces two new complexity metrics that represent two ways to add this applicability limitation to the analysis. In the first metric, the execution of an algorithm is seen as moving between a finite set of states (e.g., structures or properties that exist or do not exist), the current state determines which branches are applicable, and each branch of each branch contains information about the resulting state. In the second measure, what controls the applicability of the branch is the relative size of the modelling properties (e.g., the degree of averaging or other density concepts).
 
 Edward J. Lee released a polynomial space algorithm in 2016
 \cite{Lee} by improving Wahlstrom's algorithm to slightly improve analysis by using the potential to amortize some of the worst branching cases with better ones. 
@@ -255,7 +257,6 @@ First of all, as introduced in the introduction above, the fundamental conceptua
 \begin{center}
 	2-SAT:  $\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $\\3-SAT:$\left ( A \vee B\vee C \right )\wedge \left ( B \vee C\vee D \right )$
 \end{center}
-
 In this paper, we define the degree $d\left( x \right)$ of a variable x in formula F as the number of clauses in $F$ containing $x$.
 e.g.:in $\left ( A \vee B \right )\wedge \left ( B \vee C \right ) $ d$\left( B \right)$=2.
 And the maximum degree of  any variable in F is d$\left(F\right)$, the number is $n_{d}\left ( F \right )$.\\
@@ -287,9 +288,7 @@ Connect: A formula F is connected iff in the corresponding constraint graph, the
 	child {node {A}}
 	child {node {C}};
 \end{center}
-
 Next, after the model style is built, we start calculating the temporal complexity of the branch.
-
 \begin{center}
 	\tikz \node {v}
 	child {node {t1}}
@@ -303,9 +302,7 @@ Think of a tree of formula. There is a node $v$ which has $d$ branches children.
 	$\sum_{i=1}^{d} x^{-t_{i}}=1$
 \end{center}
 We defined the branching number of tuple
-$\left(t_1,t_2...t_d\right)$ is $\tau\left(t_1,t_2...t_d\right)$ ie. $\tau(4,4)\rightarrow x=\sqrt[4]{2}\approx 1.1892$
-
-In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.
+$\left(t_1,t_2...t_d\right)$ is $\tau\left(t_1,t_2...t_d\right)$ ie. $\tau(4,4)\rightarrow x=\sqrt[4]{2}\approx 1.1892$. In order to avoid the result deviation caused by the simplified formula, the prof formula is introduced, and the objective formula is simplified on the basis of increasing the weight.
 \begin{enumerate}
 	\item If $F$ contains an empty clause then $F:=(\varnothing), c:=0$ and $w:=0$
 	\item If there is a clause $(1 \vee \ldots),$ then it is removed. If any variable $a$ thereby gets removed then there are three cases:
@@ -316,32 +313,18 @@ In order to avoid the result deviation caused by the simplified formula, the pro
 	\item If there is a clause $(a),$ then it is removed and $c:=c \cdot c(a), w:=w+w(a) .$ If $a$ still appears in $F$ then $F:=F[a=1]$
 	\item If there are two clauses $x=\left(a \vee b \vee a^{\prime}\right), y=(a \vee b)$ then remove $x$. If the variable $a^{\prime}$ thereby gets removed then handle it as in case 2 .
 \end{enumerate}
-After some steps of simplification and proof we get Lemma 1:
-\begin{quote}[Lemma 1]
-	$Let({F}',c,w)=Prop(F,c,w)\\and\;({c}',{w}')=\#2SAT_{w}({F}',c,w).\\
-	Then\; \#2SATw(F ,c,w)=(c*{c}',w+{w}')$.
-\end{quote}
-
-In order to simplify the formula $F$, we have $F_{1}$, $F_{2}$, such that $Var(F_{1})\bigcap Var(F_2)=\left \{ v \right \} $.
+After some steps of simplification and proof we get Lemma 1: $Let({F}',c,w)=Prop(F,c,w) and\;({c}',{w}')=\#2SAT_{w}({F}',c,w). Then\; \#2SATw(F ,c,w)=(c*{c}',w+{w}')$. The above are the countermeasures that we can take if we go to cut a CNF. But if we come across a CNF that includes $F_{1}$, $F_{2}$, such that $Var(F_{1})\bigcap Var(F_2)=\left \{ v \right \} $. Then we can take the following steps to break down Formula $F$.
 \begin{enumerate} 
 	\item Let $\left(c_{t}, w_{t}\right)=\# 2 S A T_{w}\left(F_{1}[v=1], \mathbf{c}, \mathbf{w}\right)$ and $\left(c_{f}, w_{f}\right)=\# 2 S A T_{w}\left(F_{1}[v=0], \mathbf{c}, \mathbf{w}\right)$
 	\item Modify c and $\mathbf{w}$ so that $c(v) \leftarrow c_{t} \cdot c(v), c(\neg v) \leftarrow c_{f} \cdot c(\neg v), w(v) \leftarrow w_{t}+w(v)$ and
 	$w(\neg v) \leftarrow w_{f}+w(\neg v)$
 	\item Finally, return $\# 2 \operatorname{SAT}_{w}\left(F_{2}, \mathbf{c}, \mathbf{w}\right)$
 \end{enumerate}
-This procedure is to remove $F_1$ by multiplier reduction. And we get Lemma 2:
-\begin{quote}[Lemma 2]
-	Applying multiplier reduction does not change the return value of $\#2SAT w (F, c, w)$.
-\end{quote}
-According to Lemma 1 and Lemma 2, we can naturally get Lemma 3:
-\begin{quote}[Lemma 3]
-	The result of recursively branching on the variable $v$ in the formula $F$ equals $\#2SAT_{w}(F, c, w)$.
-\end{quote}
-Since $d(F)$ is discrete, it is discussed in three cases:
+This procedure is to remove $F_1$ by multiplier reduction. And we get Lemma 2: Applying multiplier reduction does not change the return value of $\#2SAT w (F, c, w)$.According to Lemma 1 and Lemma 2, we can naturally get Lemma 3: The result of recursively branching on the variable $v$ in the formula $F$ equals $\#2SAT_{w}(F, c, w)$. Since $d(F)$ is discrete, it is discussed in three cases:
 \begin{enumerate}
 	\item the main function: $d(F)>5$
-	\item help function1 $4<=d(F)<=5$
-	\item help function2 $d(F)<=3$
+	\item help function case 1: $4<=d(F)<=5$
+	\item help function case 2: $d(F)<=3$
 \end{enumerate}
 At First, we need to solve the $C_{3}(F,c,w)$.Algorithm $C_{3}(F, \mathbf{c}, \mathbf{w})$ as follow:
 \begin{enumerate}	
@@ -350,12 +333,7 @@ At First, we need to solve the $C_{3}(F,c,w)$.Algorithm $C_{3}(F, \mathbf{c}, \m
 	\item Case 3: If multiplier reduction applies, apply it, removing the part with lowest $n_{3}(F)$ value.
 	\item Case 4: If $d(F)=3,$ pick a variable $x, d(x)=3,$ with as many neighbours of degree 3 as possible, and recursively branch on it. Otherwise, recursively branch on any variable.$  $
 \end{enumerate}
-By calling the loop recursively, we could get Lemma 5.
-\begin{quote}[Lemma 5]
-	$C_{3}(F ,c,w)$runs in $O(ploy(n)*\tau(4,4)^{n_{3}(F))})$\\time, where $p(n)$ is a polynomial in $n$.
-\end{quote}
-
-In the same way, we can get	algorithm $C_{5}(F, \mathbf{c}, \mathbf{w})$
+By calling the loop recursively, we could get Lemma 5. $C_{3}(F ,c,w)$runs in $O(ploy(n)*\tau(4,4)^{n_{3}(F))})$ time, where $p(n)$ is a polynomial in $n$. In the same way, we can get	algorithm $C_{5}(F, \mathbf{c}, \mathbf{w})$
 \begin{enumerate}
 	\item Case 1: If $F$ contains no clauses, return (1, 0). If $F$ contains an empty clause, return (0, 0).
 	\item Case 2: If $F$ is not connected, return $(c, w)$ where $c=\prod_{i=0}^{j} c_{i}, w=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c}, \mathbf{w}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
@@ -417,7 +395,9 @@ Here take after the deﬁnitions of the terms included.
 	\end{tabular}}
 \end{table*}
 The precise values of $k_i$ can be found in Table1, along with rounded-off values for $\chi_{i}$ and $\tau(4,4)^{\chi_{i}}$, the last-mentioned being c in the $O\left ( p\left ( n \right ) *c^{n}\right )$ upper restrain on the running time for a formula F with $m\left ( F \right )/n\left ( F \right )\leq k_{i}$. The expressions defining the values of $b_{i}$ can be found in Table2, along with rounded-off numerical values for  $b_{i}$ and  $a_{i}$. The expressions come from the branching numbers for the worst case in each section i. We have got $a_{i},b_{i},k_{i}$. We need a lemma that allows us to make a connection between the value of m(F )/n(F ) and worst-case branchings.
-\begin{quote}[Lemma 6]
+
+Magnus also proposed a graph-based approach to formula complexity analysis in his paper. This is more convincing than a direct description of the complexity of Clause in the formula. He further deduces Var by describing two additional formulas directly. The formula provided is as follows.
+\begin{quote}
 	Let $F$ be a non-empty formula such that $m(F) / n(F)=k,$ and define $\alpha(x)$ and
 	$\beta(x)$ such that
 	$$
@@ -428,22 +408,8 @@ The precise values of $k_i$ can be found in Table1, along with rounded-off value
 	$$
 	There exists some variable $x \in \operatorname{Var}(F)$ with $d(x) \geqslant k$ such that $\alpha(x) / \beta(x) \geqslant k$
 \end{quote}
-We will need to prove that the worst-case branching number in each section is $\tau(4,4)$. For different ranges of m/n values, we need to show that when $m/n\leqslant5$, the time complexity is less than $\mathrm{O}\left(1.2561^{n}\right)$. So we broke down a number of situations.
-\begin{enumerate}
-	\item Case: $m / n \leqslant2$
-	\item Case: $m / n \in[2,3]$
-	\item Case: $d(F)=5$ which gets a branching number less than $\tau(4,4)$.
-	\item Case: $m / n \in[3,3.5], d(F)=4$
-	\item Case: $m / n \in[3.5,3.75], d(F)=4$
-	\item Case: $ m / n \in[3.75,4], d(F)=4 .$ 
-	\item Case:  $m / n \in[4,4+4 / 29]$
-	\item Case: $m / n \in[4+4 / 29,4+4 / 9]$
-	\item Case: $m / n \in[4+4 / 9,4+4 / 7]$
-	\item Case: $m / n \in[4+4 / 7,4.8]$
-	\item Case: $m / n \in[4.8,5]$
-\end{enumerate}
-After all of the above branches have been recursively calculated, we can deduce the conclusion.
-\begin{quote}[Theorem 11]
+We will need to prove that the worst-case branching number in each section is $\tau(4,4)$. For different ranges of m/n values, we need to show that when $m/n\leqslant5$, the time complexity is less than $\mathrm{O}\left(1.2561^{n}\right)$. So we broke down a number of situations. According to Table 1 and Table 2, we need to discuss $C_{3}$ versus $C_{5}$ in nearly 11 cases where m/n takes different values. Here, since this section is only our research proposal for calculating the proof project, we ignore the considerable proof process and the recursive branching process. After all of the above branches have been recursively calculated, we can deduce the conclusion.
+\begin{quote}
 	$C(F, \mathbf{c}, \mathbf{w})$ runs in $\mathrm{O}\left(1.2561^{n}\right)$ time.
 \end{quote}
 The above is a basic introduction to Wahlstrom's algorithmic theory, and it can be noted that a large number of calculations and proofs are in numerous Lemma. The original paper does not specify this. The task of this project is to perform a computational validation analysis of the algorithm of the above theory. This is an essential and essential validation process and serves as a reference and guide for future researchers. The tools and methods for computer validation to implement this algorithm will be detailed in later sections.
