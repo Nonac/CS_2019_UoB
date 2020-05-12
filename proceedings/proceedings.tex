@@ -22,6 +22,7 @@
 %Price
 \acmPrice{\$15.00}
 
+\toappear{}
 
 
 % Use this command to override the default ACM copyright statement
@@ -82,7 +83,7 @@
 % Paper metadata (use plain text, for PDF inclusion and later
 % re-using, if desired).  Use \emtpyauthor when submitting for review
 % so you remain anonymous.
-\def\plaintitle{Show the proposed algorithm has the claimed running time by making all the computer verification explicit}
+\def\plaintitle{Research Proposal: Show the proposed algorithm has the claimed running time by making all the computer verification explicit}
 \def\plainauthor{First Author, Second Author, Third Author,
 	Fourth Author, Fifth Author, Sixth Author}
 \def\emptyauthor{}
@@ -242,7 +243,7 @@ Further, in the work of Magnus Wahlstrom et al. in 2004, they designed a computa
 
 We note that Junosza-Szaniawski and Tuczynski, in a technical report, proposed an algorithm for counting independent collections with run times of O (1.2369n).\cite{undefined} For graphs where the maximum number of degrees is 3 and all neighbors with degrees 3 do not have 3-degree vertices, they propose a new algorithm with a run time of $2^{n_{3}/5} +O\left( n \right))$, where n3 is the number of 3-degree vertices and the overall run Inserting the results into the fastest algorithm before Wahlstrom \cite{10.1016/j.tcs.2004.10.037} can save time.
 
-To speak to the corresponding decision problem, we see that it is not 2SAT, but a weighted variant. We do not know of any specific algorithm to solve this problem. However, in order to understand its hardness, we can note that it contains MAXIMUM INDEPENDENT SET as a particular case. MAXIMUM INDEPENDENT SET is known as NP-complete, and the fastest multi-space algorithm to date runs at O(1.2025n), implemented by Robson.\cite{robson2001finding}
+To address the corresponding decision problem, we see that it isn't 2SAT, however a weighted variation. We don't know about a particular algorithm to tackle this issue. Nonetheless, so as to comprehend its hardness, we can take note of that it contains MAXIMUM INDEPENDENT SET as a specific case. MAXIMUM INDEPENDENT SET is known as NP-complete, and the quickest multi-space algorithm to date runs at O(1.2025n), executed by Robson.\cite{robson2001finding}
 
 In 2007, Magnus Wahlström summarized his findings by releasing a book summarizing his findings in this area.\cite{Wahlstrom} In this book, he introduces two new complexity metrics that represent two ways to add this applicability limitation to the analysis. In the first metric, the execution of an algorithm is seen as moving between a finite set of states (e.g., structures or properties that exist or do not exist), the current state determines which branches are applicable, and each branch of each branch contains information about the resulting state. In the second measure, what controls the applicability of the branch is the relative size of the modelling properties (e.g., the degree of averaging or other density concepts).
 
@@ -262,7 +263,7 @@ And the maximum degree of  any variable in $F_{c}$ is d$\left(F\right)$, the num
 \begin{center}
 	$m\left(F_{c}\right)=\sum_{x\in Var\left(F\right)} d\left(x\right)$
 	\cite{10.1016/j.tcs.2004.10.037}
-\end{center}\cite{10.1016/j.tcs.2004.10.037}
+\end{center}
 We define a model $M$ for $F_{c}$, a set L of all liters in $F_{c}$,and a weight vector $w_{c}$:
 \begin{center}
 	$W\left ( M \right )=\sum_{\left \{ l\in L | l\;is\;true\;in\;M\right \}} w_{c}\left ( l \right )$
@@ -281,7 +282,7 @@ In this way, we get a weighted model  of F for \#2-SAT:
 
 At the same time, Magnus Wahlström introduced the concept of some graphs to illustrate the relationship between branches and branches better. Graphs are another way we look at Boolean expressions. We define a constraint graph of a formula:
 \begin{center}
-	$\left \{ \left ( a,b \right ) |a\;and \;b\; occur \;together\;in\;at\;least\; one\;clause\right \}$
+	$\left \{ \left ( a,b \right ) |a\;and \;b\; occur \;together\;in\;at\;least\; one\;clause\right \}$\cite{10.1016/j.tcs.2004.10.037}
 \end{center}
 Connect: A formula $F_{c}$ is connected iff in the corresponding constraint graph, there is a path from each variable to every other.\cite{10.1016/j.tcs.2004.10.037}As follow is a tree for 
 \begin{center}
@@ -329,23 +330,27 @@ This procedure is to remove $F_{c1}$ by multiplier reduction. And we get Lemma 2
 \end{enumerate}
 At First, we need to solve the $C_{3}(F_{c},c_{c},w_{c})$.Algorithm $C_{3}(F, \mathbf{c_{c}}, \mathbf{w_{c}})$ as follow:
 \begin{enumerate}	
-	\item In the event that $F_{c}$ contains no clauses, return (1, 0). In the event that $F_{c}$ contains an purge clause, return (0, 0).
-	\item Case 2: If $F_{c}$ is not connected, return $(c_{c}, w_{c})$ where $c_{c}=\prod_{i=0}^{j} c_{i}, w_{c}=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c_{c}}, \mathbf{w_{c}}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
-	\item Case 3: If multiplier reduction applies, apply it, removing the part with lowest $n_{3}(F_{c})$ value.
-	\item Case 4: If $d(F_{c})=3,$ pick a variable $x, d(x)=3,$ with as many neighbours of degree 3 as possible, and recursively branch on it. Otherwise, recursively branch on any variable.$  $
+	\item  In the event that $F_{c}$ contains no clauses, return (1, 0). In the event that $F_{c}$ contains an purge clause, return (0, 0).
+	\item In the event that $F_{c}$ is not connected, return $(c_{c}, w_{c})$ where $c_{c}=\prod_{i=0}^{j} c_{i}, w_{c}=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c_{c}}, \mathbf{w_{c}}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
+	\item In the event that multiplier reduction applies, apply it, removing the part with lowest $n_{3}(F_{c})$ value.
+	\item  In the event that $d(F_{c})=3,$ select a variable $x, d(x)=3,$ with as various neighbors of degree 3 as conceivable, and recursively division on it. Something else, recursively branch on any variable.
 \end{enumerate}
 By calling the loop recursively, we could get Lemma 5. $C_{3}(F_{c} ,c,w_{c})$runs in $O(ploy(n)*\tau(4,4)^{n_{3}(F_{c}))})$ time, where $p(n)$ is a polynomial in $n$. In the same way, we can get	algorithm $C_{5}(F_{c}, \mathbf{c}, \mathbf{w_{c}})$
 \begin{enumerate}
-	\item Case 1: If $F_{c}$ contains no clauses, return (1, 0). If $F_{c}$ contains an empty clause, return (0, 0).
-	\item Case 2: If $F_{c}$ is not connected, return $(c_{c}, w_{c})$ where $c_{c}=\prod_{i=0}^{j} c_{i}, w=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c_{c}}, \mathbf{w_{c}}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
-	\item Case 3: If $d(F_{c})<4,$ return $C_{3}(F_{c}, \mathbf{c_{c}}, \mathbf{w_{c}})$ 
-	\item Case 4: If multiplier reduction applies, apply it, removing the part with lowest $f(F_{c})$ value.
-	\item Case 5: Pick a variable $x$ of maximum degree such that $S(x)$ is maximized. (a) If $N(x)$ is connected to the rest of the graph through only 2 external vertices $y, z$ such that $d(y) \geqslant d(z)$ then branch on $y .$
-	(b) Otherwise, branch on $x .$
-	$S(x)=\sum_{y \in N(x)} d(y)$
+	\item In the event that $F_{c}$ contains no clauses, return (1, 0). In the event that $F_{c}$ contains an empty clause, return (0, 0).
+	\item In the event that $F_{c}$ is not connected, return $(c_{c}, w_{c})$ where $c_{c}=\prod_{i=0}^{j} c_{i}, w=\sum_{i=0}^{j} w_{i}$ and $\left(c_{i}, w_{i}\right)=C\left(F_{i}, \mathbf{c_{c}}, \mathbf{w_{c}}\right)$ for the connected components $F_{0}, \ldots, F_{j}$
+	\item In the event that $d(F_{c})<4,$ return $C_{3}(F_{c}, \mathbf{c_{c}}, \mathbf{w_{c}})$ 
+	\item In the event that multiplier reduction applies, apply it, expelling the portion with least $f(F_{c})$ esteem.
+	\item In the other event that choose a variable $x$ of greatest degree such that $S(x)$ is maximized.\\
+	(a) In case $N(x)$ is connected to the rest of the graph through as it were 2 outside vertices $y, z$ such that $d(y) geqslant d(z)$ at that point branch on $y .$\\
+	(b) Something else, branch on $x .$
+	\begin{center}
+		$S(x)=\sum_{y \in N(x)} d(y)$
+	\end{center}
+	
 \end{enumerate}
 From the quotient of the complexity of the formula and the maximum number of branches, it can be inferred that the larger the quotient, the greater the time complexity of the worst case.So discuss the worst case of C5 in the value range of linear function $f\left(n,m\right)$, where $n=n(F_{c})$ and $m=m(F_{c})$. 
-We need a sequence of worst cases as the $m / n$ quotient increases, and with each worst case we associate a linear function. To rearrange the definition of the verification, we grant here the definition of f(n, m) and related terms, and after that continue to demonstrate some of its properties. These qualities will be utilized within the examination and can be confirmed with values. 
+We require a grouping of most noticeably awful cases like the $m / n$ remainder increments, and with each most exceedingly bad case, we relate a straight work. To rearrange the definition of the verification, we grant here the definition of f(n, m) and related terms, and after that continue to demonstrate some of its properties. These qualities will be utilized within the examination and can be confirmed with values. 
 Here take after the deﬁnitions of the terms included.
 \begin{center}
 	$f_{i}(n, m)=a_{i} n+b_{i} m$. \\
@@ -395,7 +400,7 @@ Here take after the deﬁnitions of the terms included.
 			\hline
 	\end{tabular}}
 \end{table*}
-The precise values of $k_i$ can be found in Table1, along with rounded-off values for $\chi_{i}$ and $\tau(4,4)^{\chi_{i}}$, the last-mentioned being $c_{c}$ in the $O\left ( p\left ( n \right ) *c_{c}^{n}\right )$ upper restrain on the running time for a formula $F_{c}$ with $m\left ( F_{c} \right )/n\left ( F_{c} \right )\leq k_{i}$. The expressions defining the values of $b_{i}$ can be found in Table2, along with rounded-off numerical values for  $b_{i}$ and  $a_{i}$. The expressions come from the branching numbers for the worst case in each section i. We have got $a_{i},b_{i},k_{i}$. We need a lemma that allows us to make a connection between the value of $m(F_{c} )/n(F_{c} )$ and worst-case branchings.
+The precise values of $k_i$ can be found in Table1, along with rounded-off values for $\chi_{i}$ and $\tau(4,4)^{\chi_{i}}$, the last-mentioned being $c_{c}$ in the $O\left ( p\left ( n \right ) *c_{c}^{n}\right )$ upper restrain on the running time for a formula $F_{c}$ with $m\left ( F_{c} \right )/n\left ( F_{c} \right )\leq k_{i}$. The expressions characterizing the values of $b_{i}$ can be found in Table2, together with rounded-off numerical values for $b_{i}$ and $a_{i}$. The expressions come from the branching numbers for the most exceedingly bad case in each area i. We have got $a_{i},b_{i},k_{i}$. We require a lemma that permits us to create a association between the esteem of $m(F_{c} )/n(F_{c} )$ and worst-case branchings.
 
 Magnus also proposed a graph-based approach to formula complexity analysis in his paper. This is more convincing than a direct description of the complexity of Clause in the formula. He further deduces Var by describing two additional formulas directly. The formula provided is as follows.
 \begin{quote}
@@ -436,7 +441,7 @@ In part three, we will talk about the third phase of this project, the testing c
 \bibliography{reference,reference2}
 \newpage
 \begin{center}
-	\begin{gantt}[xunitlength=1.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{6}{9}
+	\begin{gantt}[xunitlength=1.5cm,fontsize=\small,titlefontsize=\small,drawledgerline=true]{7}{9}
 		\begin{ganttitle}
 			\titleelement{Gannt Chart of Project Plan}{9}
 		\end{ganttitle}
@@ -451,9 +456,10 @@ In part three, we will talk about the third phase of this project, the testing c
 			\titleelement{Aug}{1}
 			\titleelement{Sep}{1}
 		\end{ganttitle}
-		\ganttbar{Read paper}{0}{5}
-		\ganttbarcon[color=red]{Write code}{5}{1}
-		\ganttbarcon{Test code}{6}{1}
+		\ganttbar{Read paper-Wahlström}{0}{3}
+		\ganttbarcon{Read paper-other papers}{2}{5}
+		\ganttbarcon[color=red]{Write code}{5}{2}
+		\ganttbarcon{Test code}{5.5}{2}
 		\ganttbarcon{Write report}{7}{2}
 	\end{gantt}
 \end{center}
@@ -467,6 +473,7 @@ In part three, we will talk about the third phase of this project, the testing c
 		\begin{tabular}[c]{@{}l@{}}Inability to \\ complete the \\ project\end{tabular}                                                         & Medium      & \begin{tabular}[c]{@{}l@{}}This project may not be\\  completed correctly due to\\  problems with reading\\  literature, code debug.\end{tabular}                                                                                                                            & \begin{tabular}[c]{@{}l@{}}The project was\\  scrapped halfway \\ through.\end{tabular}                                                & \begin{tabular}[c]{@{}l@{}}Start early on the project and complete \\ the code prototype as early as possible.\\  Test early.\end{tabular}                                                    \\ \hline
 		\begin{tabular}[c]{@{}l@{}}The bug in the\\  code cannot be \\ fixed.\end{tabular}                                                      & Low         & \begin{tabular}[c]{@{}l@{}}Since recursive algorithms are \\ involved, there is still the \\ possibility that bugs cannot be \\ fixed.It may even cause a stack\\  overflow.\end{tabular}                                                                                    & \begin{tabular}[c]{@{}l@{}}Unable to test, and\\  verify the final \\ results.\end{tabular}                                            & \begin{tabular}[c]{@{}l@{}}Optimize in the recursive process \\ whenever possible. Use the stack \\ to simulate recursion where possible,\\  thus reducing the use of recursion.\end{tabular} \\ \hline
 		\begin{tabular}[c]{@{}l@{}}Long program \\ runtime\end{tabular}                                                                         & High        & \begin{tabular}[c]{@{}l@{}}The runtime problem cannot be \\ controlled because of the \\ recursive algorithm used.\end{tabular}                                                                                                                                              & \begin{tabular}[c]{@{}l@{}}Excessively long \\ run times cause \\ debugging programs \\ to program hard to \\ get things.\end{tabular} & \begin{tabular}[c]{@{}l@{}}Try to branch optimize the main program.\\  Reduce recursive calls.\end{tabular}                                                                                   \\ \hline
+		\begin{tabular}[c]{@{}l@{}}It is hard to \\ finish a paper.\end{tabular}                                                                & Low         & \begin{tabular}[c]{@{}l@{}}Because completing the paper\\  requires completing the code\\  and completing the tests, \\ there is no point in completing \\ the paper if the above tasks \\ are not completed on time.\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}Inability to complete\\  the project\end{tabular}                                                           & \begin{tabular}[c]{@{}l@{}}Finishing the code section as early as \\ possible and finalizing the paper \\ earlier can effectively mitigate \\ this risk.\end{tabular}                         \\ \hline
 	\end{tabular}
 \end{table*}
 \end{document}
