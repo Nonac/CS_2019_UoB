@@ -1,0 +1,85 @@
+body {
+    background-color: #eee8d5; /* base2 */
+    font-family: sans-serif;
+}
+
+div.menu {
+    margin-bottom: 1ex;
+    padding: 1ex;
+    background-color: #859900;
+    color: #002b36;
+}
+
+div.menuitem a {
+    color: #002b36;
+}
+
+h1 {
+    color: #cb4b16;
+}
+
+div.section {
+    display: block;
+    background-color: #fdf6e3; /* base3 */
+    color: #2aa198;
+    padding-top: 0.5ex;
+    padding-bottom: 0.5ex;
+    margin: 1ex;
+}
+
+div.section h2 {
+    padding-left: 1ex;
+    color: #dc322f;
+}
+
+div.section p {
+    padding-left: 2ex;
+    padding-right: 2ex;
+}
+
+div.section a {
+    color: #6c71c4;
+}
+
+div.outer {
+    background-color: #073642; /* base02 */
+}
+
+div.subsection {
+    margin: 1ex;
+    padding: 0.25ex;
+    display: block;
+    background-color: #fdf6e3; /* base3 */
+    color: #859900;
+    /* border: 1px solid #268bd2; */
+}
+
+pre {
+    margin: 1ex;
+    padding: 1ex;
+    color: #d33682;
+}
+
+
+div.alt {
+    background-color: #859900;
+    color: #002b36;
+}
+
+div.alt a {
+    color: #002b36;
+}
+
+span.key {
+    width: 12em;
+    color: #859900;
+    float: left;
+}
+
+span.login {
+    float: right;
+}
+
+span.like {
+    float: right;
+}

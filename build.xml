@@ -1,0 +1,23 @@
+<project default="compile">
+    <path id="libs">
+        <fileset dir="lib">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+    <target name="compile">
+        <mkdir dir="target"/>
+        <javac srcdir="src" destdir="target">
+            <classpath refid="libs" />
+        </javac>
+    </target>
+    <target name="run">
+        <java classname="uk.ac.bris.cs.databases.web.Server">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="*.jar" />
+                </fileset>
+                <pathelement path="target" />
+            </classpath>
+        </java>
+    </target>
+</project>
