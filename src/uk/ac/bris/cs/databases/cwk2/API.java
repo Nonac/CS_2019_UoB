@@ -101,7 +101,26 @@ public class API implements APIProvider {
 
     @Override
     public Result<PersonView> getPersonView(String username) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try (Statement s = c.createStatement()) {
+            ResultSet r = s.executeQuery("SELECT name, username, stuId FROM Person");
+
+            PersonView personView=null;
+            while (r.next()) {
+                if(r.getString("username").equals(username)){
+
+                    personView=new PersonView(r.getString("name"),r.getString("username"),
+                            r.getString("stuId"));
+                }
+            }
+            if(personView!=null){
+                return Result.success(personView);
+            }else {
+                return Result.failure("Null afasdf");
+            }
+
+        } catch (SQLException ex) {
+            return Result.fatal("database error - " + ex.getMessage());
+        }
     }
 
     @Override
