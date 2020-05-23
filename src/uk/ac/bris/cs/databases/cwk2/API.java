@@ -109,7 +109,6 @@ public class API implements APIProvider {
     public Result<PersonView> getPersonView(String username) {
         try (Statement s = c.createStatement()) {
             ResultSet r = s.executeQuery("SELECT name, username, stuId FROM Person WHERE username='"+username+'\'');
-
             PersonView personView=null;
             while (r.next()) {
                 if(r.getString("username").equals(username)){
@@ -132,9 +131,8 @@ public class API implements APIProvider {
     @Override
     public Result<List<ForumSummaryView>> getForums() {
         try (Statement s = c.createStatement()) {
-            ResultSet r = s.executeQuery("SELECT id, title FROM Forum");
+            ResultSet r = s.executeQuery("SELECT id, title FROM Forum order by title");
             List<ForumSummaryView> list = new ArrayList<>();
-
             while (r.next()) {
                 ForumSummaryView forumSummaryView=new ForumSummaryView(r.getInt("id"),
                         r.getString("title"));
@@ -148,18 +146,33 @@ public class API implements APIProvider {
 
     @Override
     public Result<Integer> countPostsInTopic(int topicId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try (Statement s = c.createStatement()){
+            if(!isTopicExist(topicId)){
+                return Result.failure("The topicID does not exist.");
+            }
+            ResultSet r = s.executeQuery(
+                    "SELECT count(1) as c FROM Post WHERE T.id="+topicId);
+            if(r.next()){
+                return Result.success(r.getInt("c"));
+            }
+        } catch (SQLException ex) {
+        return Result.fatal("database error - " + ex.getMessage());
+    }
+        return Result.failure("Unexpect database error.");
     }
 
     @Override
     public Result<TopicView> getTopic(int topicId) {
         try (Statement s = c.createStatement()) {
+            if(!isTopicExist(topicId)){
+                return Result.failure("The topicID does not exist.");
+            }
             ResultSet r = s.executeQuery(
                     "SELECT T.id as id,T.title as title,P2.username as username," +
                             "P.text as text,P.time as time From Topic T\n" +
                     "INNER JOIN Post P on T.id = P.topicId\n" +
                     "INNER JOIN Person P2 on P.personId = P2.id\n" +
-                    "WHERE T.id="+topicId);
+                    "WHERE T.id="+topicId+" order by P.time");
             String title=null;
             List<SimplePostView> list = new ArrayList<>();
             int cnt=1;
@@ -167,7 +180,6 @@ public class API implements APIProvider {
                 if(title==null){
                     title=r.getString("title");
                 }
-
                 SimplePostView simplePostView=new SimplePostView(
                         cnt,r.getString("username"),r.getString("text"),r.getString("time"));
                 list.add(simplePostView);
@@ -221,16 +233,19 @@ public class API implements APIProvider {
     @Override
     public Result<ForumView> getForum(int id) {
         try (Statement s = c.createStatement()) {
+            if(!isForumExist(id)){
+                return Result.failure("The forumID does not exist.");
+            }
             ResultSet r = s.executeQuery(
                     "SELECT F.id as id,F.title as title, T.id as topicId,T.title as topicTitle From Forum F\n" +
                             "INNER JOIN Topic T on F.id = T.forumId\n" +
-                            "WHERE F.id="+id);
+                            "WHERE F.id="+id+" order by T.title");
             String title=null;
             List<SimpleTopicSummaryView> list = new ArrayList<>();
             if(r.getRow()==0){
                 title=getForumTitleForForumID(id);
             }
-            while (r.getRow()!=0 && r.next()) {
+            while (r.next()) {
                 if(title==null){
                     title=r.getString("title");
                 }
@@ -239,7 +254,6 @@ public class API implements APIProvider {
                 );
                 list.add(simpleTopicSummaryView);
             }
-
             ForumView forumView=new ForumView(id,title,list);
             return Result.success(forumView);
         } catch (SQLException ex) {
@@ -263,13 +277,12 @@ public class API implements APIProvider {
             if(!isTopicExist(topicId)) {
                 return Result.failure("The topicID does not exist.");
             }
+            if(!isUserExist(username)){
+                return Result.failure("The username does not exist.");
+            }
             personId=getUserIdFormUsername(username);
         }catch (SQLException e) {
             return Result.fatal(e.getMessage());
-        }
-
-        if(personId==0){
-            return Result.failure("The username does not exist.");
         }
 
         try (PreparedStatement p = c.prepareStatement(
@@ -315,11 +328,11 @@ public class API implements APIProvider {
             if(!isForumExist(forumId)) {
                 return Result.failure("The forumID does not exist.");
             }
-            topicId=countTopicInForum(forumId)+1;
-            personId=getUserIdFormUsername(username);
-            if(personId==0){
+            if(!isUserExist(username)){
                 return Result.failure("The username does not exist.");
             }
+            topicId=countTopic()+1;
+            personId=getUserIdFormUsername(username);
         } catch (SQLException e) {
             return Result.fatal(e.getMessage());
         }
@@ -327,9 +340,10 @@ public class API implements APIProvider {
         try {
             Statement p = c.createStatement();
             p.addBatch("INSERT INTO Topic (forumId,personId,title) VALUES ( "
-                    +forumId+","+personId+","+title+" )");
+                    +forumId+","+personId+",\'"+title+"\' )");
+            p.executeBatch();
             p.addBatch("INSERT INTO Post (topicId,personId,text,time) VALUES (" +
-                    +topicId+","+personId+","+text+","+currentTime()+" )");
+                    +topicId+","+personId+",\'"+text+"',\'"+currentTime()+"\' )");
             p.executeBatch();
 
             c.commit();
@@ -376,11 +390,10 @@ public class API implements APIProvider {
         return !r.next() || r.getInt("c") != 0;
     }
 
-    public int countTopicInForum (int forumId) throws SQLException{
+    public int countTopic() throws SQLException{
         PreparedStatement p = c.prepareStatement(
-                "SELECT count(1) AS c FROM Topic WHERE forumId = ?"
+                "SELECT count(1) AS c FROM Topic"
         );
-        p.setInt(1, forumId);
         ResultSet r = p.executeQuery();
         r.next();
         return r.getInt("c");
@@ -401,5 +414,15 @@ public class API implements APIProvider {
         ResultSet r = p.executeQuery();
         r.next();
         return r.getString("title");
+    }
+
+    public boolean isUserExist(String username) throws SQLException{
+        PreparedStatement p = c.prepareStatement(
+                "SELECT count(1) as c FROM Person WHERE username = ?"
+        );
+        p.setString(1, username);
+        ResultSet r = p.executeQuery();
+        r.next();
+        return !r.next() || r.getInt("c") != 0;
     }
 }
