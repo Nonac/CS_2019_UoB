@@ -1,2 +1,2 @@
-#Final Project
-#2-SAT algorithmic validation
+# Final Project
+# 2-SAT algorithmic validation
