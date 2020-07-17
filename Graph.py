@@ -1,4 +1,6 @@
 from Vertex import Vertex
+import matplotlib.pyplot as plt
+import networkx as nx
 
 
 class Graph:
@@ -7,6 +9,7 @@ class Graph:
         self.numVertices = 0
         self.S = 0
         self.degreeF = 0
+        self.nxG = nx.Graph()
 
     def addVertex(self, key):
         self.numVertices = self.numVertices + 1
@@ -24,10 +27,9 @@ class Graph:
         return n in self.vertList
 
     def addS(self):
-        self.S = self.S + 2
-
-    def subS(self):
-        self.S = self.S - 2
+        self.S = 0
+        for v in self.vertList:
+            self.S = self.S + self.vertList[v].getDegree()
 
     def addEdge(self, f, t, cost=0):
         if f not in self.vertList:
@@ -35,21 +37,10 @@ class Graph:
         if t not in self.vertList:
             nv = self.addVertex(t)
         self.vertList[f].addNeighbor(self.vertList[t], cost)
-        self.vertList[f].addDegree()
-        self.vertList[t].addDegree()
+        self.vertList[t].addNeighbor(self.vertList[f], cost)
         self.addS()
         self.getDegreeF()
-
-    def deleteEdge(self, f, t):
-        if f not in self.vertList:
-            return
-        if t not in self.vertList:
-            return
-        self.vertList[f].deleteNeighbor(self.vertList[t])
-        self.vertList[f].subDegree()
-        self.vertList[t].subDegree()
-        self.subS()
-        self.getDegreeF()
+        self.nxG.add_edge(f, t)
 
     def getVertices(self):
         return self.vertList.keys()
@@ -63,6 +54,10 @@ class Graph:
     def getDegreeF(self):
         maxDegree = 0
         for v in self.vertList:
-            if v.getDegree > maxDegree:
-                maxDegree = v.getDegree
+            if self.vertList[v].getDegree() > maxDegree:
+                maxDegree = self.vertList[v].getDegree()
         self.degreeF = maxDegree
+
+    def draw(self):
+        nx.draw(self.nxG, with_labels=True, edge_color='b', node_color='g', node_size=1000)
+        plt.show()
