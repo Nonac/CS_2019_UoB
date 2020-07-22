@@ -42,8 +42,15 @@ class Graph:
         self.getDegreeF()
         self.nxG.add_edge(f, t)
 
+    def removeEdge(self, f, t):
+        self.vertList[f].removeNeighbor(self.vertList[t])
+        self.vertList[t].removeNeighbor(self.vertList[f])
+        self.addS()
+        self.getDegreeF()
+        self.nxG.remove_edge(f, t)
+
     def getVertices(self):
-        return self.vertList.keys()
+        return self.vertList.values()
 
     def __iter__(self):
         return iter(self.vertList.values())
@@ -57,6 +64,7 @@ class Graph:
             if self.vertList[v].getDegree() > maxDegree:
                 maxDegree = self.vertList[v].getDegree()
         self.degreeF = maxDegree
+        return self.degreeF
 
     def draw(self):
         nx.draw(self.nxG, with_labels=True, edge_color='b', node_color='g', node_size=1000)
