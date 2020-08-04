@@ -1,4 +1,4 @@
-from Graph import Graph
+from old.Graph import Graph
 import copy
 
 
@@ -19,7 +19,7 @@ class genGraph:
 
     def gen(self, v, graph, S, d):
         if v.getId() == '0':
-            for i in range(1, d+1):
+            for i in range(1, d + 1):
                 graph.addEdge(v.getId(), str(i))
                 graph.getVertex(str(i)).addPrevious(v)
             for vi in v.getConnections():
@@ -46,7 +46,7 @@ class genGraph:
                             graph.addEdge(v.getId(), vi.getId())
                             graph.getVertex(vi.addPrevious(v))
                             for vj in graph.getVertices():
-                                if (len(vj.getConnections())!=0) \
+                                if (len(vj.getConnections()) != 0) \
                                         & (vj != v.getPrevious()):
                                     self.gen(vj, graph, S, d)
                             graph.removeEdge(v.getId(), vi.getId())

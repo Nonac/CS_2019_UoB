@@ -1,4 +1,4 @@
-from genGraph import *
+from old.genGraph import *
 
 makeGraph = genGraph()
 graph = makeGraph.initGraph(8)

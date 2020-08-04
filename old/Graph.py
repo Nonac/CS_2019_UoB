@@ -1,4 +1,4 @@
-from Vertex import Vertex
+from old.Vertex import Vertex
 import matplotlib.pyplot as plt
 import networkx as nx
 
