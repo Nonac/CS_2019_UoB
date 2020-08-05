@@ -8,6 +8,7 @@ class minS:
         self.S = 0
         self.first = True
         self.begin = True
+        self.minK = 0
 
     def minS(self):
         for d_0 in range(math.ceil(self.k), 6):
@@ -17,14 +18,16 @@ class minS:
                 vertex.setD(2)
                 graph.append(vertex)
             while self.isLoop(graph):
-                graph=self.rebuild(graph)
+                graph = self.rebuild(graph)
                 S = self.countS(graph) + d_0
                 k = self.countAlpha(d_0, graph) / self.countBeta(d_0, graph)
                 if self.first & (self.k <= k):
                     self.S = S
                     self.first = False
+                    self.minK = k
                 elif (self.S > S) & (self.k <= k):
                     self.S = S
+                    self.minK = k
 
     def rebuild(self, graph):
         if self.isBegin(graph) & self.begin:
@@ -41,6 +44,9 @@ class minS:
 
     def getS(self):
         return self.S
+
+    def getK(self):
+        return self.minK
 
     def countAlpha(self, d_0, graph):
         cnt = d_0
@@ -75,6 +81,6 @@ class minS:
         return True
 
 
-minS = minS(4)
-minS.minS()
-print(minS.getS())
+# minS = minS(5)
+# minS.minS()
+# print(minS.getS(), minS.getK())
