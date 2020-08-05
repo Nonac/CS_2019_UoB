@@ -36,7 +36,7 @@ class Graph:
         self.m_out = self.S - 2 * self.father.getD()
         self.n_in = 1
         self.m_in = self.S - 2 * len(self.getVertex())
-        self.branch = [self.m_in, self.n_in, self.m_out, self.n_out]
+        self.branch = [self.n_in, self.m_in, self.n_out, self.m_out]
 
     def getBranch(self):
         return self.branch

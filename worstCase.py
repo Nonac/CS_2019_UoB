@@ -11,6 +11,8 @@ class worstCase:
         self.graphList = []
         self.first = True
         self.branchList = []
+        self.worstIn = 0
+        self.worstOut = 0
 
     def genGraphList(self):
         graph = Graph()
@@ -28,11 +30,28 @@ class worstCase:
             graph.recountS()
         return self.graphList
 
-    def worstCase(self,graphList):
+    def worstCase(self, graphList, funcA, funcB):
         for each in graphList:
             each.countBranch()
             self.branchList.append(each.getBranch())
-        print(1)
+        worstIn = 0
+        worstOut = 0
+        for each in self.branchList:
+            if worstIn == 0 & worstOut == 0:
+                worstIn = each[0] * funcA + each[1] * funcB
+                worstOut = each[2] * funcA + each[3] * funcB
+            elif (worstIn >= each[0] * funcA + each[1] * funcB) \
+                    & (worstOut >= each[2] * funcA + each[3] * funcB):
+                worstIn = each[0] * funcA + each[1] * funcB
+                worstOut = each[2] * funcA + each[3] * funcB
+        self.worstIn = worstIn
+        self.worstOut = worstOut
+
+    def getWorstIn(self):
+        return self.worstIn
+
+    def getWorstOut(self):
+        return self.worstOut
 
     def isLoop(self, graph):
         for each in graph.getVertex():
@@ -50,6 +69,6 @@ class worstCase:
         return graph
 
 
-w=worstCase(16,3)
-l=w.genGraphList()
-w.worstCase(l)
+# w = worstCase(16, 3)
+# # l = w.genGraphList()
+# # w.worstCase(l)
