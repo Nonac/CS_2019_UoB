@@ -1,3 +1,6 @@
+# This is the code 1 to find minimum S(k) with given k.
+
+
 import math
 from Vertex import Vertex
 
@@ -81,6 +84,4 @@ class minS:
         return True
 
 
-# minS = minS(5)
-# minS.minS()
-# print(minS.getS(), minS.getK())
+
