@@ -1,6 +1,7 @@
 from sympy import *
 import math
 from worstCase import *
+from minS import minS
 
 k_str = input("Please input d：")
 k = float(k_str)

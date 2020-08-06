@@ -1,6 +1,6 @@
 # This is the code 1 to find minimum S(k) with given k.
 
-
+import copy
 import math
 from Vertex import Vertex
 
@@ -12,6 +12,10 @@ class minS:
         self.first = True
         self.begin = True
         self.minK = 0
+        self.alpha = 0
+        self.beta = 0
+        self.graph = []
+        self.d = 0
 
     def minS(self):
         for d_0 in range(math.ceil(self.k), 6):
@@ -23,14 +27,25 @@ class minS:
             while self.isLoop(graph):
                 graph = self.rebuild(graph)
                 S = self.countS(graph) + d_0
-                k = self.countAlpha(d_0, graph) / self.countBeta(d_0, graph)
+                k = self.countAlpha(d_0, graph) / self.countBeta(graph)
                 if self.first & (self.k <= k):
                     self.S = S
                     self.first = False
                     self.minK = k
+                    self.alpha = self.countAlpha(d_0, graph)
+                    self.beta = self.countBeta(graph)
+                    self.graph = copy.deepcopy(graph)
+                    self.d = d_0
                 elif (self.S > S) & (self.k <= k):
                     self.S = S
                     self.minK = k
+                    self.alpha = self.countAlpha(d_0, graph)
+                    self.beta = self.countBeta(graph)
+                    self.graph = copy.deepcopy(graph)
+                    self.d = d_0
+
+    def getD(self):
+        return self.d
 
     def rebuild(self, graph):
         if self.isBegin(graph) & self.begin:
@@ -54,14 +69,14 @@ class minS:
     def countAlpha(self, d_0, graph):
         cnt = d_0
         for each in graph:
-            if each.getD() < d_0:
+            if each.getD() < self.k:
                 cnt += 1
         return cnt
 
-    def countBeta(self, d_0, graph):
+    def countBeta(self, graph):
         beta = 1
         for each in graph:
-            if each.getD() < d_0:
+            if each.getD() < self.k:
                 beta = beta + (1 / each.getD())
         return beta
 
@@ -82,6 +97,3 @@ class minS:
             if each.getD() != 2:
                 return False
         return True
-
-
-
