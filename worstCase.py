@@ -9,6 +9,7 @@ import copy
 
 
 class worstCase:
+    # Initialize the module, S for S(x), d for d(F)
     def __init__(self, S, d):
         self.S = S
         self.d = d
@@ -18,6 +19,7 @@ class worstCase:
         self.worstIn = 0
         self.worstOut = 0
 
+    # Generate a list of all the graphs that match the S and d possibilities.
     def genGraphList(self):
         graph = Graph()
         v_0 = Vertex(0)
@@ -34,6 +36,9 @@ class worstCase:
             graph.recountS()
         return self.graphList
 
+    # The worst-case in and out branches are computed for
+    # each element in the graph list and compared,
+    # keeping the minimum worst-case branch.
     def worstCase(self, graphList, funcA, funcB):
         for each in graphList:
             each.countBranch()
