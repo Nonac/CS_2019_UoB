@@ -3,7 +3,6 @@
 # a vertex of degree d and size S.
 
 
-
 from Vertex import Vertex
 from Graph import Graph
 import copy
@@ -39,14 +38,16 @@ class worstCase:
         for each in graphList:
             each.countBranch()
             self.branchList.append(each.getBranch())
-        worstIn = 0
-        worstOut = 0
+        worstIn = 0.0
+        worstOut = 0.0
+        first = True
         for each in self.branchList:
-            if worstIn == 0 & worstOut == 0:
+            if first:
                 worstIn = each[0] * funcA + each[1] * funcB
                 worstOut = each[2] * funcA + each[3] * funcB
-            elif (worstIn >= each[0] * funcA + each[1] * funcB) \
-                    & (worstOut >= each[2] * funcA + each[3] * funcB):
+                first=False
+            elif (worstIn > each[0] * funcA + each[1] * funcB) \
+                    & (worstOut > each[2] * funcA + each[3] * funcB):
                 worstIn = each[0] * funcA + each[1] * funcB
                 worstOut = each[2] * funcA + each[3] * funcB
         self.worstIn = worstIn
@@ -72,7 +73,6 @@ class worstCase:
             else:
                 each.setD(2)
         return graph
-
 
 # w = worstCase(16, 3)
 # # l = w.genGraphList()

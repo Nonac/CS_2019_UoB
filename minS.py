@@ -12,9 +12,9 @@ class minS:
         self.first = True
         self.begin = True
         self.minK = 0
-        self.alpha = 0
-        self.beta = 0
-        self.graph = []
+        # self.alpha = 0
+        # self.beta = 0
+        # self.graph = []
         self.d = 0
 
     def minS(self):
@@ -32,16 +32,23 @@ class minS:
                     self.S = S
                     self.first = False
                     self.minK = k
-                    self.alpha = self.countAlpha(d_0, graph)
-                    self.beta = self.countBeta(graph)
-                    self.graph = copy.deepcopy(graph)
+                    # self.alpha = self.countAlpha(d_0, graph)
+                    # self.beta = self.countBeta(graph)
+                    # self.graph = copy.deepcopy(graph)
                     self.d = d_0
                 elif (self.S > S) & (self.k <= k):
                     self.S = S
                     self.minK = k
-                    self.alpha = self.countAlpha(d_0, graph)
-                    self.beta = self.countBeta(graph)
-                    self.graph = copy.deepcopy(graph)
+                    # self.alpha = self.countAlpha(d_0, graph)
+                    # self.beta = self.countBeta(graph)
+                    # self.graph = copy.deepcopy(graph)
+                    self.d = d_0
+                elif (self.S == S) & (self.k <= k) & (self.minK<k):
+                    self.S = S
+                    self.minK = k
+                    # self.alpha = self.countAlpha(d_0, graph)
+                    # self.beta = self.countBeta(graph)
+                    # self.graph = copy.deepcopy(graph)
                     self.d = d_0
 
     def getD(self):

@@ -32,10 +32,14 @@ class Graph:
             self.S += each.getD()
 
     def countBranch(self):
-        self.n_out = len(self.getVertex())
-        self.m_out = self.S - 2 * self.father.getD()
-        self.n_in = 1
-        self.m_in = self.S - 2 * len(self.getVertex())
+        self.n_out = 1
+        self.m_out = 2 * self.father.getD()
+        self.n_in = (len(self.getVertex()) + 1)
+        self.m_in = 2 * (self.S - self.father.getD())
+        for each in self.vertexList:
+            if each.getD() == 2:
+                self.n_out += 1
+                self.m_out += 2
         self.branch = [self.n_in, self.m_in, self.n_out, self.m_out]
 
     def getBranch(self):
