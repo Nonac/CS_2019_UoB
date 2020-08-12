@@ -31,6 +31,7 @@ class Graph:
         for each in self.vertexList:
             self.S += each.getD()
 
+    
     def countBranch(self):
         self.n_out = 1
         self.m_out = 2 * self.father.getD()
