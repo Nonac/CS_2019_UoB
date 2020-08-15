@@ -7,10 +7,11 @@
 # for g in collection:
 #     g.draw()
 
-from sympy import *
+# from sympy import *
+#
+# x = Symbol('x', real=True)
+# r = solve([(x ** (22)) - (x ** (13)) - 1], [x])
+# for each in r:
+#     if each[0] > 0:
+#         print(each[0])
 
-x = Symbol('x', real=True)
-r = solve([(x ** (22)) - (x ** (13)) - 1], [x])
-for each in r:
-    if each[0] > 0:
-        print(each[0])

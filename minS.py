@@ -43,7 +43,7 @@ class minS:
                     # self.beta = self.countBeta(graph)
                     # self.graph = copy.deepcopy(graph)
                     self.d = d_0
-                elif (self.S == S) & (self.k <= k) & (self.minK<k):
+                elif (self.S == S) & (self.k <= k) & (self.minK < k):
                     self.S = S
                     self.minK = k
                     # self.alpha = self.countAlpha(d_0, graph)

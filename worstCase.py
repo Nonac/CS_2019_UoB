@@ -1,4 +1,4 @@
-# This is the code 2 to find that given f, k, d and S,
+# This is the code 2 to fi·nd that given f, k, d and S,
 # work out the worst-case branches for f branching on
 # a vertex of degree d and size S.
 
@@ -6,6 +6,7 @@
 from Vertex import Vertex
 from Graph import Graph
 import copy
+from sympy import *
 
 
 class worstCase:
@@ -40,6 +41,8 @@ class worstCase:
     # each element in the graph list and compared,
     # keeping the minimum worst-case branch.
     def worstCase(self, graphList, funcA, funcB):
+        global MIN
+        MIN = 0
         for each in graphList:
             each.countBranch()
             self.branchList.append(each.getBranch())
@@ -47,14 +50,28 @@ class worstCase:
         worstOut = 0.0
         first = True
         for each in self.branchList:
+            tempIn = each[0] * funcA + each[1] * funcB
+            tempOut = each[2] * funcA + each[3] * funcB
             if first:
-                worstIn = each[0] * funcA + each[1] * funcB
-                worstOut = each[2] * funcA + each[3] * funcB
-                first=False
-            elif (worstIn > each[0] * funcA + each[1] * funcB) \
-                    & (worstOut > each[2] * funcA + each[3] * funcB):
-                worstIn = each[0] * funcA + each[1] * funcB
-                worstOut = each[2] * funcA + each[3] * funcB
+                worstIn = tempIn
+                worstOut = tempOut
+                first = False
+            elif (worstIn > tempIn) & (worstOut > tempOut):
+                worstIn = tempIn
+                worstOut = tempOut
+            else:
+                x = Symbol('x', real=True)
+                r1 = solve([(x ** worstIn) - (x ** (worstIn - worstOut)) - 1], [x])
+                r2 = solve([(x ** tempIn) - (x ** (tempIn - tempOut)) - 1], [x])
+                for result1 in r1:
+                    for result2 in r2:
+                        if result1[MIN] > result2[MIN] & result2[MIN] > 0:
+                            worstIn = tempIn
+                            worstOut = tempOut
+                            break
+                    else:
+                        continue
+                    break
         self.worstIn = worstIn
         self.worstOut = worstOut
 
