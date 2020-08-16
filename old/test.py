@@ -15,3 +15,35 @@
 #     if each[0] > 0:
 #         print(each[0])
 
+def isLoop(edges):
+    for each in edges:
+        for edge in each:
+            if edge == 0:
+                return True
+    return False
+
+edges = []
+first = True
+for i in range(5):
+    newEdgesList = []
+    for j in range(i + 1):
+        newEdgesList.append(0)
+    edges.append(newEdgesList)
+while(isLoop(edges)):
+    if first:
+        first = False
+        continue
+    for i in range(len(edges)):
+        for j in range(len(edges[i])):
+            if edges[i][j] == 0:
+                edges[i][j] = 1
+                break
+            else:
+                edges[i][j] = 0
+        else:
+            continue
+        break
+    print(edges)
+
+
+

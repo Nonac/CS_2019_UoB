@@ -11,6 +11,8 @@ class Graph:
         self.m_out = 0
         self.n_out = 0
         self.branch = []
+        self.edges = []
+        self.first=True
 
     def appendFatherVertex(self, v):
         self.father = v
@@ -31,8 +33,11 @@ class Graph:
         for each in self.vertexList:
             self.S += each.getD()
 
-    
     def countBranch(self):
+        self.buildEdges()
+        while self.isLoop():
+            self.reBuildEdges()
+
         self.n_out = 1
         self.m_out = 2 * self.father.getD()
         self.n_in = (len(self.getVertex()) + 1)
@@ -45,3 +50,42 @@ class Graph:
 
     def getBranch(self):
         return self.branch
+
+    def buildEdges(self):
+        for i in range(len(self.vertexList)):
+            newEdgesList = []
+            for j in range(i + 1):
+                newEdgesList.append(0)
+            self.edges.append(newEdgesList)
+
+    def isLoop(self):
+        for each in self.edges:
+            for edge in each:
+                if edge == 0:
+                    return True
+        return False
+
+    def isFirst(self):
+        for each in self.edges:
+            for edge in each:
+                if edge == 1:
+                    return False
+        return True
+
+    def reBuildEdges(self):
+        if self.isFirst() & self.first:
+            self.first=False
+            return
+        for i in range(len(self.edges)):
+            for j in range(len(self.edges[i])):
+                if self.edges[i][j] == 0:
+                    self.edges[i][j] = 1
+                    break
+                else:
+                    self.edges[i][j] = 0
+            else:
+                continue
+            break
+
+    def edgesIsValid(self):
+        for 
