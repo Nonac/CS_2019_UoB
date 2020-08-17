@@ -12,7 +12,7 @@ class Graph:
         self.n_out = 0
         self.branch = []
         self.edges = []
-        self.first=True
+        self.first = True
 
     def appendFatherVertex(self, v):
         self.father = v
@@ -37,6 +37,8 @@ class Graph:
         self.buildEdges()
         while self.isLoop():
             self.reBuildEdges()
+            if self.edgesIsValid():
+                self.algorithmC5(self.father, self.vertexList, self.edges)
 
         self.n_out = 1
         self.m_out = 2 * self.father.getD()
@@ -74,7 +76,7 @@ class Graph:
 
     def reBuildEdges(self):
         if self.isFirst() & self.first:
-            self.first=False
+            self.first = False
             return
         for i in range(len(self.edges)):
             for j in range(len(self.edges[i])):
@@ -88,4 +90,23 @@ class Graph:
             break
 
     def edgesIsValid(self):
-        for 
+        for i in range(len(self.vertexList)):
+            d = 0
+            for j in range(len(self.edges)):
+                if i < len(self.edges[j]):
+                    if self.edges[j][i] == 1:
+                        d += 1
+            if i > 1:
+                for each in self.edges[i - 1]:
+                    if each == 1:
+                        d += 1
+            if d > self.vertexList[i].getD():
+                return False
+        return True
+
+    def algorithmC5(self, father, childrenList, edges):
+        if father.getD() == 0:
+            return [1, 0]
+        elif len(childrenList) == 0:
+            return [0, 0]
+        
