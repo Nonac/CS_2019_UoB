@@ -38,17 +38,16 @@ class Graph:
         while self.isLoop():
             self.reBuildEdges()
             if self.edgesIsValid():
-                self.algorithmC5(self.father, self.vertexList, self.edges)
-
-        self.n_out = 1
-        self.m_out = 2 * self.father.getD()
-        self.n_in = (len(self.getVertex()) + 1)
-        self.m_in = 2 * (self.S - self.father.getD())
-        for each in self.vertexList:
-            if each.getD() == 2:
-                self.n_out += 1
-                self.m_out += 2
-        self.branch = [self.n_in, self.m_in, self.n_out, self.m_out]
+                if self.algorithmC5(self.father, self.vertexList, self.edges):
+                    self.n_out = 1
+                    self.m_out = 2 * self.father.getD()
+                    self.n_in = (len(self.getVertex()) + 1)
+                    self.m_in = 2 * (self.S - self.father.getD())
+                    for each in self.vertexList:
+                        if each.getD() == 2:
+                            self.n_out += 1
+                            self.m_out += 2
+                    self.branch = [self.n_in, self.m_in, self.n_out, self.m_out]
 
     def getBranch(self):
         return self.branch
@@ -105,8 +104,36 @@ class Graph:
         return True
 
     def algorithmC5(self, father, childrenList, edges):
-        if father.getD() == 0:
-            return [1, 0]
-        elif len(childrenList) == 0:
-            return [0, 0]
-        
+        if father.getD() == 0 | len(childrenList) == 0:
+            return False
+        elif self.multiplierReduction(childrenList, edges):
+            return False
+
+        return True
+
+    def multiplierReduction(self, childrenList, edges):
+        groups = []
+        for i in range(len(edges)):
+            for j in range(len(edges[i])):
+                if edges[i][j] == 1:
+                    if len(groups) == 0:
+                        groups.append([j, i + 1])
+                    else:
+                        for each in groups:
+                            if i + 1 in each:
+                                if j not in each:
+                                    each.append(j)
+                                break
+                            if j in each:
+                                if i + 1 not in each:
+                                    each.append(i + 1)
+                                break
+                        else:
+                            groups.append([j, i + 1])
+        for i in range(len(childrenList)):
+            for each in groups:
+                if i in each:
+                    break
+            else:
+                groups.append([i])
+        return len(groups) == 2
