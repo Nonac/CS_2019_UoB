@@ -88,6 +88,12 @@ class Graph:
         return True
 
     def reBuildEdges(self):
+        # As a counter, exhaust all possible edge alignments. Example.
+        # [[0],[0,0]]
+        # [[1],[0,0]]
+        # [[0],[1,0]]
+        # ........
+        # [[1],[1,1]]
         if self.isFirst() & self.first:
             self.first = False
             return
@@ -103,6 +109,9 @@ class Graph:
             break
 
     def edgesIsValid(self):
+        # Determine if the exhausted edge array
+        # satisfies the children degree requirement
+        # after this instantiation.
         for i in range(len(self.vertexList)):
             d = 0
             for j in range(len(self.edges)):
