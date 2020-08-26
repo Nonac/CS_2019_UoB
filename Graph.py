@@ -2,6 +2,20 @@ from Vertex import Vertex
 
 
 class Graph:
+    # Data structure:
+    # When I want to represent a father with d(x) = 4,
+    # carrying children vertex = {x_0, x_1,x_2, x_3}
+    # and degrees 3, 3, 3, 4, and edges = {x_0x_1, x_0x_2, x_2x_3},
+    # the data structure looks like this:
+
+    # father vertex d=4
+    # vertexList={x_0, x_1,x_2, x_3}
+    # edges={[1],[1, 0],[0, 0, 1]}
+
+    # edges[0][0] for x_0x_1,
+    # edges[1][0] for x_0x_2,
+    # and edges[2][2] for x_2x_3.
+
     def __init__(self):
         self.vertexList = []
         self.S = 0
@@ -104,12 +118,21 @@ class Graph:
         return True
 
     def algorithmC5(self, father, childrenList, edges):
+        # case 1
         if father.getD() == 0 | len(childrenList) == 0:
             return False
+        # case 4
         elif self.multiplierReduction(childrenList, edges):
             return False
+        # case 5
         elif self.case5(childrenList, edges):
             return False
+        # Since case 2 discusses whether the father is
+        # connected or not, and this algorithm assumes
+        # that the father is connected to the children,
+        # there is no point in discussing it.
+        # Case 3 is a simplified version of Algorithm 5,
+        # so it is covered by this algorithm.
         return True
 
     def case5(self, childrenList, edges):
