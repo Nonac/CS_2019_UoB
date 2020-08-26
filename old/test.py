@@ -46,34 +46,50 @@
 #     print(edges)
 
 
-def multiplierReduction(edges,childrenList):
-    groups = []
-    for i in range(len(edges)):
-        for j in range(len(edges[i])):
-            if edges[i][j] == 1:
-                if len(groups) == 0:
-                    groups.append([j, i + 1])
-                else:
-                    for each in groups:
-                        if i + 1 in each:
-                            if j not in each:
-                                each.append(j)
-                            break
-                        if j in each:
-                            if i+1 not in each:
-                                each.append(i + 1)
-                            break
-                    else:
-                        groups.append([j, i + 1])
-    for i in range(childrenList):
-        for each in groups:
-            if i in each:
-                break
-        else:
-            groups.append([i])
-    print(groups)
+# def multiplierReduction(edges,childrenList):
+#     groups = []
+#     for i in range(len(edges)):
+#         for j in range(len(edges[i])):
+#             if edges[i][j] == 1:
+#                 if len(groups) == 0:
+#                     groups.append([j, i + 1])
+#                 else:
+#                     for each in groups:
+#                         if i + 1 in each:
+#                             if j not in each:
+#                                 each.append(j)
+#                             break
+#                         if j in each:
+#                             if i+1 not in each:
+#                                 each.append(i + 1)
+#                             break
+#                     else:
+#                         groups.append([j, i + 1])
+#     for i in range(childrenList):
+#         for each in groups:
+#             if i in each:
+#                 break
+#         else:
+#             groups.append([i])
+#     print(groups)
+
+def conutEdgesInLocal(edges):
+    local = []
+    for i in range(len(edges) + 1):
+        cnt = 0
+        if i > 0:
+            for each in edges[i - 1]:
+                if each == 1:
+                    cnt += 1
+        if i < (len(edges) + 1):
+            for group in edges:
+                if len(group) > i:
+                    if group[i] == 1:
+                        cnt += 1
+        local.append(cnt)
+    print(local)
 
 
-a = [[0], [0, 0], [0, 0, 1], [0, 0, 0, 0]]
-b = 5
-multiplierReduction(a,b)
+a = [[1], [0, 0], [0, 0, 1], [0, 0, 0, 1]]
+b = 4
+conutEdgesInLocal(a)

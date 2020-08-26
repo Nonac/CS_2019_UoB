@@ -108,10 +108,40 @@ class Graph:
             return False
         elif self.multiplierReduction(childrenList, edges):
             return False
-
+        elif self.case5(childrenList, edges):
+            return False
         return True
 
+    def case5(self, childrenList, edges):
+        # Counting the number of children connected to
+        # the external vertex
+        cnt = 0
+        childrenLocalDegree = self.conutEdgesInLocal(edges)
+        for i in range(len(childrenList)):
+            if childrenLocalDegree[i] != childrenList[i].getD:
+                cnt += 1
+        return cnt == 2
+
     def multiplierReduction(self, childrenList, edges):
+        # Group the children vertex and enable the connected
+        # vertex by ignoring the father. This way you can find
+        # out the premises where Multiplier Reduction can be used.
+        groups = self.groupEdges(childrenList, edges)
+        # Calculate the children's degree of Local while considering
+        # only the Local degree. this can determine the case where N(x)
+        # has children connected to the outside.
+        childrenLocalDegree = self.conutEdgesInLocal(edges)
+        if len(groups) >= 2:
+            # Counting the number of connected components
+            cnt = 0
+            for i in range(len(childrenList)):
+                if childrenLocalDegree[i] == childrenList[i].getD:
+                    cnt += 1
+            return cnt >= 2
+        else:
+            return False
+
+    def groupEdges(self, childrenList, edges):
         groups = []
         for i in range(len(edges)):
             for j in range(len(edges[i])):
@@ -130,10 +160,31 @@ class Graph:
                                 break
                         else:
                             groups.append([j, i + 1])
+
+        # Adding vertex that is not connected to
+        # other children as a separate group
         for i in range(len(childrenList)):
             for each in groups:
                 if i in each:
                     break
             else:
                 groups.append([i])
-        return len(groups) == 2
+        return groups
+
+    def conutEdgesInLocal(self, edges):
+        local = []
+        for i in range(len(edges) + 1):
+            cnt = 0
+            if i > 0:
+                for each in edges[i - 1]:
+                    if each == 1:
+                        cnt += 1
+            if i < (len(edges) + 1):
+                for group in edges:
+                    if len(group) > i:
+                        if group[i] == 1:
+                            cnt += 1
+            # father to child edge
+            cnt += 1
+            local.append(cnt)
+        return local
