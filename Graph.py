@@ -1,4 +1,5 @@
 from Vertex import Vertex
+import copy
 
 
 class Graph:
@@ -53,15 +54,70 @@ class Graph:
             self.reBuildEdges()
             if self.edgesIsValid():
                 if self.algorithmC5(self.father, self.vertexList, self.edges):
-                    self.n_out = 1
-                    self.m_out = 2 * self.father.getD()
                     self.n_in = (len(self.getVertex()) + 1)
                     self.m_in = 2 * (self.S - self.father.getD())
-                    for each in self.vertexList:
-                        if each.getD() == 2:
-                            self.n_out += 1
-                            self.m_out += 2
-                    self.branch = [self.n_in, self.m_in, self.n_out, self.m_out]
+
+                    self.removeEdges(self.vertexList, self.edges)
+                    self.worstCaseBranch(self.n_in, self.m_in, self.n_out, self.m_out)
+
+    def worstCaseBranch(self, n_in, m_in, n_out, m_out):
+        self.branch.append([n_in, m_in, n_out, m_out])
+
+    def removeEdges(self, childrenList, edges):
+        local = self.conutEdgesInLocal(edges)
+        childrenDegreeList = []
+        removeSwitch = []
+        tempEdges = copy.deepcopy(edges)
+        for each in childrenList:
+            childrenDegreeList.append(each.getD())
+            removeSwitch.append(False)
+
+        # first remove father
+        for i in range(len(local)):
+            local[i] -= 1
+            childrenList[i] -= 1
+        self.n_out = 1
+        self.m_out = 2 * self.father.getD()
+
+        # second if children with degree 1
+        # connected to other children, remove it
+        while self.isRemove(childrenDegreeList, local):
+            for i in range(len(local)):
+                if local[i] == 1 and childrenDegreeList[i] == 1:
+                    self.n_out += 1
+                    self.m_out += 2
+                    tempEdges = self.recountEdges(i, tempEdges)
+                    tempLocal = self.conutEdgesInLocal(tempEdges)
+                    for j in range(len(tempLocal)):
+                        if tempLocal[j] == local[j] - 1:
+                            childrenDegreeList[j] -= 1
+                            removeSwitch[j] = True
+                    local = tempLocal
+
+        # third if children with degree 0 remove it
+        for i in range(len(local)):
+            if local[i] == 0 and removeSwitch[i] == False:
+                self.n_out += 1
+                removeSwitch[i] = True
+
+    def isRemove(self, childrenDegreeList, local):
+        for i in range(len(local)):
+            if local[i] == 1 and childrenDegreeList[i] == 1:
+                return True
+        return False
+
+    def recountEdges(self, i, tempEdges):
+        if i < len(tempEdges):
+            for j in range(len(tempEdges[i])):
+                if tempEdges[i][j] == 1:
+                    tempEdges[i][j] = 0
+                    return tempEdges
+        if i > 0:
+            for j in range(len(tempEdges)):
+                if tempEdges[j][i - 1] == 1:
+                    tempEdges[j][i - 1] = 0
+                    return tempEdges
+        return tempEdges
 
     def getBranch(self):
         return self.branch

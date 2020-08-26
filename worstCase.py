@@ -45,7 +45,8 @@ class worstCase:
         MIN = 0
         for each in graphList:
             each.countBranch()
-            self.branchList.append(each.getBranch())
+            for eachBranch in each.getBranch():
+                self.branchList.append(eachBranch)
         worstIn = 0.0
         worstOut = 0.0
         first = True
