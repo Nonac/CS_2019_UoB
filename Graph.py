@@ -80,7 +80,10 @@ class Graph:
             childrenDegreeList.append(each.getD())
             removeSwitch.append(False)
 
-        print(local, childrenDegreeList)
+
+        for i in range(len(local)):
+            if local[i]>childrenDegreeList[i]:
+                print(local, childrenDegreeList)
 
         # first remove father
         for i in range(len(local)):
@@ -194,7 +197,7 @@ class Graph:
                 for each in self.edges[i - 1]:
                     if each == 1:
                         d += 1
-            if d > self.vertexList[i].getD():
+            if d+1 > self.vertexList[i].getD():
                 return False
         return True
 
