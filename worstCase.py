@@ -52,10 +52,8 @@ class worstCase:
         worstOut = 0.0
         first = True
         for each in self.branchList:
-            print(each)
             tempIn = each[0] * funcA + each[1] * funcB
             tempOut = each[2] * funcA + each[3] * funcB
-            print(tempIn,tempOut)
             if first:
                 worstIn = tempIn
                 worstOut = tempOut

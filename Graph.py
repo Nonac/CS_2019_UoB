@@ -28,6 +28,7 @@ class Graph:
         self.branch = []
         self.edges = []
         self.first = True
+        self.cnt = 0
 
     def appendFatherVertex(self, v):
         self.father = v
@@ -51,6 +52,8 @@ class Graph:
     def countBranch(self):
         self.buildEdges()
         while self.isLoop():
+            self.cnt += 1
+            print(self.cnt)
             self.reBuildEdges()
             if self.edgesIsValid():
                 if self.algorithmC5(self.father, self.vertexList, self.edges):
@@ -116,7 +119,7 @@ class Graph:
                     tempEdges[i][j] = 0
                     return tempEdges
         if i > 0:
-            for j in range(len(tempEdges[i-1])):
+            for j in range(len(tempEdges[i - 1])):
                 if tempEdges[i - 1][j] == 1:
                     tempEdges[i - 1][j] = 0
                     return tempEdges
@@ -127,7 +130,7 @@ class Graph:
 
     def buildEdges(self):
         if len(self.vertexList) > 1:
-            for i in range(len(self.vertexList)-1):
+            for i in range(len(self.vertexList) - 1):
                 newEdgesList = []
                 for j in range(i + 1):
                     newEdgesList.append(0)
