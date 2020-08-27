@@ -80,11 +80,11 @@ for i in range(1000, 5000):
     minS.minS()
     if S == 0:
         S = minS.getS()
+        print("When d=", d, "f(n, m)=", A, " * n + ", B, " * m")
+        print("Minimum S =", minS.getS())
         w = worstCase(minS.getS(), math.ceil(minS.getK()))
         list = w.genGraphList()
         w.worstCase(list, A, B)
-        print("When d=", d, "f(n, m)=", A, " * n + ", B, " * m")
-        print("Minimum S =", minS.getS())
         print("worst branch number is (", int(w.getWorstIn()), int(w.getWorstOut()),")")
         del minS
     elif minS.getS() != S:
