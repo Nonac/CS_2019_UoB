@@ -20,6 +20,7 @@ class worstCase:
         self.branchList = []
         self.worstIn = 0
         self.worstOut = 0
+        self.cnt=0
 
     # Generate a list of all the graphs that match the S and d possibilities.
     def genGraphList(self):
@@ -53,6 +54,8 @@ class worstCase:
         worstOut = 0.0
         first = True
         for each in self.branchList:
+            print(self.cnt,"=", time.asctime(time.localtime(time.time())))
+            self.cnt+=1
             tempIn = each[0] * funcA + each[1] * funcB
             tempOut = each[2] * funcA + each[3] * funcB
             if first:
