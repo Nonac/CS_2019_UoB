@@ -89,24 +89,20 @@ for i in range(2001, 5000):
     d = i / 1000
     minS = minS(d)
     minS.minS()
-    if S == 0:
-        S = minS.getS()
-        print("When d=", d, "f(n, m)=", A, " * n + ", B, " * m")
-        print("Minimum S =", minS.getS())
+
+    def countProcess(minS):
         w = worstCase(minS.getS(), math.ceil(minS.getK()))
         w.worstCase(w.genGraphList(), A, B)
-        print("the worst branch number is (", int(w.getWorstIn()),
-              ",", int(w.getWorstOut()), ")")
-        print("worst time is", w.getWorstTime())
-        del minS
-    elif minS.getS() != S:
-        S = minS.getS()
-        w = worstCase(minS.getS(), math.ceil(minS.getK()))
-        list = w.genGraphList()
-        w.worstCase(list, A, B)
         print("When d=", d, "f(n, m)=", A, " * n + ", B, " * m")
         print("Minimum S =", minS.getS())
         print("the worst branch number is (", int(w.getWorstIn()),
               ",", int(w.getWorstOut()), ")")
         print("worst time is", w.getWorstTime())
         del minS
+
+    if S == 0:
+        S = minS.getS()
+        countProcess(minS)
+    elif minS.getS() != S:
+        S = minS.getS()
+        countProcess(minS)
