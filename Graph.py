@@ -75,9 +75,11 @@ class Graph:
         childrenDegreeList = []
         removeSwitch = []
         tempEdges = copy.deepcopy(edges)
+
         for each in childrenList:
             childrenDegreeList.append(each.getD())
             removeSwitch.append(False)
+
 
         # first remove father
         for i in range(len(local)):
@@ -88,6 +90,8 @@ class Graph:
 
         # second if children with degree 1
         # connected to other children, remove it
+        print(local, childrenDegreeList)
+
         while self.isRemove(childrenDegreeList, local):
             for i in range(len(local)):
                 if local[i] == 1 and childrenDegreeList[i] == 1:
