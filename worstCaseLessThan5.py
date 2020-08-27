@@ -72,7 +72,7 @@ A = float(A_str)
 B_str = input("B = ")
 B = float(B_str)
 S = 0
-for i in range(1000, 5000):
+for i in range(3001, 5000):
     from minS import minS
 
     d = i / 1000
