@@ -56,7 +56,10 @@ class Graph:
                 if self.algorithmC5(self.father, self.vertexList, self.edges):
                     self.n_in = (len(self.getVertex()) + 1)
                     self.m_in = 2 * (self.S - self.father.getD())
-
+                    for group in self.edges:
+                        for each in group:
+                            if each == 1:
+                                self.m_in -= 1
                     self.removeEdges(self.vertexList, self.edges)
                     self.worstCaseBranch(self.n_in, self.m_in, self.n_out, self.m_out)
 
@@ -75,7 +78,7 @@ class Graph:
         # first remove father
         for i in range(len(local)):
             local[i] -= 1
-            childrenList[i] -= 1
+            childrenDegreeList[i] -= 1
         self.n_out = 1
         self.m_out = 2 * self.father.getD()
 
@@ -87,7 +90,7 @@ class Graph:
                     self.n_out += 1
                     self.m_out += 2
                     tempEdges = self.recountEdges(i, tempEdges)
-                    tempLocal = self.conutEdgesInLocal(tempEdges)
+                    tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
                     for j in range(len(tempLocal)):
                         if tempLocal[j] == local[j] - 1:
                             childrenDegreeList[j] -= 1
@@ -113,9 +116,9 @@ class Graph:
                     tempEdges[i][j] = 0
                     return tempEdges
         if i > 0:
-            for j in range(len(tempEdges)):
-                if tempEdges[j][i - 1] == 1:
-                    tempEdges[j][i - 1] = 0
+            for j in range(len(tempEdges[i-1])):
+                if tempEdges[i - 1][j] == 1:
+                    tempEdges[i - 1][j] = 0
                     return tempEdges
         return tempEdges
 
@@ -123,11 +126,12 @@ class Graph:
         return self.branch
 
     def buildEdges(self):
-        for i in range(len(self.vertexList)):
-            newEdgesList = []
-            for j in range(i + 1):
-                newEdgesList.append(0)
-            self.edges.append(newEdgesList)
+        if len(self.vertexList) > 1:
+            for i in range(len(self.vertexList)-1):
+                newEdgesList = []
+                for j in range(i + 1):
+                    newEdgesList.append(0)
+                self.edges.append(newEdgesList)
 
     def isLoop(self):
         for each in self.edges:
@@ -220,10 +224,16 @@ class Graph:
         # has children connected to the outside.
         childrenLocalDegree = self.conutEdgesInLocal(edges)
         if len(groups) >= 2:
-            # Counting the number of connected components
+            # Counting the number of connected components.
+            # Calculations are done in units of connected
+            # components, not in individual vertex.
             cnt = 0
-            for i in range(len(childrenList)):
-                if childrenLocalDegree[i] == childrenList[i].getD:
+            for group in groups:
+                for each in group:
+                    if childrenLocalDegree[each] \
+                            != childrenList[each].getD():
+                        break
+                else:
                     cnt += 1
             return cnt >= 2
         else:
@@ -274,5 +284,21 @@ class Graph:
                             cnt += 1
             # father to child edge
             cnt += 1
+            local.append(cnt)
+        return local
+
+    def conutEdgesInLocalWithoutFather(self, edges):
+        local = []
+        for i in range(len(edges) + 1):
+            cnt = 0
+            if i > 0:
+                for each in edges[i - 1]:
+                    if each == 1:
+                        cnt += 1
+            if i < (len(edges) + 1):
+                for group in edges:
+                    if len(group) > i:
+                        if group[i] == 1:
+                            cnt += 1
             local.append(cnt)
         return local

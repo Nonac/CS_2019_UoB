@@ -66,7 +66,7 @@ class worstCase:
                 r2 = solve([(x ** tempIn) - (x ** (tempIn - tempOut)) - 1], [x])
                 for result1 in r1:
                     for result2 in r2:
-                        if result1[MIN] > result2[MIN] & result2[MIN] > 0:
+                        if (result1[MIN] > result2[MIN]) and (result2[MIN] > 0):
                             worstIn = tempIn
                             worstOut = tempOut
                             break
