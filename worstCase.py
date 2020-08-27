@@ -6,8 +6,7 @@
 from Vertex import Vertex
 from Graph import Graph
 import copy
-from sympy import *
-import time
+from scipy.optimize import fsolve
 
 
 class worstCase:
@@ -18,9 +17,9 @@ class worstCase:
         self.graphList = []
         self.first = True
         self.branchList = []
-        self.worstIn = 0
-        self.worstOut = 0
-        self.cnt = 0
+        self.worstIn = 0.0
+        self.worstOut = 0.0
+        self.worstTime = 0.0
 
     # Generate a list of all the graphs that match the S and d possibilities.
     def genGraphList(self):
@@ -49,12 +48,10 @@ class worstCase:
             each.countBranch()
             for eachBranch in each.getBranch():
                 self.branchList.append(eachBranch)
-        print("Begin=", time.asctime(time.localtime(time.time())))
         worstIn = 0.0
         worstOut = 0.0
         first = True
-        self.branchList=self.deduplication()
-        print(self.branchList)
+        self.branchList = self.deduplication()
         for each in self.branchList:
             tempIn = each[0] * funcA + each[1] * funcB
             tempOut = each[2] * funcA + each[3] * funcB
@@ -66,30 +63,43 @@ class worstCase:
                 worstIn = tempIn
                 worstOut = tempOut
             else:
-                x = Symbol('x', real=True)
-                r1 = solve([(x ** worstIn) - (x ** (worstIn - worstOut)) - 1], [x])
-                r2 = solve([(x ** tempIn) - (x ** (tempIn - tempOut)) - 1], [x])
-                for result1 in r1:
-                    for result2 in r2:
-                        if (result1[MIN] > result2[MIN]) and (result2[MIN] > 0):
-                            worstIn = tempIn
-                            worstOut = tempOut
-                            break
-                    else:
-                        continue
-                    break
+                def func1(i):
+                    x = i[MIN]
+                    return [(x ** worstIn) - (x ** (worstIn - worstOut)) - 1]
+
+                def func2(i):
+                    x = i[MIN]
+                    return [(x ** tempIn) - (x ** (tempIn - tempOut)) - 1]
+
+                r1 = fsolve(func1, [1])
+                r2 = fsolve(func2, [1])
+                if (r1[MIN] > r2[MIN]) and (r2[MIN] > 0):
+                    worstIn = tempIn
+                    worstOut = tempOut
         self.worstIn = worstIn
         self.worstOut = worstOut
-        print("End=", time.asctime(time.localtime(time.time())))
+        self.countWorstTime()
 
+
+    def countWorstTime(self):
+        a = self.worstIn
+        b = self.worstOut
+
+        def func(i):
+            x = i[0]
+            return [((x ** (a)) - (x ** (a - b)) - 1)]
+
+        self.worstTime = fsolve(func, [1])[0]
+
+    def getWorstTime(self):
+        return self.worstTime
 
     def deduplication(self):
-        new=[]
+        new = []
         for each in self.branchList:
             if each not in new:
                 new.append(each)
         return new
-
 
     def getWorstIn(self):
         return self.worstIn
