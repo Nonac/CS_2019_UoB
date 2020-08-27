@@ -90,15 +90,14 @@ class Graph:
         # second if children with degree 1
         # connected to other children, remove it
 
-
         while self.isRemove(childrenDegreeList, local):
             for i in range(len(local)):
                 if local[i] == 1 and childrenDegreeList[i] == 1:
                     self.n_out += 1
                     self.m_out += 2
-                    print(i,tempEdges)
+                    print(i, tempEdges)
                     tempEdges = self.recountEdges(i, tempEdges)
-                    print(i,tempEdges)
+                    print(i, tempEdges)
                     tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
                     for j in range(len(tempLocal)):
                         if tempLocal[j] == local[j] - 1:
@@ -124,9 +123,10 @@ class Graph:
     def recountEdges(self, i, tempEdges):
         if i < len(tempEdges):
             for j in range(len(tempEdges)):
-                if tempEdges[j][i] == 1:
-                    tempEdges[j][i] = 0
-                    return tempEdges
+                if i < len(tempEdges[j]):
+                    if tempEdges[j][i] == 1:
+                        tempEdges[j][i] = 0
+                        return tempEdges
         if i > 0:
             for j in range(len(tempEdges[i - 1])):
                 if tempEdges[i - 1][j] == 1:
@@ -194,7 +194,7 @@ class Graph:
                 for each in self.edges[i - 1]:
                     if each == 1:
                         d += 1
-            if d+1 > self.vertexList[i].getD():
+            if d + 1 > self.vertexList[i].getD():
                 return False
         return True
 
