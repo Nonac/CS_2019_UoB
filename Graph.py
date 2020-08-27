@@ -123,9 +123,9 @@ class Graph:
 
     def recountEdges(self, i, tempEdges):
         if i < len(tempEdges):
-            for j in range(len(tempEdges[i])):
-                if tempEdges[i][j] == 1:
-                    tempEdges[i][j] = 0
+            for j in range(len(tempEdges)):
+                if tempEdges[j][i] == 1:
+                    tempEdges[j][i] = 0
                     return tempEdges
         if i > 0:
             for j in range(len(tempEdges[i - 1])):
