@@ -304,5 +304,5 @@ class Graph:
                         if group[i] == 1:
                             cnt += 1
             local.append(cnt)
-            print(local,edges)
+        print(local,edges)
         return local
