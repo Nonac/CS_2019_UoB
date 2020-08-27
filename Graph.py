@@ -111,9 +111,7 @@ class Graph:
     def isRemove(self, childrenDegreeList, local):
         for i in range(len(local)):
             if local[i] == 1 and childrenDegreeList[i] == 1:
-                if self.temp!=local:
-                    self.temp=local
-                    print(local,childrenDegreeList)
+                print(local,childrenDegreeList)
                 return True
         return False
 
