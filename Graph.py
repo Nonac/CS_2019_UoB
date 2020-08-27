@@ -300,7 +300,9 @@ class Graph:
                         cnt += 1
             if i < (len(edges) + 1):
                 for group in edges:
+                    print(group,i)
                     if len(group) > i:
+                        print(group, i)
                         if group[i] == 1:
                             cnt += 1
             local.append(cnt)

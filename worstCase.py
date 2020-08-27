@@ -47,7 +47,7 @@ class worstCase:
             each.countBranch()
             for eachBranch in each.getBranch():
                 self.branchList.append(eachBranch)
-                print(eachBranch)
+
         worstIn = 0.0
         worstOut = 0.0
         first = True
