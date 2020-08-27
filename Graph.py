@@ -189,7 +189,7 @@ class Graph:
                 if i < len(self.edges[j]):
                     if self.edges[j][i] == 1:
                         d += 1
-            if i > 1:
+            if i > 0:
                 for each in self.edges[i - 1]:
                     if each == 1:
                         d += 1
