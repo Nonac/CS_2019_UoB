@@ -54,7 +54,6 @@ class Graph:
         self.buildEdges()
         while self.isLoop():
             self.cnt += 1
-            # print(self.cnt)
             self.reBuildEdges()
             if self.edgesIsValid():
                 if self.algorithmC5(self.father, self.vertexList, self.edges):
@@ -95,9 +94,7 @@ class Graph:
                 if local[i] == 1 and childrenDegreeList[i] == 1:
                     self.n_out += 1
                     self.m_out += 2
-                    print(i, tempEdges)
                     tempEdges = self.recountEdges(i, tempEdges)
-                    print(i, tempEdges)
                     tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
                     for j in range(len(tempLocal)):
                         if tempLocal[j] == local[j] - 1:
@@ -114,9 +111,6 @@ class Graph:
     def isRemove(self, childrenDegreeList, local):
         for i in range(len(local)):
             if local[i] == 1 and childrenDegreeList[i] == 1:
-                # if self.temp != local:
-                #     self.temp = local
-                print(local, childrenDegreeList)
                 return True
         return False
 
@@ -313,5 +307,4 @@ class Graph:
                         if group[i] == 1:
                             cnt += 1
             local.append(cnt)
-        # print(local, edges)
         return local
