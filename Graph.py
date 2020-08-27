@@ -54,7 +54,7 @@ class Graph:
         self.buildEdges()
         while self.isLoop():
             self.cnt += 1
-            print(self.cnt)
+            # print(self.cnt)
             self.reBuildEdges()
             if self.edgesIsValid():
                 if self.algorithmC5(self.father, self.vertexList, self.edges):
@@ -80,6 +80,7 @@ class Graph:
             childrenDegreeList.append(each.getD())
             removeSwitch.append(False)
 
+        print(local, childrenDegreeList)
 
         # first remove father
         for i in range(len(local)):
@@ -90,7 +91,7 @@ class Graph:
 
         # second if children with degree 1
         # connected to other children, remove it
-        print(local, childrenDegreeList)
+
 
         while self.isRemove(childrenDegreeList, local):
             for i in range(len(local)):
