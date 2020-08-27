@@ -97,7 +97,7 @@ for i in range(2001, 5000):
         print("Minimum S =", minS.getS())
         print("the worst branch number is (", int(w.getWorstIn()),
               ",", int(w.getWorstOut()), ")")
-        print("worst time is", w.getWorstTime())
+        print("worst time is", w.getWorstTime(),"\n")
         del minS
 
     if S == 0:
