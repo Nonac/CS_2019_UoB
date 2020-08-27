@@ -7,6 +7,7 @@ from Vertex import Vertex
 from Graph import Graph
 import copy
 from sympy import *
+import time
 
 
 class worstCase:
@@ -47,7 +48,7 @@ class worstCase:
             each.countBranch()
             for eachBranch in each.getBranch():
                 self.branchList.append(eachBranch)
-
+        print("Begin=", time.asctime(time.localtime(time.time())))
         worstIn = 0.0
         worstOut = 0.0
         first = True
@@ -76,6 +77,7 @@ class worstCase:
                     break
         self.worstIn = worstIn
         self.worstOut = worstOut
+        print("End=", time.asctime(time.localtime(time.time())))
 
     def getWorstIn(self):
         return self.worstIn
