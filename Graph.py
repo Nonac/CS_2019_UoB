@@ -80,11 +80,6 @@ class Graph:
             childrenDegreeList.append(each.getD())
             removeSwitch.append(False)
 
-
-        for i in range(len(local)):
-            if local[i]>childrenDegreeList[i]:
-                print(local, childrenDegreeList)
-
         # first remove father
         for i in range(len(local)):
             local[i] -= 1
@@ -101,7 +96,9 @@ class Graph:
                 if local[i] == 1 and childrenDegreeList[i] == 1:
                     self.n_out += 1
                     self.m_out += 2
+                    print(i,tempEdges)
                     tempEdges = self.recountEdges(i, tempEdges)
+                    print(i,tempEdges)
                     tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
                     for j in range(len(tempLocal)):
                         if tempLocal[j] == local[j] - 1:
@@ -118,9 +115,9 @@ class Graph:
     def isRemove(self, childrenDegreeList, local):
         for i in range(len(local)):
             if local[i] == 1 and childrenDegreeList[i] == 1:
-                if self.temp != local:
-                    self.temp = local
-                    print(local, childrenDegreeList)
+                # if self.temp != local:
+                #     self.temp = local
+                print(local, childrenDegreeList)
                 return True
         return False
 
