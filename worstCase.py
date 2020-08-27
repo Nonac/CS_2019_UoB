@@ -53,9 +53,8 @@ class worstCase:
         worstIn = 0.0
         worstOut = 0.0
         first = True
+        print(self.branchList)
         for each in self.branchList:
-            print(self.cnt,"=", time.asctime(time.localtime(time.time())))
-            self.cnt+=1
             tempIn = each[0] * funcA + each[1] * funcB
             tempOut = each[2] * funcA + each[3] * funcB
             if first:
