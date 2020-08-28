@@ -28,6 +28,13 @@ class Graph:
         self.branch = []
         self.edges = []
         self.first = True
+        self.edgesCheck = []
+
+    def getVertex(self):
+        return self.vertexList
+
+    def getEdgesCheck(self):
+        return self.edgesCheck
 
     def appendFatherVertex(self, v):
         self.father = v
@@ -59,12 +66,13 @@ class Graph:
                     for group in self.edges:
                         for each in group:
                             if each == 1:
-                                self.m_in -= 1
+                                self.m_in -= 2
                     self.removeEdges(self.vertexList, self.edges)
                     self.worstCaseBranch(self.n_in, self.m_in, self.n_out, self.m_out)
 
     def worstCaseBranch(self, n_in, m_in, n_out, m_out):
         self.branch.append([n_in, m_in, n_out, m_out])
+        self.edgesCheck.append(copy.deepcopy(self.edges))
 
     def removeEdges(self, childrenList, edges):
         local = self.conutEdgesInLocal(edges)
@@ -101,7 +109,7 @@ class Graph:
 
         # third if children with degree 0 remove it
         for i in range(len(local)):
-            if local[i] == 0 and removeSwitch[i] == False:
+            if childrenDegreeList[i] == 0 and removeSwitch[i] == False:
                 self.n_out += 1
                 removeSwitch[i] = True
 
@@ -209,14 +217,23 @@ class Graph:
         return True
 
     def case5(self, childrenList, edges):
-        # Counting the number of children connected to
+        # Counting the number of N(x) connected to
         # the external vertex
-        cnt = 0
+        cnt_NX = 0
+        # Counting the number of N(x) connected to
+        # the external vertex by two edges. In the next iteration
+        # this case will run case 2 to smaller N(x), and then count
+        # the branch which much smaller than it used to be.
+        cnt_NNx = 0
         childrenLocalDegree = self.conutEdgesInLocal(edges)
         for i in range(len(childrenList)):
-            if childrenLocalDegree[i] != childrenList[i].getD:
-                cnt += 1
-        return cnt == 2
+            if childrenLocalDegree[i] != childrenList[i].getD():
+                cnt_NX += 1
+            if (childrenList[i].getD() - childrenLocalDegree[i]) == 2:
+                cnt_NNx += 1
+            elif (childrenList[i].getD() - childrenLocalDegree[i]) == 1:
+                cnt_NNx += 1
+        return (cnt_NX == 2) or (cnt_NX == 1 and ((cnt_NNx == 1) or (cnt_NNx == 2)))
 
     def multiplierReduction(self, childrenList, edges):
         # Group the children vertex and enable the connected
@@ -239,7 +256,7 @@ class Graph:
                         break
                 else:
                     cnt += 1
-            return cnt >= 2
+            return cnt >= 1
         else:
             return False
 

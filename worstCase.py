@@ -20,6 +20,7 @@ class worstCase:
         self.worstIn = 0.0
         self.worstOut = 0.0
         self.worstTime = 0.0
+        self.branchCheck = []
 
     # Generate a list of all the graphs that match the S and d possibilities.
     def genGraphList(self):
@@ -52,6 +53,7 @@ class worstCase:
         worstOut = 0.0
         first = True
         self.branchList = self.deduplication()
+
         for each in self.branchList:
             tempIn = each[0] * funcA + each[1] * funcB
             tempOut = each[2] * funcA + each[3] * funcB
@@ -59,9 +61,11 @@ class worstCase:
                 worstIn = tempIn
                 worstOut = tempOut
                 first = False
+                self.branchCheck = each
             elif (worstIn > tempIn) & (worstOut > tempOut):
                 worstIn = tempIn
                 worstOut = tempOut
+                self.branchCheck = each
             else:
                 def func1(i):
                     x = i[MIN]
@@ -71,15 +75,18 @@ class worstCase:
                     x = i[MIN]
                     return [(x ** tempIn) - (x ** (tempIn - tempOut)) - 1]
 
-                r1 = fsolve(func1, [1])
-                r2 = fsolve(func2, [1])
-                if (r1[MIN] > r2[MIN]) and (r2[MIN] > 0):
+                r1 = fsolve(func1, [1])[MIN]
+                r2 = fsolve(func2, [1])[MIN]
+                if (r1 > r2) and (r2 > 0):
                     worstIn = tempIn
                     worstOut = tempOut
+                    self.branchCheck = each
         self.worstIn = worstIn
         self.worstOut = worstOut
         self.countWorstTime()
 
+    def getBranchCheck(self):
+        return self.branchCheck
 
     def countWorstTime(self):
         a = self.worstIn
