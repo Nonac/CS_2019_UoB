@@ -1,72 +1,72 @@
 # When d= 3.001 f(n, m)= 0.1961  * n +  0.268  * m Minimum S = 15
 # the worst branch is ( [2, 10, 5, 18] )
 # the worst branch number is ( 5.8045 , 3.0722 )
-# worst time is 1.1754138473615692
+# \tau is 1.1754138473615692
 #
 # When d= 3.201 f(n, m)= 0.1961  * n +  0.268  * m Minimum S = 16
 # the worst branch is ( [1, 8, 5, 20] )
 # the worst branch number is ( 6.3405000000000005 , 2.3401 )
-# worst time is 1.1891856117367177
+# \tau is 1.1891856117367177
 #
 # When d= 3.429 f(n, m)= 0.1961  * n +  0.268  * m Minimum S = 17
 # the worst branch is ( [1, 8, 5, 20] )
 # the worst branch number is ( 6.3405000000000005 , 2.3401 )
-# worst time is 1.1891856117367177
+# \tau is 1.1891856117367177
 #
 # When d= 3.501 f(n, m)= 0.3308  * n +  0.2295  * m Minimum S = 18
 # the worst branch is ( [1, 8, 5, 22] )
 # the worst branch number is ( 6.703 , 2.1668000000000003 )
-# worst time is 1.189195278439272
+# \tau is 1.189195278439272
 #
 # When d= 3.601 f(n, m)= 0.3308  * n +  0.2295  * m Minimum S = 19
 # the worst branch is ( [1, 8, 5, 22] )
 # the worst branch number is ( 6.703 , 2.1668000000000003 )
-# worst time is 1.189195278439272
+# \tau is 1.189195278439272
 #
 # When d= 3.751 f(n, m)= 0.4461  * n +  0.1987  * m Minimum S = 20
 # the worst branch is ( [1, 8, 5, 24] )
 # the worst branch number is ( 6.9993 , 2.0357 )
-# worst time is 1.1892354698194136
+# \tau is 1.1892354698194136
 #
 # When d= 4.001 f(n, m)= 0.8755  * n +  0.0914  * m Minimum S = 23
 # the worst branch is ( [1, 10, 6, 26] )
 # the worst branch number is ( 7.6294 , 1.7894999999999999 )
-# worst time is 1.189192112943713
+# \tau is 1.189192112943713
 #
 # When d= 4.138 f(n, m)= 0.9139  * n +  0.0821  * m Minimum S = 24
 # the worst branch is ( [1, 10, 6, 28] )
 # the worst branch number is ( 7.7822000000000005 , 1.7349 )
-# worst time is 1.1891939959022877
+# \tau is 1.1891939959022877
 #
 # When d= 4.286 f(n, m)= 0.9139  * n +  0.0821  * m Minimum S = 25
 # the worst branch is ( [1, 10, 6, 28] )
 # the worst branch number is ( 7.7822000000000005 , 1.7349 )
-# worst time is 1.1891939959022877
+# \tau is 1.1891939959022877
 #
 # When d= 4.445 f(n, m)= 0.9517  * n +  0.0736  * m Minimum S = 26
 # the worst branch is ( [1, 10, 6, 30] )
 # the worst branch number is ( 7.918200000000001 , 1.6877 )
-# worst time is 1.1892060029243312
+# \tau is 1.1892060029243312
 #
 # When d= 4.501 f(n, m)= 0.9517  * n +  0.0736  * m Minimum S = 27
 # the worst branch is ( [1, 10, 6, 30] )
 # the worst branch number is ( 7.918200000000001 , 1.6877 )
-# worst time is 1.1892060029243312
+# \tau is 1.1892060029243312
 #
 # When d= 4.572 f(n, m)= 0.9841  * n +  0.0665  * m Minimum S = 28
 # the worst branch is ( [1, 10, 6, 32] )
 # the worst branch number is ( 8.0326 , 1.6491 )
-# worst time is 1.1892178401235916
+# \tau is 1.1892178401235916
 #
 # When d= 4.667 f(n, m)= 0.9841  * n +  0.0665  * m Minimum S = 29
 # the worst branch is ( [1, 10, 6, 32] )
 # the worst branch number is ( 8.0326 , 1.6491 )
-# worst time is 1.1892178401235916
+# \tau is 1.1892178401235916
 #
 # When d= 4.801 f(n, m)= 1.0143  * n +  0.0602  * m Minimum S = 30
 # the worst branch is ( [1, 10, 6, 34] )
 # the worst branch number is ( 8.1326 , 1.6162999999999998 )
-# worst time is 1.189222576940108
+# \tau is 1.189222576940108
 
 
 import math
@@ -93,7 +93,7 @@ for i in range(3001, 5000):
         print("When d=", d, "f(n, m)=", A[cnt], " * n + ", B[cnt], " * m","Minimum S =", minS.getS())
         print("the worst branch is (", w.getBranchCheck(), ")")
         print("the worst branch number is (", w.getWorstIn(),",", w.getWorstOut(), ")")
-        print("worst time is", w.getWorstTime(), "\n")
+        print("\\tau is", w.getWorstTime(), "\n")
         del minS
 
 
