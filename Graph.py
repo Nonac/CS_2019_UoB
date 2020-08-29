@@ -71,7 +71,7 @@ class Graph:
                     self.worstCaseBranch(self.n_in, self.m_in, self.n_out, self.m_out)
 
     def worstCaseBranch(self, n_in, m_in, n_out, m_out):
-        self.branch.append([n_in, m_in, n_out, m_out])
+        self.branch.append([ n_out, m_out,n_in, m_in])
         self.edgesCheck.append(copy.deepcopy(self.edges))
 
     def removeEdges(self, childrenList, edges):
@@ -94,18 +94,23 @@ class Graph:
         # second if children with degree 1
         # connected to other children, remove it
 
-        while self.isRemove(childrenDegreeList, local):
-            for i in range(len(local)):
-                if local[i] == 1 and childrenDegreeList[i] == 1:
+        while self.isRemove(childrenDegreeList, removeSwitch):
+            for i in range(len(childrenDegreeList)):
+                if childrenDegreeList[i] == 1:
                     self.n_out += 1
                     self.m_out += 2
                     tempEdges = self.recountEdges(i, tempEdges)
                     tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
-                    for j in range(len(tempLocal)):
-                        if tempLocal[j] == local[j] - 1:
-                            childrenDegreeList[j] -= 1
-                            removeSwitch[j] = True
-                    local = tempLocal
+                    if tempLocal == local:
+                        childrenDegreeList[i] = 0
+                        removeSwitch[i] = True
+                    else:
+                        for j in range(len(tempLocal)):
+                            if tempLocal[j] == local[j] - 1:
+                                childrenDegreeList[j] -= 1
+                                if childrenDegreeList[j] == 0:
+                                    removeSwitch[j] = True
+                        local = tempLocal
 
         # third if children with degree 0 remove it
         for i in range(len(local)):
@@ -113,9 +118,9 @@ class Graph:
                 self.n_out += 1
                 removeSwitch[i] = True
 
-    def isRemove(self, childrenDegreeList, local):
-        for i in range(len(local)):
-            if local[i] == 1 and childrenDegreeList[i] == 1:
+    def isRemove(self,childrenDegreeList, removeSwitch):
+        for i in range(len(childrenDegreeList)):
+            if childrenDegreeList[i] == 1 and removeSwitch[i] == False:
                 # print(local,childrenDegreeList)
                 return True
         return False
@@ -202,6 +207,9 @@ class Graph:
         # case 1
         if father.getD() == 0 | len(childrenList) == 0:
             return False
+        # case 2
+        elif self.connected(childrenList,edges):
+            return False
         # case 4
         elif self.multiplierReduction(childrenList, edges):
             return False
@@ -214,6 +222,18 @@ class Graph:
         # there is no point in discussing it.
         # Case 3 is a simplified version of Algorithm 5,
         # so it is covered by this algorithm.
+        return True
+
+    def connected(self,childrenList,edges):
+        degrees=[]
+        for each in childrenList:
+            degrees.append(each.getD())
+
+        localDegrees=self.conutEdgesInLocal(edges)
+
+        for i in range(len(degrees)):
+            if degrees[i]!=localDegrees[i]:
+                return False
         return True
 
     def case5(self, childrenList, edges):

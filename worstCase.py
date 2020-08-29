@@ -37,6 +37,9 @@ class worstCase:
                 self.graphList.append(copy.deepcopy(graph))
             graph = self.rebuild(graph)
             graph.recountS()
+        if self.isFinal(graph):
+            if graph.getS() == self.S:
+                self.graphList.append(copy.deepcopy(graph))
         return self.graphList
 
     # The worst-case in and out branches are computed for
@@ -55,8 +58,8 @@ class worstCase:
         self.branchList = self.deduplication()
 
         for each in self.branchList:
-            tempIn = each[0] * funcA + each[1] * funcB
-            tempOut = each[2] * funcA + each[3] * funcB
+            tempOut = each[0] * funcA + each[1] * funcB
+            tempIn = each[2] * funcA + each[3] * funcB
             if first:
                 worstIn = tempIn
                 worstOut = tempOut
@@ -77,7 +80,7 @@ class worstCase:
 
                 r1 = fsolve(func1, [1])[MIN]
                 r2 = fsolve(func2, [1])[MIN]
-                if (r1 > r2) and (r2 > 0):
+                if (r2 > r1) and (r1 > 0):
                     worstIn = tempIn
                     worstOut = tempOut
                     self.branchCheck = each
@@ -120,6 +123,12 @@ class worstCase:
                 return True
         return False
 
+    def isFinal(self,graph):
+        for each in graph.getVertex():
+            if each.getD()!=5:
+                return False
+        return True
+
     def rebuild(self, graph):
         for each in graph.getVertex():
             if each.getD() != 5:
@@ -129,6 +138,3 @@ class worstCase:
                 each.setD(2)
         return graph
 
-# w = worstCase(16, 3)
-# # l = w.genGraphList()
-# # w.worstCase(l)
