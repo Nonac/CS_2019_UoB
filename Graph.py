@@ -1,5 +1,7 @@
 from Vertex import Vertex
 import copy
+from AlgorithmC5ByDahllof import *
+from function import *
 
 
 class Graph:
@@ -60,7 +62,7 @@ class Graph:
         while self.isLoop():
             self.reBuildEdges()
             if self.edgesIsValid():
-                if self.algorithmC5(self.father, self.vertexList, self.edges):
+                if algorithmC5(self.father, self.vertexList, self.edges):
                     self.n_in = (len(self.getVertex()) + 1)
                     self.m_in = 2 * (self.S - self.father.getD())
                     for group in self.edges:
@@ -71,11 +73,11 @@ class Graph:
                     self.worstCaseBranch(self.n_in, self.m_in, self.n_out, self.m_out)
 
     def worstCaseBranch(self, n_in, m_in, n_out, m_out):
-        self.branch.append([ n_out, m_out,n_in, m_in])
+        self.branch.append([n_out, m_out, n_in, m_in])
         self.edgesCheck.append(copy.deepcopy(self.edges))
 
     def removeEdges(self, childrenList, edges):
-        local = self.conutEdgesInLocal(edges)
+        local = countEdgesInLocal(edges)
         childrenDegreeList = []
         removeSwitch = []
         tempEdges = copy.deepcopy(edges)
@@ -94,13 +96,13 @@ class Graph:
         # second if children with degree 1
         # connected to other children, remove it
 
-        while self.isRemove(childrenDegreeList, removeSwitch):
+        while isRemove(childrenDegreeList, removeSwitch):
             for i in range(len(childrenDegreeList)):
                 if childrenDegreeList[i] == 1:
                     self.n_out += 1
                     self.m_out += 2
-                    tempEdges = self.recountEdges(i, tempEdges)
-                    tempLocal = self.conutEdgesInLocalWithoutFather(tempEdges)
+                    tempEdges = recountEdges(i, tempEdges)
+                    tempLocal = countEdgesInLocalWithoutFather(tempEdges)
                     if tempLocal == local:
                         childrenDegreeList[i] = 0
                         removeSwitch[i] = True
@@ -117,27 +119,6 @@ class Graph:
             if childrenDegreeList[i] == 0 and removeSwitch[i] == False:
                 self.n_out += 1
                 removeSwitch[i] = True
-
-    def isRemove(self,childrenDegreeList, removeSwitch):
-        for i in range(len(childrenDegreeList)):
-            if childrenDegreeList[i] == 1 and removeSwitch[i] == False:
-                # print(local,childrenDegreeList)
-                return True
-        return False
-
-    def recountEdges(self, i, tempEdges):
-        if i < len(tempEdges):
-            for j in range(len(tempEdges)):
-                if i < len(tempEdges[j]):
-                    if tempEdges[j][i] == 1:
-                        tempEdges[j][i] = 0
-                        return tempEdges
-        if i > 0:
-            for j in range(len(tempEdges[i - 1])):
-                if tempEdges[i - 1][j] == 1:
-                    tempEdges[i - 1][j] = 0
-                    return tempEdges
-        return tempEdges
 
     def getBranch(self):
         return self.branch
@@ -202,144 +183,3 @@ class Graph:
             if d + 1 > self.vertexList[i].getD():
                 return False
         return True
-
-    def algorithmC5(self, father, childrenList, edges):
-        # case 1
-        if father.getD() == 0 | len(childrenList) == 0:
-            return False
-        # case 2
-        elif self.connected(childrenList,edges):
-            return False
-        # case 4
-        elif self.multiplierReduction(childrenList, edges):
-            return False
-        # case 5
-        elif self.case5(childrenList, edges):
-            return False
-        # Since case 2 discusses whether the father is
-        # connected or not, and this algorithm assumes
-        # that the father is connected to the children,
-        # there is no point in discussing it.
-        # Case 3 is a simplified version of Algorithm 5,
-        # so it is covered by this algorithm.
-        return True
-
-    def connected(self,childrenList,edges):
-        degrees=[]
-        for each in childrenList:
-            degrees.append(each.getD())
-
-        localDegrees=self.conutEdgesInLocal(edges)
-
-        for i in range(len(degrees)):
-            if degrees[i]!=localDegrees[i]:
-                return False
-        return True
-
-    def case5(self, childrenList, edges):
-        # Counting the number of N(x) connected to
-        # the external vertex
-        cnt_NX = 0
-        # Counting the number of N(x) connected to
-        # the external vertex by two edges. In the next iteration
-        # this case will run case 2 to smaller N(x), and then count
-        # the branch which much smaller than it used to be.
-        cnt_NNx = 0
-        childrenLocalDegree = self.conutEdgesInLocal(edges)
-        for i in range(len(childrenList)):
-            if childrenLocalDegree[i] != childrenList[i].getD():
-                cnt_NX += 1
-            if (childrenList[i].getD() - childrenLocalDegree[i]) == 2:
-                cnt_NNx += 1
-            elif (childrenList[i].getD() - childrenLocalDegree[i]) == 1:
-                cnt_NNx += 1
-        return (cnt_NX == 2) or (cnt_NX == 1 and ((cnt_NNx == 1) or (cnt_NNx == 2)))
-
-    def multiplierReduction(self, childrenList, edges):
-        # Group the children vertex and enable the connected
-        # vertex by ignoring the father. This way you can find
-        # out the premises where Multiplier Reduction can be used.
-        groups = self.groupEdges(childrenList, edges)
-        # Calculate the children's degree of Local while considering
-        # only the Local degree. this can determine the case where N(x)
-        # has children connected to the outside.
-        childrenLocalDegree = self.conutEdgesInLocal(edges)
-        if len(groups) >= 2:
-            # Counting the number of connected components.
-            # Calculations are done in units of connected
-            # components, not in individual vertex.
-            cnt = 0
-            for group in groups:
-                for each in group:
-                    if childrenLocalDegree[each] \
-                            != childrenList[each].getD():
-                        break
-                else:
-                    cnt += 1
-            return cnt >= 1
-        else:
-            return False
-
-    def groupEdges(self, childrenList, edges):
-        groups = []
-        for i in range(len(edges)):
-            for j in range(len(edges[i])):
-                if edges[i][j] == 1:
-                    if len(groups) == 0:
-                        groups.append([j, i + 1])
-                    else:
-                        for each in groups:
-                            if i + 1 in each:
-                                if j not in each:
-                                    each.append(j)
-                                break
-                            if j in each:
-                                if i + 1 not in each:
-                                    each.append(i + 1)
-                                break
-                        else:
-                            groups.append([j, i + 1])
-
-        # Adding vertex that is not connected to
-        # other children as a separate group
-        for i in range(len(childrenList)):
-            for each in groups:
-                if i in each:
-                    break
-            else:
-                groups.append([i])
-        return groups
-
-    def conutEdgesInLocal(self, edges):
-        local = []
-        for i in range(len(edges) + 1):
-            cnt = 0
-            if i > 0:
-                for each in edges[i - 1]:
-                    if each == 1:
-                        cnt += 1
-            if i < (len(edges) + 1):
-                for group in edges:
-                    if len(group) > i:
-                        if group[i] == 1:
-                            cnt += 1
-            # father to child edge
-            cnt += 1
-            local.append(cnt)
-        return local
-
-    def conutEdgesInLocalWithoutFather(self, edges):
-        local = []
-        for i in range(len(edges) + 1):
-            cnt = 0
-            if i > 0:
-                for each in edges[i - 1]:
-                    if each == 1:
-                        cnt += 1
-            if i < (len(edges) + 1):
-                for group in edges:
-                    if len(group) > i:
-                        if group[i] == 1:
-                            cnt += 1
-            local.append(cnt)
-        return local

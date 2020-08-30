@@ -1,4 +1,4 @@
-# This is the code 2 to fi·nd that given f, k, d and S,
+# This is the code 2 to find that given f, k, d and S,
 # work out the worst-case branches for f branching on
 # a vertex of degree d and size S.
 
