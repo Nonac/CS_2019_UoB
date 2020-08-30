@@ -102,7 +102,7 @@ class Graph:
                     self.n_out += 1
                     self.m_out += 2
                     tempEdges = recountEdges(i, tempEdges)
-                    tempLocal = countEdgesInLocalWithoutFather(tempEdges)
+                    tempLocal = countEdgesInLocal(tempEdges, False)
                     if tempLocal == local:
                         childrenDegreeList[i] = 0
                         removeSwitch[i] = True
@@ -116,7 +116,7 @@ class Graph:
 
         # third if children with degree 0 remove it
         for i in range(len(local)):
-            if childrenDegreeList[i] == 0 and removeSwitch[i] == False:
+            if childrenDegreeList[i] == 0 and (not removeSwitch[i]):
                 self.n_out += 1
                 removeSwitch[i] = True
 

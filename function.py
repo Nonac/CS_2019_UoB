@@ -36,7 +36,7 @@ def groupEdges(childrenList, edges):
 # connected to the external vertex and focus only on the
 # father-children local graph. This method yields the
 # internal degree of local.
-def countEdgesInLocal(edges):
+def countEdgesInLocal(edges, withFather=True):
     local = []
     for i in range(len(edges) + 1):
         cnt = 0
@@ -50,24 +50,8 @@ def countEdgesInLocal(edges):
                     if group[i] == 1:
                         cnt += 1
         # father to child edge
-        cnt += 1
-        local.append(cnt)
-    return local
-
-
-def countEdgesInLocalWithoutFather(edges):
-    local = []
-    for i in range(len(edges) + 1):
-        cnt = 0
-        if i > 0:
-            for each in edges[i - 1]:
-                if each == 1:
-                    cnt += 1
-        if i < (len(edges) + 1):
-            for group in edges:
-                if len(group) > i:
-                    if group[i] == 1:
-                        cnt += 1
+        if withFather:
+            cnt += 1
         local.append(cnt)
     return local
 
@@ -89,7 +73,31 @@ def recountEdges(i, tempEdges):
 
 def isRemove(childrenDegreeList, removeSwitch):
     for i in range(len(childrenDegreeList)):
-        if childrenDegreeList[i] == 1 and removeSwitch[i] == False:
+        if childrenDegreeList[i] == 1 and (not removeSwitch[i]):
             # print(local,childrenDegreeList)
+            return True
+    return False
+
+
+def isFinal(graph):
+    for each in graph.getVertex():
+        if each.getD() != 5:
+            return False
+    return True
+
+
+def rebuild(graph):
+    for each in graph.getVertex():
+        if each.getD() != 5:
+            each.addD()
+            return graph
+        else:
+            each.setD(2)
+    return graph
+
+
+def isLoop(graph):
+    for each in graph.getVertex():
+        if each.getD() != 5:
             return True
     return False

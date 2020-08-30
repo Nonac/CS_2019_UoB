@@ -7,6 +7,7 @@ from Vertex import Vertex
 from Graph import Graph
 import copy
 from scipy.optimize import fsolve
+from function import *
 
 
 class worstCase:
@@ -32,12 +33,12 @@ class worstCase:
             newVertex = Vertex(i)
             newVertex.setD(2)
             graph.appendVertex(newVertex)
-        while self.isLoop(graph):
+        while isLoop(graph):
             if graph.getS() == self.S:
                 self.graphList.append(copy.deepcopy(graph))
-            graph = self.rebuild(graph)
+            graph = rebuild(graph)
             graph.recountS()
-        if self.isFinal(graph):
+        if isFinal(graph):
             if graph.getS() == self.S:
                 self.graphList.append(copy.deepcopy(graph))
         return self.graphList
@@ -97,7 +98,7 @@ class worstCase:
 
         def func(i):
             x = i[0]
-            return [((x ** (a)) - (x ** (a - b)) - 1)]
+            return [((x ** a) - (x ** (a - b)) - 1)]
 
         self.worstTime = fsolve(func, [1])[0]
 
@@ -116,25 +117,3 @@ class worstCase:
 
     def getWorstOut(self):
         return self.worstOut
-
-    def isLoop(self, graph):
-        for each in graph.getVertex():
-            if each.getD() != 5:
-                return True
-        return False
-
-    def isFinal(self,graph):
-        for each in graph.getVertex():
-            if each.getD()!=5:
-                return False
-        return True
-
-    def rebuild(self, graph):
-        for each in graph.getVertex():
-            if each.getD() != 5:
-                each.addD()
-                return graph
-            else:
-                each.setD(2)
-        return graph
-
