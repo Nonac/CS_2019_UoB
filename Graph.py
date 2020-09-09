@@ -46,8 +46,8 @@ class Graph:
         self.vertexList.append(v)
         self.S += v.getD()
 
-    def getVertex(self):
-        return self.vertexList
+    def getFather(self):
+        return self.father
 
     def getS(self):
         return self.S
@@ -94,7 +94,7 @@ class Graph:
         self.m_out = 2 * self.father.getD()
 
         # second if children with degree 1
-        # connected to other children, remove it
+        # connected to other vertex, remove it
 
         while isRemove(childrenDegreeList, removeSwitch):
             for i in range(len(childrenDegreeList)):

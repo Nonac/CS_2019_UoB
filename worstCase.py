@@ -8,6 +8,8 @@ from Graph import Graph
 import copy
 from scipy.optimize import fsolve
 from function import *
+import matplotlib.pyplot as plt
+import networkx as nx
 
 
 class worstCase:
@@ -22,6 +24,11 @@ class worstCase:
         self.worstOut = 0.0
         self.worstTime = 0.0
         self.branchCheck = []
+        self.edgesList = []
+        self.edgesCheck = []
+        self.graphCheck = []
+        self.graphCntList = []
+        self.nxG = nx.Graph()
 
     # Generate a list of all the graphs that match the S and d possibilities.
     def genGraphList(self):
@@ -49,15 +56,20 @@ class worstCase:
     def worstCase(self, graphList, funcA, funcB):
         global MIN
         MIN = 0
+        cnt = 0
         for each in graphList:
             each.countBranch()
             for eachBranch in each.getBranch():
                 self.branchList.append(eachBranch)
+                self.graphCntList.append(cnt)
+            for eachEdgesCheck in each.getEdgesCheck():
+                self.edgesList.append(eachEdgesCheck)
+            cnt += 1
         worstIn = 0.0
         worstOut = 0.0
         first = True
-        self.branchList = self.deduplication()
-
+        # self.branchList = self.deduplication()
+        cnt = 0
         for each in self.branchList:
             tempOut = each[0] * funcA + each[1] * funcB
             tempIn = each[2] * funcA + each[3] * funcB
@@ -66,10 +78,14 @@ class worstCase:
                 worstOut = tempOut
                 first = False
                 self.branchCheck = each
+                self.edgesCheck = self.edgesList[cnt]
+                self.graphCheck = self.graphList[self.graphCntList[cnt]]
             elif (worstIn > tempIn) & (worstOut > tempOut):
                 worstIn = tempIn
                 worstOut = tempOut
                 self.branchCheck = each
+                self.edgesCheck = self.edgesList[cnt]
+                self.graphCheck = self.graphList[self.graphCntList[cnt]]
             else:
                 def func1(i):
                     x = i[MIN]
@@ -85,9 +101,30 @@ class worstCase:
                     worstIn = tempIn
                     worstOut = tempOut
                     self.branchCheck = each
+                    self.edgesCheck = self.edgesList[cnt]
+                    self.graphCheck = self.graphList[self.graphCntList[cnt]]
+            cnt += 1
         self.worstIn = worstIn
         self.worstOut = worstOut
         self.countWorstTime()
+        self.draw()
+
+    def draw(self):
+        labeldict = {}
+        labeldict[self.graphCheck.getFather()] = 'F:' +str( self.graphCheck.getFather().getD())
+        for each in self.graphCheck.getVertex():
+            self.nxG.add_edge(self.graphCheck.getFather(), each)
+            labeldict[each] = each.getD()
+        for i in range(len(self.edgesCheck)):
+            for j in range(len(self.edgesCheck[i])):
+                if self.edgesCheck[i][j] == 1:
+                    self.nxG.add_edge(self.graphCheck.getVertex()[i],
+                                      self.graphCheck.getVertex()[j])
+
+        nx.draw(self.nxG, labels=labeldict, with_labels=True, edge_color='b', node_color='g', node_size=1000)
+        plt.savefig(str(self.graphCheck.getS()))
+        plt.show()
+
 
     def getBranchCheck(self):
         return self.branchCheck
