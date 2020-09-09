@@ -111,20 +111,23 @@ class worstCase:
 
     def draw(self):
         labeldict = {}
-        labeldict[self.graphCheck.getFather()] = 'F:' +str( self.graphCheck.getFather().getD())
+        labeldict[self.graphCheck.getFather()] = 'F:' + str(self.graphCheck.getFather().getD())
         for each in self.graphCheck.getVertex():
             self.nxG.add_edge(self.graphCheck.getFather(), each)
             labeldict[each] = each.getD()
         for i in range(len(self.edgesCheck)):
             for j in range(len(self.edgesCheck[i])):
                 if self.edgesCheck[i][j] == 1:
-                    self.nxG.add_edge(self.graphCheck.getVertex()[i],
+                    self.nxG.add_edge(self.graphCheck.getVertex()[i+1],
                                       self.graphCheck.getVertex()[j])
-
-        nx.draw(self.nxG, labels=labeldict, with_labels=True, edge_color='b', node_color='g', node_size=1000)
+        for v in list(self.nxG.nodes):
+            b = list(self.nxG.neighbors(v))
+            for i in range(v.getD()-len(b)):
+                self.nxG.add_edge(Vertex(0), v)
+        nx.draw_kamada_kawai(self.nxG, labels=labeldict, with_labels=True, edge_color='b', node_color='g',
+                node_size=1000)
         plt.savefig(str(self.graphCheck.getS()))
         plt.show()
-
 
     def getBranchCheck(self):
         return self.branchCheck
