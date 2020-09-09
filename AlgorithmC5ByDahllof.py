@@ -22,7 +22,7 @@ def multiplierReduction(childrenList, edges):
                     break
             else:
                 cnt += 1
-        return cnt >= 1
+        return cnt >= 2
     else:
         return False
 
@@ -65,10 +65,6 @@ def algorithmC5(father, childrenList, edges):
     if father.getD() == 0 | len(childrenList) == 0:
         return False
     # case 2
-    # Since case 2 include two cases: one is whether
-    # the father is connected or not, and this algorithm
-    # assumes that the father is connected to the children,
-    # there is no point in discussing it.
     elif connected(childrenList, edges):
         return False
     # case 4
