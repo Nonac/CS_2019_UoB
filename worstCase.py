@@ -10,7 +10,9 @@ from scipy.optimize import fsolve
 from function import *
 import matplotlib.pyplot as plt
 import networkx as nx
+from sovleTau import *
 
+isDraw = False
 
 class worstCase:
     # Initialize the module, S for S(x), d for d(F)
@@ -89,11 +91,29 @@ class worstCase:
             else:
                 def func1(i):
                     x = i[MIN]
-                    return [(x ** worstIn) - (x ** (worstIn - worstOut)) - 1]
+                    if worstOut > 0 and worstIn > worstOut:
+                        return [(x ** worstIn) - (x ** (worstIn - worstOut)) - 1]
+                    elif worstIn > 0 and worstOut > worstIn:
+                        return [(x ** worstOut) - (x ** (worstOut - worstIn)) - 1]
+                    elif worstOut < worstIn and worstIn < 0:
+                        return [1 - (x ** (- worstOut) - (x ** (-worstIn)))]
+                    elif worstIn < 0 and worstOut > 0:
+                        return [(x ** worstOut) - (x ** (worstOut - worstIn)) - 1]
+                    elif worstIn < worstOut and worstOut < 0:
+                        return [1 - (x ** (- worstOut) - (x ** (-worstIn)))]
 
                 def func2(i):
                     x = i[MIN]
-                    return [(x ** tempIn) - (x ** (tempIn - tempOut)) - 1]
+                    if tempOut > 0 and tempIn > tempOut:
+                        return [(x ** tempIn) - (x ** (tempIn - tempOut)) - 1]
+                    elif tempIn > 0 and tempOut > tempIn:
+                        return [(x ** tempOut) - (x ** (tempOut - tempIn)) - 1]
+                    elif tempOut < tempIn and tempIn < 0:
+                        return [1 - (x ** (- tempOut) - (x ** (-tempIn)))]
+                    elif tempIn < 0 and tempOut > 0:
+                        return [(x ** tempOut) - (x ** (tempOut - tempIn)) - 1]
+                    elif tempIn < tempOut and tempOut < 0:
+                        return [1 - (x ** (- tempOut) - (x ** (-tempIn)))]
 
                 r1 = fsolve(func1, [1])[MIN]
                 r2 = fsolve(func2, [1])[MIN]
@@ -107,7 +127,8 @@ class worstCase:
         self.worstIn = worstIn
         self.worstOut = worstOut
         self.countWorstTime()
-        self.draw()
+        if isDraw:
+            self.draw()
 
     def draw(self):
         labeldict = {}
@@ -138,7 +159,16 @@ class worstCase:
 
         def func(i):
             x = i[0]
-            return [((x ** a) - (x ** (a - b)) - 1)]
+            if b > 0 and a > b:
+                return [(x ** a) - (x ** (a - b)) - 1]
+            elif a > 0 and b > a:
+                return [(x ** b) - (x ** (b - a)) - 1]
+            elif b < a and a < 0:
+                return [1 - (x ** (- b) - (x ** (-a)))]
+            elif a < 0 and b > 0:
+                return [(x ** b) - (x ** (b - a)) - 1]
+            elif a < b and b < 0:
+                return [1 - (x ** (- b) - (x ** (-a)))]
 
         self.worstTime = fsolve(func, [1])[0]
 

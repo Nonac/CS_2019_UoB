@@ -4,6 +4,7 @@ from AlgorithmC5ByDahllof import *
 from function import *
 
 
+
 class Graph:
     # Data structure:
     # When I want to represent a father with d(x) = 4,
@@ -86,6 +87,8 @@ class Graph:
             childrenDegreeList.append(each.getD())
             removeSwitch.append(False)
 
+        if len(local)!=len(childrenDegreeList):
+            print(1)
         # first remove father
         for i in range(len(local)):
             local[i] -= 1

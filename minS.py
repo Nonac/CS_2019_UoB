@@ -3,6 +3,7 @@
 import copy
 import math
 from Vertex import Vertex
+from fractions import Fraction
 
 
 class minS:
@@ -27,7 +28,7 @@ class minS:
             while self.isLoop(graph):
                 graph = self.rebuild(graph)
                 S = self.countS(graph) + d_0
-                k = self.countAlpha(d_0, graph) / self.countBeta(graph)
+                k = Fraction(self.countAlpha(d_0, graph), self.countBeta(graph))
                 if self.first & (self.k <= k):
                     self.S = S
                     self.first = False
@@ -81,10 +82,10 @@ class minS:
         return cnt
 
     def countBeta(self, graph):
-        beta = 1
+        beta = Fraction(1,1)
         for each in graph:
             if each.getD() < self.k:
-                beta = beta + (1 / each.getD())
+                beta = beta + Fraction(1 , each.getD())
         return beta
 
     def countS(self, graph):
