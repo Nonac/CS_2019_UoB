@@ -1,25 +1,45 @@
-from sympy import *
+from fractions import Fraction
+import numpy as np
+
+UPPERBOARD = 3
+LOWERBOARD = 0
+ACCURACY = Fraction(1, 100000)
 
 
-def function(a, b):
-    x = Symbol('x', real=True, nonnegative=True)
-    if b > 0 and a >= b:
-        return [(x ** a) - (x ** (a - b)) - 1]
-    elif a > 0 and b >= a:
-        return [(x ** b) - (x ** (b - a)) - 1]
-    elif b <= a and a < 0:
-        return [1 - (x ** (- b) - (x ** (-a)))]
-    elif a < 0 and b > 0:
-        return [(x ** b) - (x ** (b - a)) - 1]
-    elif a <= b and b < 0:
-        return [1 - (x ** (- b) - (x ** (-a)))]
+def calculationOfTau(x, a, b):
+    r = np.power(x, -a) + np.power(x, -b) - 1
+    return r
+
+
+def binarySearchToSearchTau(low, up, a, b, subtraction):
+    mid = (low + up) / 2
+    r = calculationOfTau(mid, a, b)
+    if r == 0:
+        return mid
+    elif up - low <= ACCURACY:
+        if subtraction:
+            return low
+        else:
+            return up
+    elif subtraction and r < 0:
+        return binarySearchToSearchTau(low, mid, a, b, subtraction)
+    elif subtraction and r > 0:
+        return binarySearchToSearchTau(mid, up, a, b, subtraction)
+    elif (not subtraction) and r < 0:
+        return binarySearchToSearchTau(mid, up, a, b, subtraction)
+    elif (not subtraction) and r > 0:
+        return binarySearchToSearchTau(low, mid, a, b, subtraction)
 
 
 def sovleTau(a, b):
-    x = Symbol('x', real=True, nonnegative=True)
-    f = function(a, b)
-    r = solve(f, x, rational=True, dict=True)
-    if len(r) != 0:
-        return r[0][x]
+    up = UPPERBOARD
+    low = LOWERBOARD
+    if (a < 0 and b > 0) or (a > 0 and b < 0):
+        return None
+    elif a < 0 and b < 0:
+        subtraction = False
     else:
-        return []
+        subtraction = True
+
+    return binarySearchToSearchTau(low, up, a, b, subtraction)
+

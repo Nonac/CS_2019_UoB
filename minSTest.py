@@ -20,11 +20,13 @@
 # minimum S(k) is 29  when k>= 24/5  and d(F)= 5
 # minimum S(k) is 30  when k>= 5  and d(F)= 5
 
+from fractions import Fraction
+
 S = 0
 for i in range(1000, 5000):
     from minS import minS
 
-    d = i / 1000
+    d = Fraction(i, 1000)
     minS = minS(d)
     minS.minS()
     if S == 0:

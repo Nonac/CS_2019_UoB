@@ -14,6 +14,7 @@ from sovleTau import *
 
 isDraw = False
 
+
 class worstCase:
     # Initialize the module, S for S(x), d for d(F)
     def __init__(self, S, d):
@@ -70,7 +71,8 @@ class worstCase:
         worstIn = 0.0
         worstOut = 0.0
         first = True
-        # self.branchList = self.deduplication()
+        if not isDraw:
+            self.branchList = self.deduplication()
         cnt = 0
         for each in self.branchList:
             tempOut = each[0] * funcA + each[1] * funcB
@@ -89,34 +91,8 @@ class worstCase:
                 self.edgesCheck = self.edgesList[cnt]
                 self.graphCheck = self.graphList[self.graphCntList[cnt]]
             else:
-                def func1(i):
-                    x = i[MIN]
-                    if worstOut > 0 and worstIn > worstOut:
-                        return [(x ** worstIn) - (x ** (worstIn - worstOut)) - 1]
-                    elif worstIn > 0 and worstOut > worstIn:
-                        return [(x ** worstOut) - (x ** (worstOut - worstIn)) - 1]
-                    elif worstOut < worstIn and worstIn < 0:
-                        return [1 - (x ** (- worstOut) - (x ** (-worstIn)))]
-                    elif worstIn < 0 and worstOut > 0:
-                        return [(x ** worstOut) - (x ** (worstOut - worstIn)) - 1]
-                    elif worstIn < worstOut and worstOut < 0:
-                        return [1 - (x ** (- worstOut) - (x ** (-worstIn)))]
-
-                def func2(i):
-                    x = i[MIN]
-                    if tempOut > 0 and tempIn > tempOut:
-                        return [(x ** tempIn) - (x ** (tempIn - tempOut)) - 1]
-                    elif tempIn > 0 and tempOut > tempIn:
-                        return [(x ** tempOut) - (x ** (tempOut - tempIn)) - 1]
-                    elif tempOut < tempIn and tempIn < 0:
-                        return [1 - (x ** (- tempOut) - (x ** (-tempIn)))]
-                    elif tempIn < 0 and tempOut > 0:
-                        return [(x ** tempOut) - (x ** (tempOut - tempIn)) - 1]
-                    elif tempIn < tempOut and tempOut < 0:
-                        return [1 - (x ** (- tempOut) - (x ** (-tempIn)))]
-
-                r1 = fsolve(func1, [1])[MIN]
-                r2 = fsolve(func2, [1])[MIN]
+                r1 = sovleTau(worstIn, worstOut)
+                r2 = sovleTau(tempIn, tempOut)
                 if (r2 > r1) and (r1 > 0):
                     worstIn = tempIn
                     worstOut = tempOut
@@ -139,14 +115,14 @@ class worstCase:
         for i in range(len(self.edgesCheck)):
             for j in range(len(self.edgesCheck[i])):
                 if self.edgesCheck[i][j] == 1:
-                    self.nxG.add_edge(self.graphCheck.getVertex()[i+1],
+                    self.nxG.add_edge(self.graphCheck.getVertex()[i + 1],
                                       self.graphCheck.getVertex()[j])
         for v in list(self.nxG.nodes):
             b = list(self.nxG.neighbors(v))
-            for i in range(v.getD()-len(b)):
+            for i in range(v.getD() - len(b)):
                 self.nxG.add_edge(Vertex(0), v)
         nx.draw_kamada_kawai(self.nxG, labels=labeldict, with_labels=True, edge_color='b', node_color='g',
-                node_size=1000)
+                             node_size=1000)
         plt.savefig(str(self.graphCheck.getS()))
         plt.show()
 
@@ -154,23 +130,7 @@ class worstCase:
         return self.branchCheck
 
     def countWorstTime(self):
-        a = self.worstIn
-        b = self.worstOut
-
-        def func(i):
-            x = i[0]
-            if b > 0 and a > b:
-                return [(x ** a) - (x ** (a - b)) - 1]
-            elif a > 0 and b > a:
-                return [(x ** b) - (x ** (b - a)) - 1]
-            elif b < a and a < 0:
-                return [1 - (x ** (- b) - (x ** (-a)))]
-            elif a < 0 and b > 0:
-                return [(x ** b) - (x ** (b - a)) - 1]
-            elif a < b and b < 0:
-                return [1 - (x ** (- b) - (x ** (-a)))]
-
-        self.worstTime = fsolve(func, [1])[0]
+        self.worstTime = sovleTau(self.worstIn, self.worstOut)
 
     def getWorstTime(self):
         return self.worstTime
