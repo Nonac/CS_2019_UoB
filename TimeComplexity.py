@@ -19,16 +19,15 @@
 # 30 24/5 922223738707/950272000000 108715297/1638400000 1237498100007/950272000000 O( 1.2531543494790474 ^n)
 
 
-
 import math
 from worstCase import *
 import sovleTau
 
-Kai_i = 0
-b_i = 1
+Kai_i = 0 * math.log(sovleTau.sovleTau(4, 4), sovleTau.sovleTau(2, 2))
+b_i = 1 * math.log(sovleTau.sovleTau(4, 4), sovleTau.sovleTau(2, 2))
 k_i = 2
 S = 0
-TAUFOURFOUR = sovleTau.sovleTau(4, 4)
+PreDefinedTau = sovleTau.sovleTau(2, 2)
 ACCURACY = Fraction(1, 100000)
 
 for i in range(2001, 5000):
@@ -48,35 +47,36 @@ for i in range(2001, 5000):
             a_mid = Kai - (minS.getK() * b_mid)
             w.worstCase(w.genGraphList(), a_mid, b_mid)
             branch = w.getBranchCheck()
-            if w.getWorstTime() == TAUFOURFOUR:
+            if w.getWorstTime() == PreDefinedTau:
                 return {"Kai": Kai, "b": b_mid, "a": a_mid, "branch": branch, "tau": w.getWorstTime(), "k": minS.getK()}
             elif (up - low) < ACCURACY:
                 return {"Kai": Kai, "b": low, "a": a_mid, "branch": branch, "tau": w.getWorstTime(), "k": minS.getK()}
-            elif w.getWorstTime() > TAUFOURFOUR:
+            elif w.getWorstTime() > PreDefinedTau:
                 return binarySearchToSearchBi(b_mid, up)
-            elif w.getWorstTime() < TAUFOURFOUR:
+            elif w.getWorstTime() < PreDefinedTau:
                 return binarySearchToSearchBi(low, b_mid)
 
-        list = binarySearchToSearchBi(ACCURACY, 1)
+        res = binarySearchToSearchBi(ACCURACY, 1)
         del minS
-        return list
+        return res
 
 
     if S == 0:
         S = minS.getS()
-        list = countProcess(minS, Kai_i, b_i, k_i)
-        Kai_i = list["Kai"]
-        b_i = list["b"]
-        k_i = list["k"]
+        res = countProcess(minS, Kai_i, b_i, k_i)
+        Kai_i = res["Kai"]
+        b_i = res["b"]
+        k_i = res["k"]
 
         print("S(x)", "k_i", "a_i", "b_i", "Kai_i", "Running Time")
-        print(S,"&", k_i,"&", list["a"], "&",b_i,"&", Kai_i, "&","$O\\left(", np.power(list["tau"], Kai_i), "^n\\right)$\\\\  \\hline")
+        print(S, "&", k_i, "&", res["a"], "&", b_i, "&", Kai_i, "&", "$O\\left(", np.power(res["tau"], Kai_i),
+              "^n\\right)$\\\\  \\hline")
 
     elif minS.getS() != S:
         S = minS.getS()
-        list = countProcess(minS, Kai_i, b_i, k_i)
-        Kai_i = list["Kai"]
-        b_i = list["b"]
-        k_i = list["k"]
-        print(S,"&", k_i,"&", list["a"], "&",b_i,"&", Kai_i, "&","$O\\left(", np.power(list["tau"], Kai_i), "^n\\right)$\\\\  \\hline")
-
+        res = countProcess(minS, Kai_i, b_i, k_i)
+        Kai_i = res["Kai"]
+        b_i = res["b"]
+        k_i = res["k"]
+        print(S, "&", k_i, "&", res["a"], "&", b_i, "&", Kai_i, "&", "$O\\left(", np.power(res["tau"], Kai_i),
+              "^n\\right)$\\\\  \\hline")

@@ -72,9 +72,9 @@
 import math
 from worstCase import *
 
-k = [3,3.5, 3.75, 4, 4 + 4 / 29, 4 + 4 / 9, 4 + 4 / 7, 4.8, 5]
-A = [1,0.1961, 0.3308, 0.4461, 0.8755, 0.9139, 0.9517, 0.9841, 1.0143]
-B = [-2,0.2680, 0.2295, 0.1987, 0.0914, 0.0821, 0.0736, 0.0665, 0.0602]
+k = [3, 3.5, 3.75, 4, 4 + 4 / 29, 4 + 4 / 9, 4 + 4 / 7, 4.8, 5]
+A = [1, 0.1961, 0.3308, 0.4461, 0.8755, 0.9139, 0.9517, 0.9841, 1.0143]
+B = [-2, 0.2680, 0.2295, 0.1987, 0.0914, 0.0821, 0.0736, 0.0665, 0.0602]
 S = 0
 cnt = 0
 for i in range(2001, 5000):
@@ -90,9 +90,9 @@ for i in range(2001, 5000):
     def countProcess(minS):
         w = worstCase(minS.getS(), math.ceil(minS.getK()))
         w.worstCase(w.genGraphList(), A[cnt], B[cnt])
-        print("When d=", d, "f(n, m)=", A[cnt], " * n + ", B[cnt], " * m","Minimum S =", minS.getS())
+        print("When d=", d, "f(n, m)=", A[cnt], " * n + ", B[cnt], " * m", "Minimum S =", minS.getS())
         print("the worst branch is (", w.getBranchCheck(), ")")
-        print("the worst branch number is (", w.getWorstIn(),",", w.getWorstOut(), ")")
+        print("the worst branch number is (", w.getWorstIn(), ",", w.getWorstOut(), ")")
         print("\\tau is", w.getWorstTime(), "\n")
         del minS
 
