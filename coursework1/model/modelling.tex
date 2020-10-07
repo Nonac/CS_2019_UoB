@@ -1,0 +1,158 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cleese Assignment (For Students)
+% LaTeX Template
+% Version 2.0 (27/5/2018)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Author:
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt]{article}
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+% Required
+\newcommand{\assignmentQuestionName}{Question} % The word to be used as a prefix to question numbers; example alternatives: Problem, Exercise
+\newcommand{\assignmentClass}{Databases} % Course/class
+\newcommand{\assignmentTitle}{Coursework 1 Modelling exercise} % Assignment title or name
+\newcommand{\assignmentAuthorName}{FF19085} % Student name
+
+% Optional (comment lines to remove)
+%\newcommand{\assignmentClassInstructor}{Jones 10:30am} % Intructor name/time/description
+%\newcommand{\assignmentDueDate}{Monday,\ January\ 24,\ 2019} % Due date
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+%\maketitle % Print the title page
+
+%\thispagestyle{empty} % Suppress headers and footers on the title page
+
+%\newpage
+
+%----------------------------------------------------------------------------------------
+%	QUESTION 1
+%----------------------------------------------------------------------------------------
+
+\begin{question}
+
+\questiontext{Describe in your own words some of the features of the application/website that you  have chosen. You do not need to describe all the site’s features, just the ones that you will work with in the other points of this exercise.}
+
+
+\answer{What I want to describe is the \textbf{Steam} gaming platform by Valve. Game Developers can publish their work on the steam platform. Users can purchase computer games though Steam Store. Games can be classified with tags so that users can quickly find the games they are interested in Steam. Once the game is bought, an unique software license is permanently attached to the user's Steam account, allowing them to download the software on any compatible device.  The Steam platform also allows users to comment on games they have purchased. }
+
+\end{question}
+
+%----------------------------------------------------------------------------------------
+%	QUESTION 2
+%----------------------------------------------------------------------------------------
+
+\begin{question}
+
+\questiontext{Draw an ER diagram}
+\begin{center}
+	\includegraphics[width=1\columnwidth]{modelling.png} % Example image
+\end{center}
+%--------------------------------------------
+\begin{comment}
+\begin{subquestion}{Suppose ``chuck" implies throwing.} % Subquestion within question
+
+\answer{According to the Associated Press (1988), a New York Fish and Wildlife technician named Richard Thomas calculated the volume of dirt in a typical 25--30 foot (7.6--9.1 m) long woodchuck burrow and had determined that if the woodchuck had moved an equivalent volume of wood, it could move ``about \textbf{700 pounds (320 kg)} on a good day, with the wind at his back".}
+
+\end{subquestion}
+
+%--------------------------------------------
+
+\begin{subquestion}{Suppose ``chuck" implies vomiting.} % Subquestion within question
+
+\answer{A woodchuck can ingest 361.92 cm\textsuperscript{3} (22.09 cu in) of wood per day. Assuming immediate expulsion on ingestion with a 5\% retainment rate, a woodchuck could chuck \textbf{343.82 cm\textsuperscript{3}} of wood per day.}
+
+\end{subquestion}
+
+%--------------------------------------------
+\end{comment}
+\end{question}
+
+%----------------------------------------------------------------------------------------
+%	QUESTION 3
+%----------------------------------------------------------------------------------------
+
+\begin{question}
+
+\questiontext{Write a create/drop script for the exacttables in your model.}
+
+\lstinputlisting[
+	caption=Steam\_model, % Caption above the listing
+	label=lst:luftballons, % Label for referencing this listing
+	language=Sql, % Use Perl functions/syntax highlighting
+	frame=single, % Frame around the code listing
+	showstringspaces=false, % Don't put marks in string spaces
+	numbers=left, % Line numbers on left
+	numberstyle=\tiny, % Line numbers styling
+	basicstyle=\tiny
+	]{modelling.sql}
+
+%--------------------------------------------
+
+\end{question}
+\begin{question}
+\questiontext{Describe two use cases of your chosen application or website in terms of SQL queries that involve some form of JOIN. }
+\begin{subquestion}{Query the list of games released by a game developer, in descending order of release time:} % Subquestion within question
+
+\lstinputlisting[
+caption=Answer, % Caption above the listing
+label=lst:luftballons, % Label for referencing this listing
+language=Sql, % Use Perl functions/syntax highlighting
+frame=single, % Frame around the code listing
+showstringspaces=false, % Don't put marks in string spaces
+numbers=left, % Line numbers on left
+numberstyle=\tiny, % Line numbers styling
+basicstyle=\tiny
+]{Answer1.sql}
+
+\end{subquestion}
+
+%--------------------------------------------
+
+\begin{subquestion}{Query all games with the same tag as all games owned by a player} % Subquestion within question
+
+\lstinputlisting[
+caption=Answer, % Caption above the listing
+label=lst:luftballons, % Label for referencing this listing
+language=Sql, % Use Perl functions/syntax highlighting
+frame=single, % Frame around the code listing
+showstringspaces=false, % Don't put marks in string spaces
+numbers=left, % Line numbers on left
+numberstyle=\tiny, % Line numbers styling
+basicstyle=\tiny
+]{Answer2.sql}
+
+\end{subquestion}
+
+%--------------------------------------------
+
+\end{question}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}

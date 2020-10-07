@@ -1,0 +1,209 @@
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
++---------------------------------------------+
+| name                                        |
++---------------------------------------------+
+| Conservative                                |
+| Green                                       |
+| Independent                                 |
+| Independents for Bristol                    |
+| Labour                                      |
+| Liberal Democrat                            |
+| Respect                                     |
+| Trade Unionists and Socialists Against Cuts |
+| UKIP                                        |
++---------------------------------------------+
+9 rows in set (0.00 sec)
+
++------------+
+| sum(votes) |
++------------+
+|      78807 |
++------------+
+1 row in set (0.01 sec)
+
++--------------------+-------+
+| name               | votes |
++--------------------+-------+
+| Robin Victor Clapp |   204 |
+| Thom Oliver        |   264 |
+| Sarah Helen Cleave |   680 |
+| Catherine Slade    |   838 |
+| Mark Bradshaw      |  1745 |
++--------------------+-------+
+5 rows in set (0.00 sec)
+
++-------+
+| votes |
++-------+
+|   102 |
++-------+
+1 row in set (0.00 sec)
+
++-------------------------+-------+-------+
+| name                    | party | votes |
++-------------------------+-------+-------+
+| Michael Frost           |     5 |   912 |
+| Yvonne Eileen Clapp     |     6 |   780 |
+| Antony Skelding         |     7 |   503 |
+| Sylvia Kathleen Doubell |     2 |   480 |
+| Graham Hugh Davey       |     4 |   123 |
+| Neil Oliver Maggs       |     9 |   114 |
+| Mark Baker              |     1 |    28 |
++-------------------------+-------+-------+
+7 rows in set (0.00 sec)
+
++---+
+| m |
++---+
+| 2 |
++---+
+1 row in set (0.00 sec)
+
++------------------+----------------------------------------------------+
+| name             | convert(CR.votes/sum(CL.votes)*100,decimal (15,4)) |
++------------------+----------------------------------------------------+
+| Avonmouth        |                                             4.3772 |
+| Bedminster       |                                            22.4605 |
+| Bishopston       |                                            47.3141 |
+| Bishopsworth     |                                             8.5757 |
+| Brislington East |                                             7.6605 |
+| Filwood          |                                            14.9154 |
+| Hartcliffe       |                                            12.2670 |
+| Henbury          |                                             8.2345 |
+| Hengrove         |                                             4.1837 |
+| Henleaze         |                                             7.3357 |
+| Horfield         |                                            12.6908 |
+| Kingsweston      |                                             6.9027 |
+| Knowle           |                                             8.6078 |
+| Lockleaze        |                                            10.9033 |
+| Redland          |                                            36.1907 |
+| Southmead        |                                             6.3116 |
+| Southville       |                                            42.5319 |
+| St George West   |                                            17.0698 |
+| Stockwood        |                                            12.0185 |
+| Stoke Bishop     |                                            13.8350 |
+| Westbury-on-Trym |                                            10.7611 |
+| Whitchurch Park  |                                             3.1238 |
+| Windmill Hill    |                                            24.0964 |
++------------------+----------------------------------------------------+
+23 rows in set (0.00 sec)
+
++--------------+---------+------+
+| ward         | rel     | abs  |
++--------------+---------+------+
+| Bishopston   | 10.4630 | 1078 |
+| Redland      |  8.9236 |  776 |
+| Southville   |  3.8949 |  378 |
+| Stoke Bishop |  0.5564 |   45 |
++--------------+---------+------+
+4 rows in set (0.00 sec)
+
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
++-----------------------------------------+
+| name                                    |
++-----------------------------------------+
+| Conservative                            |
+| Green                                   |
+| Independents for Bristol                |
+| Labour                                  |
+| Left Unity                              |
+| Liberal Democrat                        |
+| Trade Unionists and Socialist Coalition |
+| UK Independence                         |
++-----------------------------------------+
+8 rows in set (0.00 sec)
+
++------------+
+| sum(votes) |
++------------+
+|     147966 |
++------------+
+1 row in set (0.00 sec)
+
++------------------------+-------+
+| name                   | votes |
++------------------------+-------+
+| Celia Christine Phipps |  2425 |
+| Alan Wilson Baker      |  2161 |
+| Darien Luke Jay        |  1715 |
+| Peter Henry Main       |   606 |
+| Robin Clapp            |   233 |
++------------------------+-------+
+5 rows in set (0.00 sec)
+
++-------+
+| votes |
++-------+
+|   200 |
++-------+
+1 row in set (0.00 sec)
+
++-------------------------+-------+-------+
+| name                    | party | votes |
++-------------------------+-------+-------+
+| Barry David Clark       |     3 |  1905 |
+| Antony Skelding         |     1 |  1490 |
+| Gerard Joseph Robinson  |     6 |  1273 |
+| Sylvia Kathleen Doubell |     4 |   603 |
+| Will Quick              |     2 |   244 |
+| Patrick Hulme           |     5 |    33 |
++-------------------------+-------+-------+
+6 rows in set (0.00 sec)
+
++---+
+| m |
++---+
+| 2 |
++---+
+1 row in set (0.00 sec)
+
++------------------+----------------------------------------------------+
+| name             | convert(CR.votes/sum(CL.votes)*100,decimal (15,4)) |
++------------------+----------------------------------------------------+
+| Clifton          |                                            32.7498 |
+| Ashley           |                                            51.4799 |
+| Bedminster       |                                            30.2661 |
+| Bishopsworth     |                                             9.8028 |
+| Brislington East |                                            12.7685 |
+| Brislington West |                                            13.9450 |
+| Cabot            |                                            38.4697 |
+| Clifton East     |                                            32.1594 |
+| Cotham           |                                            42.8977 |
+| Easton           |                                            47.2058 |
+| Eastville        |                                            21.0843 |
+| Filwood          |                                             8.4329 |
+| Frome Vale       |                                            13.5222 |
+| Hartcliffe       |                                             5.9844 |
+| Hengrove         |                                             4.3980 |
+| Hillfields       |                                            11.0983 |
+| Knowle           |                                            12.2207 |
+| Lawrence Hill    |                                            27.6637 |
+| Southville       |                                            44.4414 |
+| St George East   |                                             9.3574 |
+| St George West   |                                            20.0454 |
+| Stockwood        |                                             6.6679 |
+| Whitchurch Park  |                                             3.7652 |
+| Windmill Hill    |                                            39.8695 |
++------------------+----------------------------------------------------+
+24 rows in set (0.01 sec)
+
++---------------+---------+------+
+| ward          | rel     | abs  |
++---------------+---------+------+
+| Clifton       | 13.0303 | 1207 |
+| Ashley        | 16.1920 | 1990 |
+| Cabot         |  9.5970 | 1224 |
+| Clifton East  | 10.5251 |  926 |
+| Cotham        | 18.0230 | 1929 |
+| Easton        |  9.7350 |  977 |
+| Southville    | 10.9847 | 1149 |
+| Windmill Hill |  9.6159 |  989 |
++---------------+---------+------+
+8 rows in set (0.00 sec)
+
