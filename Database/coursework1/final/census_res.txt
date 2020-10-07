@@ -1,0 +1,217 @@
+MariaDB [(none)]> source census.sql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
++------+
+| data |
++------+
+|  284 |
++------+
+1 row in set (0.00 sec)
+
++-----------+
+| sum(data) |
++-----------+
+|       211 |
++-----------+
+1 row in set (0.00 sec)
+
++------------+--------------------------------------------------+
+| num_people | occ_class                                        |
++------------+--------------------------------------------------+
+|         69 | Managers, directors and senior officials         |
+|         63 | Professional occupations                         |
+|         82 | Associate professional and technical occupations |
+|         81 | Administrative and secretarial occupations       |
+|        145 | Skilled trades occupations                       |
+|         99 | Caring, leisure and other service occupations    |
+|         92 | Sales and customer service occupations           |
+|        134 | Process, plant and machine operatives            |
+|        312 | Elementary occupations                           |
++------------+--------------------------------------------------+
+9 rows in set (0.00 sec)
+
++--------------------+-----------+--------------+------------------------+
+| working population | code      | ward name    | county-level unit name |
++--------------------+-----------+--------------+------------------------+
+|                 81 | E05008324 | St. Martin's | Isles of Scilly        |
++--------------------+-----------+--------------+------------------------+
+1 row in set (0.20 sec)
+
++----------+
+| count(*) |
++----------+
+|     7667 |
++----------+
+1 row in set (0.06 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
++--------------------------+-----------+
+| name                     | avg_size  |
++--------------------------+-----------+
+| East Midlands            | 2409.1369 |
+| East of England          | 2597.5497 |
+| London                   | 6327.3687 |
+| North East               | 3266.2040 |
+| North West               | 3453.2021 |
+| South East               | 2861.4661 |
+| South West               | 2404.1164 |
+| West Midlands            | 3446.8424 |
+| Yorkshire and The Humber | 4945.1609 |
++--------------------------+-----------+
+9 rows in set (0.15 sec)
+
++---------------------------+--------------------------------------------------+--------+-------+
+| CLU                       | occupation                                       | gender | N     |
++---------------------------+--------------------------------------------------+--------+-------+
+| Cumbria                   | Associate professional and technical occupations | female | 10054 |
+| Lancashire                | Caring, leisure and other service occupations    | male   | 10088 |
+| Cheshire West and Chester | Sales and customer service occupations           | female | 10107 |
+| Cheshire East             | Associate professional and technical occupations | female | 10178 |
+| Stockport                 | Managers, directors and senior officials         | male   | 10213 |
+| Cheshire East             | Process, plant and machine operatives            | male   | 10231 |
+| Salford                   | Administrative and secretarial occupations       | female | 10244 |
+| Manchester                | Managers, directors and senior officials         | male   | 10287 |
+| Stockport                 | Associate professional and technical occupations | male   | 10377 |
+| Stockport                 | Caring, leisure and other service occupations    | female | 10517 |
+| Sefton                    | Caring, leisure and other service occupations    | female | 10558 |
+| Tameside                  | Administrative and secretarial occupations       | female | 10639 |
+| Cheshire West and Chester | Process, plant and machine operatives            | male   | 10659 |
+| Manchester                | Sales and customer service occupations           | male   | 10694 |
+| Sefton                    | Professional occupations                         | female | 10719 |
+| Trafford                  | Administrative and secretarial occupations       | female | 10770 |
+| Wigan                     | Elementary occupations                           | male   | 10831 |
+| Wigan                     | Professional occupations                         | female | 11069 |
+| Bolton                    | Administrative and secretarial occupations       | female | 11278 |
+| Wirral                    | Professional occupations                         | male   | 11287 |
+| Cheshire West and Chester | Associate professional and technical occupations | male   | 11422 |
+| Oldham                    | Skilled trades occupations                       | male   | 11513 |
+| Manchester                | Associate professional and technical occupations | female | 11603 |
+| Sefton                    | Skilled trades occupations                       | male   | 11622 |
+| Cheshire West and Chester | Managers, directors and senior officials         | male   | 11995 |
+| Manchester                | Process, plant and machine operatives            | male   | 12041 |
+| Cheshire West and Chester | Caring, leisure and other service occupations    | female | 12059 |
+| Tameside                  | Skilled trades occupations                       | male   | 12102 |
+| Wirral                    | Caring, leisure and other service occupations    | female | 12383 |
+| Trafford                  | Professional occupations                         | female | 12452 |
+| Trafford                  | Professional occupations                         | male   | 12455 |
+| Liverpool                 | Elementary occupations                           | female | 12532 |
+| Stockport                 | Skilled trades occupations                       | male   | 12547 |
+| Liverpool                 | Associate professional and technical occupations | male   | 12556 |
+| Bolton                    | Skilled trades occupations                       | male   | 12701 |
+| Wigan                     | Caring, leisure and other service occupations    | female | 12824 |
+| Stockport                 | Professional occupations                         | male   | 13097 |
+| Stockport                 | Administrative and secretarial occupations       | female | 13138 |
+| Sefton                    | Administrative and secretarial occupations       | female | 13168 |
+| Lancashire                | Administrative and secretarial occupations       | male   | 13168 |
+| Liverpool                 | Process, plant and machine operatives            | male   | 13286 |
+| Manchester                | Sales and customer service occupations           | female | 13371 |
+| Cheshire East             | Associate professional and technical occupations | male   | 13414 |
+| Cheshire East             | Caring, leisure and other service occupations    | female | 13429 |
+| Wirral                    | Professional occupations                         | female | 13451 |
+| Cheshire West and Chester | Administrative and secretarial occupations       | female | 13474 |
+| Liverpool                 | Sales and customer service occupations           | female | 13484 |
+| Cumbria                   | Associate professional and technical occupations | male   | 13550 |
+| Wigan                     | Process, plant and machine operatives            | male   | 13591 |
+| Wirral                    | Administrative and secretarial occupations       | female | 13677 |
+| Wirral                    | Skilled trades occupations                       | male   | 13704 |
+| Wigan                     | Administrative and secretarial occupations       | female | 13802 |
+| Liverpool                 | Elementary occupations                           | male   | 13945 |
+| Manchester                | Skilled trades occupations                       | male   | 13979 |
+| Stockport                 | Professional occupations                         | female | 13994 |
+| Manchester                | Elementary occupations                           | female | 14005 |
+| Cheshire West and Chester | Professional occupations                         | male   | 14236 |
+| Manchester                | Administrative and secretarial occupations       | female | 14694 |
+| Cheshire West and Chester | Professional occupations                         | female | 14809 |
+| Manchester                | Associate professional and technical occupations | male   | 14987 |
+| Cumbria                   | Managers, directors and senior officials         | male   | 15003 |
+| Cumbria                   | Elementary occupations                           | male   | 15058 |
+| Cumbria                   | Sales and customer service occupations           | female | 15140 |
+| Cumbria                   | Elementary occupations                           | female | 15165 |
+| Cheshire West and Chester | Skilled trades occupations                       | male   | 15169 |
+| Cheshire East             | Administrative and secretarial occupations       | female | 15327 |
+| Manchester                | Caring, leisure and other service occupations    | female | 15514 |
+| Liverpool                 | Caring, leisure and other service occupations    | female | 15707 |
+| Liverpool                 | Skilled trades occupations                       | male   | 15753 |
+| Liverpool                 | Professional occupations                         | male   | 16102 |
+| Lancashire                | Sales and customer service occupations           | male   | 16265 |
+| Cumbria                   | Professional occupations                         | male   | 16406 |
+| Cheshire East             | Managers, directors and senior officials         | male   | 16423 |
+| Cheshire East             | Skilled trades occupations                       | male   | 16589 |
+| Wigan                     | Skilled trades occupations                       | male   | 17483 |
+| Cumbria                   | Professional occupations                         | female | 17656 |
+| Manchester                | Elementary occupations                           | male   | 17692 |
+| Cheshire East             | Professional occupations                         | female | 17696 |
+| Liverpool                 | Administrative and secretarial occupations       | female | 17799 |
+| Cheshire East             | Professional occupations                         | male   | 17829 |
+| Liverpool                 | Professional occupations                         | female | 18298 |
+| Cumbria                   | Administrative and secretarial occupations       | female | 19669 |
+| Cumbria                   | Process, plant and machine operatives            | male   | 20024 |
+| Cumbria                   | Caring, leisure and other service occupations    | female | 20274 |
+| Lancashire                | Managers, directors and senior officials         | female | 20528 |
+| Manchester                | Professional occupations                         | female | 21096 |
+| Manchester                | Professional occupations                         | male   | 21692 |
+| Lancashire                | Associate professional and technical occupations | female | 25958 |
+| Lancashire                | Elementary occupations                           | female | 26699 |
+| Lancashire                | Sales and customer service occupations           | female | 29512 |
+| Lancashire                | Elementary occupations                           | male   | 33261 |
+| Cumbria                   | Skilled trades occupations                       | male   | 34640 |
+| Lancashire                | Associate professional and technical occupations | male   | 34795 |
+| Lancashire                | Managers, directors and senior officials         | male   | 35893 |
+| Lancashire                | Process, plant and machine operatives            | male   | 39239 |
+| Lancashire                | Professional occupations                         | male   | 42028 |
+| Lancashire                | Professional occupations                         | female | 47387 |
+| Lancashire                | Caring, leisure and other service occupations    | female | 48139 |
+| Lancashire                | Administrative and secretarial occupations       | female | 49186 |
+| Lancashire                | Skilled trades occupations                       | male   | 61088 |
++---------------------------+--------------------------------------------------+--------+-------+
+100 rows in set (0.30 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
++--------------------------+--------+--------+------------+
+| region name              | male   | female | proportion |
++--------------------------+--------+--------+------------+
+| North East               |  61574 |  37666 |     3.2669 |
+| West Midlands            | 168368 |  87224 |     3.4382 |
+| Yorkshire and The Humber | 154677 |  85615 |     3.5260 |
+| North West               | 203601 | 115796 |     3.5864 |
+| East Midlands            | 149130 |  77910 |     3.6296 |
+| East of England          | 215256 | 108759 |     3.8168 |
+| South West               | 179638 | 103436 |     4.0399 |
+| London                   | 299559 | 164713 |     4.1190 |
+| South East               | 345662 | 176316 |     4.1382 |
++--------------------------+--------+--------+------------+
+9 rows in set (0.27 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
++--------------------------+-----------+
+| name                     | avg_size  |
++--------------------------+-----------+
+| East Midlands            | 2409.1369 |
+| East of England          | 2597.5497 |
+| London                   | 6327.3687 |
+| North East               | 3266.2040 |
+| North West               | 3453.2021 |
+| South East               | 2861.4661 |
+| South West               | 2404.1164 |
+| West Midlands            | 3446.8424 |
+| Yorkshire and The Humber | 4945.1609 |
+| England                  | 3272.5609 |
+| ALL                      | 3095.2551 |
++--------------------------+-----------+
+11 rows in set (0.27 sec)
+
